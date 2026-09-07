@@ -9,6 +9,7 @@ const TOTAL_CARDS = projects.length;
 export default function ProjectsSection() {
   return (
     <section
+      id="projects"
       className="relative z-10 rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
       style={{ background: '#0C0C0C' }}
     >
