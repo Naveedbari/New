@@ -7,32 +7,32 @@ export interface Service {
 export const services: Service[] = [
   {
     number: '01',
-    name: '3D Modeling',
+    name: 'Frontend Development',
     description:
-      'Creation of detailed objects, characters, or environments tailored to specific client needs, ideal for games, products, and visualizations.',
+      'Building responsive, high-performance interfaces with Angular, ReactJs, TypeScript, and Ionic, translating Figma designs into pixel-perfect, production-ready UI.',
   },
   {
     number: '02',
-    name: 'Rendering',
+    name: 'Backend & APIs',
     description:
-      'High-quality, photorealistic renders that showcase designs with custom lighting, textures, and materials to bring concepts to life.',
+      'Designing and building robust REST APIs and services with C#, .NET Core, ASP.NET Web API, and Entity Framework Core, backed by well-structured SQL Server databases.',
   },
   {
     number: '03',
-    name: 'Motion Design',
+    name: 'Full-Stack Web Apps',
     description:
-      'Dynamic animations and motion graphics that add energy and storytelling to brands, products, and digital experiences.',
+      'Delivering complete platforms end-to-end -- requirements, architecture, clean code, testing, and deployment -- for payroll, HR, and ERP systems used by real businesses.',
   },
   {
     number: '04',
-    name: 'Branding',
+    name: 'Hybrid Mobile Apps',
     description:
-      'Crafting cohesive visual identities -- from logos to full brand systems -- that communicate a clear and memorable presence.',
+      'Building cross-platform mobile apps with Ionic and Cordova, published to the Apple App Store and Google Play, covering everything from UI to native integrations.',
   },
   {
     number: '05',
-    name: 'Web Design',
+    name: 'Legacy Modernization',
     description:
-      'Designing clean, modern, and conversion-focused websites with attention to layout, typography, and user experience.',
+      'Migrating legacy codebases to modern frameworks like jQuery to Angular, refactoring for maintainability, and mentoring teams through the transition.',
   },
 ];
