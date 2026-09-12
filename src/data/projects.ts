@@ -13,6 +13,7 @@ const TEAL = '#4FD1C5';
 const PURPLE = '#B57EDC';
 const GOLD = '#E8B34A';
 const BLUE = '#5B9BD5';
+const CORAL = '#E8734A';
 
 export const projects: Project[] = [
   {
@@ -46,5 +47,13 @@ export const projects: Project[] = [
     col1Image1: dashboardMockup(BLUE),
     col1Image2: editorMockup(BLUE),
     col2Image: mobileMockup(BLUE),
+  },
+  {
+    number: '05',
+    category: 'Client',
+    name: 'Olympic eClock Access',
+    col1Image1: mobileMockup(CORAL),
+    col1Image2: editorMockup(CORAL),
+    col2Image: dashboardMockup(CORAL),
   },
 ];
