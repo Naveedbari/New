@@ -1,0 +1,5295 @@
+{
+  "type": "FeatureCollection",
+  "name": "plots",
+  "metadata": {
+    "version": "dev-sample-0.1",
+    "name": "Development sample scheme (synthetic)",
+    "crs": "EPSG:4326",
+    "isDevelopmentData": true,
+    "disclaimer": "SYNTHETIC DEVELOPMENT DATA. Not a real housing scheme. Located near 0°N 0°E on purpose. Must never be loaded into staging or production.",
+    "layer": "plots",
+    "coordinateOrder": "lon,lat"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-1",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0011797,
+              0.0010898
+            ],
+            [
+              0.0014042,
+              0.0010898
+            ],
+            [
+              0.0014042,
+              0.0013144
+            ],
+            [
+              0.0011797,
+              0.0013144
+            ],
+            [
+              0.0011797,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-1",
+        "plotNumber": "1",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST1",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-2",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0014042,
+              0.0010898
+            ],
+            [
+              0.0016288,
+              0.0010898
+            ],
+            [
+              0.0016288,
+              0.0013144
+            ],
+            [
+              0.0014042,
+              0.0013144
+            ],
+            [
+              0.0014042,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-2",
+        "plotNumber": "2",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-3",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0016288,
+              0.0010898
+            ],
+            [
+              0.0018534,
+              0.0010898
+            ],
+            [
+              0.0018534,
+              0.0013144
+            ],
+            [
+              0.0016288,
+              0.0013144
+            ],
+            [
+              0.0016288,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-3",
+        "plotNumber": "3",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-4",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0018534,
+              0.0010898
+            ],
+            [
+              0.002078,
+              0.0010898
+            ],
+            [
+              0.002078,
+              0.0013144
+            ],
+            [
+              0.0018534,
+              0.0013144
+            ],
+            [
+              0.0018534,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-4",
+        "plotNumber": "4",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-5",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.002078,
+              0.0010898
+            ],
+            [
+              0.0023026,
+              0.0010898
+            ],
+            [
+              0.0023026,
+              0.0013144
+            ],
+            [
+              0.002078,
+              0.0013144
+            ],
+            [
+              0.002078,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-5",
+        "plotNumber": "5",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-6",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0023026,
+              0.0010898
+            ],
+            [
+              0.0025271,
+              0.0010898
+            ],
+            [
+              0.0025271,
+              0.0013144
+            ],
+            [
+              0.0023026,
+              0.0013144
+            ],
+            [
+              0.0023026,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-6",
+        "plotNumber": "6",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-7",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0025271,
+              0.0010898
+            ],
+            [
+              0.0027517,
+              0.0010898
+            ],
+            [
+              0.0027517,
+              0.0013144
+            ],
+            [
+              0.0025271,
+              0.0013144
+            ],
+            [
+              0.0025271,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-7",
+        "plotNumber": "7",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-8",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0027517,
+              0.0010898
+            ],
+            [
+              0.0029763,
+              0.0010898
+            ],
+            [
+              0.0029763,
+              0.0013144
+            ],
+            [
+              0.0027517,
+              0.0013144
+            ],
+            [
+              0.0027517,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-8",
+        "plotNumber": "8",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-9",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0029763,
+              0.0010898
+            ],
+            [
+              0.0032009,
+              0.0010898
+            ],
+            [
+              0.0032009,
+              0.0013144
+            ],
+            [
+              0.0029763,
+              0.0013144
+            ],
+            [
+              0.0029763,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-9",
+        "plotNumber": "9",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-10",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0032009,
+              0.0010898
+            ],
+            [
+              0.0034254,
+              0.0010898
+            ],
+            [
+              0.0034254,
+              0.0013144
+            ],
+            [
+              0.0032009,
+              0.0013144
+            ],
+            [
+              0.0032009,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-10",
+        "plotNumber": "10",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST1",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-11",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0011797,
+              0.0018085
+            ],
+            [
+              0.0014042,
+              0.0018085
+            ],
+            [
+              0.0014042,
+              0.0020331
+            ],
+            [
+              0.0011797,
+              0.0020331
+            ],
+            [
+              0.0011797,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-11",
+        "plotNumber": "11",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST2",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-12",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0014042,
+              0.0018085
+            ],
+            [
+              0.0016288,
+              0.0018085
+            ],
+            [
+              0.0016288,
+              0.0020331
+            ],
+            [
+              0.0014042,
+              0.0020331
+            ],
+            [
+              0.0014042,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-12",
+        "plotNumber": "12",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-13",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0016288,
+              0.0018085
+            ],
+            [
+              0.0018534,
+              0.0018085
+            ],
+            [
+              0.0018534,
+              0.0020331
+            ],
+            [
+              0.0016288,
+              0.0020331
+            ],
+            [
+              0.0016288,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-13",
+        "plotNumber": "13",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-14",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0018534,
+              0.0018085
+            ],
+            [
+              0.002078,
+              0.0018085
+            ],
+            [
+              0.002078,
+              0.0020331
+            ],
+            [
+              0.0018534,
+              0.0020331
+            ],
+            [
+              0.0018534,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-14",
+        "plotNumber": "14",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-15",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.002078,
+              0.0018085
+            ],
+            [
+              0.0023026,
+              0.0018085
+            ],
+            [
+              0.0023026,
+              0.0020331
+            ],
+            [
+              0.002078,
+              0.0020331
+            ],
+            [
+              0.002078,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-15",
+        "plotNumber": "15",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-16",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0023026,
+              0.0018085
+            ],
+            [
+              0.0025271,
+              0.0018085
+            ],
+            [
+              0.0025271,
+              0.0020331
+            ],
+            [
+              0.0023026,
+              0.0020331
+            ],
+            [
+              0.0023026,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-16",
+        "plotNumber": "16",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-17",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0025271,
+              0.0018085
+            ],
+            [
+              0.0027517,
+              0.0018085
+            ],
+            [
+              0.0027517,
+              0.0020331
+            ],
+            [
+              0.0025271,
+              0.0020331
+            ],
+            [
+              0.0025271,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-17",
+        "plotNumber": "17",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-18",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0027517,
+              0.0018085
+            ],
+            [
+              0.0029763,
+              0.0018085
+            ],
+            [
+              0.0029763,
+              0.0020331
+            ],
+            [
+              0.0027517,
+              0.0020331
+            ],
+            [
+              0.0027517,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-18",
+        "plotNumber": "18",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-19",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0029763,
+              0.0018085
+            ],
+            [
+              0.0032009,
+              0.0018085
+            ],
+            [
+              0.0032009,
+              0.0020331
+            ],
+            [
+              0.0029763,
+              0.0020331
+            ],
+            [
+              0.0029763,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-19",
+        "plotNumber": "19",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-20",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0032009,
+              0.0018085
+            ],
+            [
+              0.0034254,
+              0.0018085
+            ],
+            [
+              0.0034254,
+              0.0020331
+            ],
+            [
+              0.0032009,
+              0.0020331
+            ],
+            [
+              0.0032009,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-20",
+        "plotNumber": "20",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST2",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-21",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0011797,
+              0.0025271
+            ],
+            [
+              0.0014042,
+              0.0025271
+            ],
+            [
+              0.0014042,
+              0.0027517
+            ],
+            [
+              0.0011797,
+              0.0027517
+            ],
+            [
+              0.0011797,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-21",
+        "plotNumber": "21",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST3",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-22",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0014042,
+              0.0025271
+            ],
+            [
+              0.0016288,
+              0.0025271
+            ],
+            [
+              0.0016288,
+              0.0027517
+            ],
+            [
+              0.0014042,
+              0.0027517
+            ],
+            [
+              0.0014042,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-22",
+        "plotNumber": "22",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-23",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0016288,
+              0.0025271
+            ],
+            [
+              0.0018534,
+              0.0025271
+            ],
+            [
+              0.0018534,
+              0.0027517
+            ],
+            [
+              0.0016288,
+              0.0027517
+            ],
+            [
+              0.0016288,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-23",
+        "plotNumber": "23",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-24",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0018534,
+              0.0025271
+            ],
+            [
+              0.002078,
+              0.0025271
+            ],
+            [
+              0.002078,
+              0.0027517
+            ],
+            [
+              0.0018534,
+              0.0027517
+            ],
+            [
+              0.0018534,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-24",
+        "plotNumber": "24",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-25",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.002078,
+              0.0025271
+            ],
+            [
+              0.0023026,
+              0.0025271
+            ],
+            [
+              0.0023026,
+              0.0027517
+            ],
+            [
+              0.002078,
+              0.0027517
+            ],
+            [
+              0.002078,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-25",
+        "plotNumber": "25",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-26",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0023026,
+              0.0025271
+            ],
+            [
+              0.0025271,
+              0.0025271
+            ],
+            [
+              0.0025271,
+              0.0027517
+            ],
+            [
+              0.0023026,
+              0.0027517
+            ],
+            [
+              0.0023026,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-26",
+        "plotNumber": "26",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-27",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0025271,
+              0.0025271
+            ],
+            [
+              0.0027517,
+              0.0025271
+            ],
+            [
+              0.0027517,
+              0.0027517
+            ],
+            [
+              0.0025271,
+              0.0027517
+            ],
+            [
+              0.0025271,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-27",
+        "plotNumber": "27",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-28",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0027517,
+              0.0025271
+            ],
+            [
+              0.0029763,
+              0.0025271
+            ],
+            [
+              0.0029763,
+              0.0027517
+            ],
+            [
+              0.0027517,
+              0.0027517
+            ],
+            [
+              0.0027517,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-28",
+        "plotNumber": "28",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-29",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0029763,
+              0.0025271
+            ],
+            [
+              0.0032009,
+              0.0025271
+            ],
+            [
+              0.0032009,
+              0.0027517
+            ],
+            [
+              0.0029763,
+              0.0027517
+            ],
+            [
+              0.0029763,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-29",
+        "plotNumber": "29",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-30",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0032009,
+              0.0025271
+            ],
+            [
+              0.0034254,
+              0.0025271
+            ],
+            [
+              0.0034254,
+              0.0027517
+            ],
+            [
+              0.0032009,
+              0.0027517
+            ],
+            [
+              0.0032009,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-30",
+        "plotNumber": "30",
+        "sectorCode": "A",
+        "blockCode": "A1",
+        "streetCode": "A1-ST3",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-31",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0011797,
+              0.0035153
+            ],
+            [
+              0.0014042,
+              0.0035153
+            ],
+            [
+              0.0014042,
+              0.0037398
+            ],
+            [
+              0.0011797,
+              0.0037398
+            ],
+            [
+              0.0011797,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-31",
+        "plotNumber": "31",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST1",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-32",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0014042,
+              0.0035153
+            ],
+            [
+              0.0016288,
+              0.0035153
+            ],
+            [
+              0.0016288,
+              0.0037398
+            ],
+            [
+              0.0014042,
+              0.0037398
+            ],
+            [
+              0.0014042,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-32",
+        "plotNumber": "32",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-33",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0016288,
+              0.0035153
+            ],
+            [
+              0.0018534,
+              0.0035153
+            ],
+            [
+              0.0018534,
+              0.0037398
+            ],
+            [
+              0.0016288,
+              0.0037398
+            ],
+            [
+              0.0016288,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-33",
+        "plotNumber": "33",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-34",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0018534,
+              0.0035153
+            ],
+            [
+              0.002078,
+              0.0035153
+            ],
+            [
+              0.002078,
+              0.0037398
+            ],
+            [
+              0.0018534,
+              0.0037398
+            ],
+            [
+              0.0018534,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-34",
+        "plotNumber": "34",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-35",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.002078,
+              0.0035153
+            ],
+            [
+              0.0023026,
+              0.0035153
+            ],
+            [
+              0.0023026,
+              0.0037398
+            ],
+            [
+              0.002078,
+              0.0037398
+            ],
+            [
+              0.002078,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-35",
+        "plotNumber": "35",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-36",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0023026,
+              0.0035153
+            ],
+            [
+              0.0025271,
+              0.0035153
+            ],
+            [
+              0.0025271,
+              0.0037398
+            ],
+            [
+              0.0023026,
+              0.0037398
+            ],
+            [
+              0.0023026,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-36",
+        "plotNumber": "36",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-37",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0025271,
+              0.0035153
+            ],
+            [
+              0.0027517,
+              0.0035153
+            ],
+            [
+              0.0027517,
+              0.0037398
+            ],
+            [
+              0.0025271,
+              0.0037398
+            ],
+            [
+              0.0025271,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-37",
+        "plotNumber": "37",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-38",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0027517,
+              0.0035153
+            ],
+            [
+              0.0029763,
+              0.0035153
+            ],
+            [
+              0.0029763,
+              0.0037398
+            ],
+            [
+              0.0027517,
+              0.0037398
+            ],
+            [
+              0.0027517,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-38",
+        "plotNumber": "38",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-39",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0029763,
+              0.0035153
+            ],
+            [
+              0.0032009,
+              0.0035153
+            ],
+            [
+              0.0032009,
+              0.0037398
+            ],
+            [
+              0.0029763,
+              0.0037398
+            ],
+            [
+              0.0029763,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-39",
+        "plotNumber": "39",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-40",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0032009,
+              0.0035153
+            ],
+            [
+              0.0034254,
+              0.0035153
+            ],
+            [
+              0.0034254,
+              0.0037398
+            ],
+            [
+              0.0032009,
+              0.0037398
+            ],
+            [
+              0.0032009,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-40",
+        "plotNumber": "40",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST1",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-41",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0011797,
+              0.0042339
+            ],
+            [
+              0.0014042,
+              0.0042339
+            ],
+            [
+              0.0014042,
+              0.0044585
+            ],
+            [
+              0.0011797,
+              0.0044585
+            ],
+            [
+              0.0011797,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-41",
+        "plotNumber": "41",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST2",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-42",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0014042,
+              0.0042339
+            ],
+            [
+              0.0016288,
+              0.0042339
+            ],
+            [
+              0.0016288,
+              0.0044585
+            ],
+            [
+              0.0014042,
+              0.0044585
+            ],
+            [
+              0.0014042,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-42",
+        "plotNumber": "42",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-43",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0016288,
+              0.0042339
+            ],
+            [
+              0.0018534,
+              0.0042339
+            ],
+            [
+              0.0018534,
+              0.0044585
+            ],
+            [
+              0.0016288,
+              0.0044585
+            ],
+            [
+              0.0016288,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-43",
+        "plotNumber": "43",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-44",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0018534,
+              0.0042339
+            ],
+            [
+              0.002078,
+              0.0042339
+            ],
+            [
+              0.002078,
+              0.0044585
+            ],
+            [
+              0.0018534,
+              0.0044585
+            ],
+            [
+              0.0018534,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-44",
+        "plotNumber": "44",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-45",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.002078,
+              0.0042339
+            ],
+            [
+              0.0023026,
+              0.0042339
+            ],
+            [
+              0.0023026,
+              0.0044585
+            ],
+            [
+              0.002078,
+              0.0044585
+            ],
+            [
+              0.002078,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-45",
+        "plotNumber": "45",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-46",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0023026,
+              0.0042339
+            ],
+            [
+              0.0025271,
+              0.0042339
+            ],
+            [
+              0.0025271,
+              0.0044585
+            ],
+            [
+              0.0023026,
+              0.0044585
+            ],
+            [
+              0.0023026,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-46",
+        "plotNumber": "46",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-47",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0025271,
+              0.0042339
+            ],
+            [
+              0.0027517,
+              0.0042339
+            ],
+            [
+              0.0027517,
+              0.0044585
+            ],
+            [
+              0.0025271,
+              0.0044585
+            ],
+            [
+              0.0025271,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-47",
+        "plotNumber": "47",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-48",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0027517,
+              0.0042339
+            ],
+            [
+              0.0029763,
+              0.0042339
+            ],
+            [
+              0.0029763,
+              0.0044585
+            ],
+            [
+              0.0027517,
+              0.0044585
+            ],
+            [
+              0.0027517,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-48",
+        "plotNumber": "48",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-49",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0029763,
+              0.0042339
+            ],
+            [
+              0.0032009,
+              0.0042339
+            ],
+            [
+              0.0032009,
+              0.0044585
+            ],
+            [
+              0.0029763,
+              0.0044585
+            ],
+            [
+              0.0029763,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-49",
+        "plotNumber": "49",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-50",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0032009,
+              0.0042339
+            ],
+            [
+              0.0034254,
+              0.0042339
+            ],
+            [
+              0.0034254,
+              0.0044585
+            ],
+            [
+              0.0032009,
+              0.0044585
+            ],
+            [
+              0.0032009,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-50",
+        "plotNumber": "50",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST2",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-51",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0011797,
+              0.0049526
+            ],
+            [
+              0.0014042,
+              0.0049526
+            ],
+            [
+              0.0014042,
+              0.0051771
+            ],
+            [
+              0.0011797,
+              0.0051771
+            ],
+            [
+              0.0011797,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-51",
+        "plotNumber": "51",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST3",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-52",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0014042,
+              0.0049526
+            ],
+            [
+              0.0016288,
+              0.0049526
+            ],
+            [
+              0.0016288,
+              0.0051771
+            ],
+            [
+              0.0014042,
+              0.0051771
+            ],
+            [
+              0.0014042,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-52",
+        "plotNumber": "52",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-53",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0016288,
+              0.0049526
+            ],
+            [
+              0.0018534,
+              0.0049526
+            ],
+            [
+              0.0018534,
+              0.0051771
+            ],
+            [
+              0.0016288,
+              0.0051771
+            ],
+            [
+              0.0016288,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-53",
+        "plotNumber": "53",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-54",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0018534,
+              0.0049526
+            ],
+            [
+              0.002078,
+              0.0049526
+            ],
+            [
+              0.002078,
+              0.0051771
+            ],
+            [
+              0.0018534,
+              0.0051771
+            ],
+            [
+              0.0018534,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-54",
+        "plotNumber": "54",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-55",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.002078,
+              0.0049526
+            ],
+            [
+              0.0023026,
+              0.0049526
+            ],
+            [
+              0.0023026,
+              0.0051771
+            ],
+            [
+              0.002078,
+              0.0051771
+            ],
+            [
+              0.002078,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-55",
+        "plotNumber": "55",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-56",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0023026,
+              0.0049526
+            ],
+            [
+              0.0025271,
+              0.0049526
+            ],
+            [
+              0.0025271,
+              0.0051771
+            ],
+            [
+              0.0023026,
+              0.0051771
+            ],
+            [
+              0.0023026,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-56",
+        "plotNumber": "56",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-57",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0025271,
+              0.0049526
+            ],
+            [
+              0.0027517,
+              0.0049526
+            ],
+            [
+              0.0027517,
+              0.0051771
+            ],
+            [
+              0.0025271,
+              0.0051771
+            ],
+            [
+              0.0025271,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-57",
+        "plotNumber": "57",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-58",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0027517,
+              0.0049526
+            ],
+            [
+              0.0029763,
+              0.0049526
+            ],
+            [
+              0.0029763,
+              0.0051771
+            ],
+            [
+              0.0027517,
+              0.0051771
+            ],
+            [
+              0.0027517,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-58",
+        "plotNumber": "58",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-59",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0029763,
+              0.0049526
+            ],
+            [
+              0.0032009,
+              0.0049526
+            ],
+            [
+              0.0032009,
+              0.0051771
+            ],
+            [
+              0.0029763,
+              0.0051771
+            ],
+            [
+              0.0029763,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-59",
+        "plotNumber": "59",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-A-60",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0032009,
+              0.0049526
+            ],
+            [
+              0.0034254,
+              0.0049526
+            ],
+            [
+              0.0034254,
+              0.0051771
+            ],
+            [
+              0.0032009,
+              0.0051771
+            ],
+            [
+              0.0032009,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-A-60",
+        "plotNumber": "60",
+        "sectorCode": "A",
+        "blockCode": "A2",
+        "streetCode": "A2-ST3",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-1",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0040543,
+              0.0010898
+            ],
+            [
+              0.0042788,
+              0.0010898
+            ],
+            [
+              0.0042788,
+              0.0013144
+            ],
+            [
+              0.0040543,
+              0.0013144
+            ],
+            [
+              0.0040543,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-1",
+        "plotNumber": "1",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST1",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-2",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0042788,
+              0.0010898
+            ],
+            [
+              0.0045034,
+              0.0010898
+            ],
+            [
+              0.0045034,
+              0.0013144
+            ],
+            [
+              0.0042788,
+              0.0013144
+            ],
+            [
+              0.0042788,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-2",
+        "plotNumber": "2",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-3",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0045034,
+              0.0010898
+            ],
+            [
+              0.004728,
+              0.0010898
+            ],
+            [
+              0.004728,
+              0.0013144
+            ],
+            [
+              0.0045034,
+              0.0013144
+            ],
+            [
+              0.0045034,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-3",
+        "plotNumber": "3",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-4",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.004728,
+              0.0010898
+            ],
+            [
+              0.0049526,
+              0.0010898
+            ],
+            [
+              0.0049526,
+              0.0013144
+            ],
+            [
+              0.004728,
+              0.0013144
+            ],
+            [
+              0.004728,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-4",
+        "plotNumber": "4",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-5",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0049526,
+              0.0010898
+            ],
+            [
+              0.0051771,
+              0.0010898
+            ],
+            [
+              0.0051771,
+              0.0013144
+            ],
+            [
+              0.0049526,
+              0.0013144
+            ],
+            [
+              0.0049526,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-5",
+        "plotNumber": "5",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-6",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0051771,
+              0.0010898
+            ],
+            [
+              0.0054017,
+              0.0010898
+            ],
+            [
+              0.0054017,
+              0.0013144
+            ],
+            [
+              0.0051771,
+              0.0013144
+            ],
+            [
+              0.0051771,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-6",
+        "plotNumber": "6",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-7",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0054017,
+              0.0010898
+            ],
+            [
+              0.0056263,
+              0.0010898
+            ],
+            [
+              0.0056263,
+              0.0013144
+            ],
+            [
+              0.0054017,
+              0.0013144
+            ],
+            [
+              0.0054017,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-7",
+        "plotNumber": "7",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-8",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0056263,
+              0.0010898
+            ],
+            [
+              0.0058509,
+              0.0010898
+            ],
+            [
+              0.0058509,
+              0.0013144
+            ],
+            [
+              0.0056263,
+              0.0013144
+            ],
+            [
+              0.0056263,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-8",
+        "plotNumber": "8",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-9",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0058509,
+              0.0010898
+            ],
+            [
+              0.0060755,
+              0.0010898
+            ],
+            [
+              0.0060755,
+              0.0013144
+            ],
+            [
+              0.0058509,
+              0.0013144
+            ],
+            [
+              0.0058509,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-9",
+        "plotNumber": "9",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-10",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0060755,
+              0.0010898
+            ],
+            [
+              0.0063,
+              0.0010898
+            ],
+            [
+              0.0063,
+              0.0013144
+            ],
+            [
+              0.0060755,
+              0.0013144
+            ],
+            [
+              0.0060755,
+              0.0010898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-10",
+        "plotNumber": "10",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST1",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-11",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0040543,
+              0.0018085
+            ],
+            [
+              0.0042788,
+              0.0018085
+            ],
+            [
+              0.0042788,
+              0.0020331
+            ],
+            [
+              0.0040543,
+              0.0020331
+            ],
+            [
+              0.0040543,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-11",
+        "plotNumber": "11",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST2",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-12",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0042788,
+              0.0018085
+            ],
+            [
+              0.0045034,
+              0.0018085
+            ],
+            [
+              0.0045034,
+              0.0020331
+            ],
+            [
+              0.0042788,
+              0.0020331
+            ],
+            [
+              0.0042788,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-12",
+        "plotNumber": "12",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-13",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0045034,
+              0.0018085
+            ],
+            [
+              0.004728,
+              0.0018085
+            ],
+            [
+              0.004728,
+              0.0020331
+            ],
+            [
+              0.0045034,
+              0.0020331
+            ],
+            [
+              0.0045034,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-13",
+        "plotNumber": "13",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-14",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.004728,
+              0.0018085
+            ],
+            [
+              0.0049526,
+              0.0018085
+            ],
+            [
+              0.0049526,
+              0.0020331
+            ],
+            [
+              0.004728,
+              0.0020331
+            ],
+            [
+              0.004728,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-14",
+        "plotNumber": "14",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-15",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0049526,
+              0.0018085
+            ],
+            [
+              0.0051771,
+              0.0018085
+            ],
+            [
+              0.0051771,
+              0.0020331
+            ],
+            [
+              0.0049526,
+              0.0020331
+            ],
+            [
+              0.0049526,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-15",
+        "plotNumber": "15",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-16",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0051771,
+              0.0018085
+            ],
+            [
+              0.0054017,
+              0.0018085
+            ],
+            [
+              0.0054017,
+              0.0020331
+            ],
+            [
+              0.0051771,
+              0.0020331
+            ],
+            [
+              0.0051771,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-16",
+        "plotNumber": "16",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-17",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0054017,
+              0.0018085
+            ],
+            [
+              0.0056263,
+              0.0018085
+            ],
+            [
+              0.0056263,
+              0.0020331
+            ],
+            [
+              0.0054017,
+              0.0020331
+            ],
+            [
+              0.0054017,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-17",
+        "plotNumber": "17",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-18",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0056263,
+              0.0018085
+            ],
+            [
+              0.0058509,
+              0.0018085
+            ],
+            [
+              0.0058509,
+              0.0020331
+            ],
+            [
+              0.0056263,
+              0.0020331
+            ],
+            [
+              0.0056263,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-18",
+        "plotNumber": "18",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-19",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0058509,
+              0.0018085
+            ],
+            [
+              0.0060755,
+              0.0018085
+            ],
+            [
+              0.0060755,
+              0.0020331
+            ],
+            [
+              0.0058509,
+              0.0020331
+            ],
+            [
+              0.0058509,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-19",
+        "plotNumber": "19",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-20",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0060755,
+              0.0018085
+            ],
+            [
+              0.0063,
+              0.0018085
+            ],
+            [
+              0.0063,
+              0.0020331
+            ],
+            [
+              0.0060755,
+              0.0020331
+            ],
+            [
+              0.0060755,
+              0.0018085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-20",
+        "plotNumber": "20",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST2",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-21",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0040543,
+              0.0025271
+            ],
+            [
+              0.0042788,
+              0.0025271
+            ],
+            [
+              0.0042788,
+              0.0027517
+            ],
+            [
+              0.0040543,
+              0.0027517
+            ],
+            [
+              0.0040543,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-21",
+        "plotNumber": "21",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST3",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-22",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0042788,
+              0.0025271
+            ],
+            [
+              0.0045034,
+              0.0025271
+            ],
+            [
+              0.0045034,
+              0.0027517
+            ],
+            [
+              0.0042788,
+              0.0027517
+            ],
+            [
+              0.0042788,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-22",
+        "plotNumber": "22",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-23",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0045034,
+              0.0025271
+            ],
+            [
+              0.004728,
+              0.0025271
+            ],
+            [
+              0.004728,
+              0.0027517
+            ],
+            [
+              0.0045034,
+              0.0027517
+            ],
+            [
+              0.0045034,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-23",
+        "plotNumber": "23",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-24",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.004728,
+              0.0025271
+            ],
+            [
+              0.0049526,
+              0.0025271
+            ],
+            [
+              0.0049526,
+              0.0027517
+            ],
+            [
+              0.004728,
+              0.0027517
+            ],
+            [
+              0.004728,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-24",
+        "plotNumber": "24",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-25",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0049526,
+              0.0025271
+            ],
+            [
+              0.0051771,
+              0.0025271
+            ],
+            [
+              0.0051771,
+              0.0027517
+            ],
+            [
+              0.0049526,
+              0.0027517
+            ],
+            [
+              0.0049526,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-25",
+        "plotNumber": "25",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-26",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0051771,
+              0.0025271
+            ],
+            [
+              0.0054017,
+              0.0025271
+            ],
+            [
+              0.0054017,
+              0.0027517
+            ],
+            [
+              0.0051771,
+              0.0027517
+            ],
+            [
+              0.0051771,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-26",
+        "plotNumber": "26",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-27",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0054017,
+              0.0025271
+            ],
+            [
+              0.0056263,
+              0.0025271
+            ],
+            [
+              0.0056263,
+              0.0027517
+            ],
+            [
+              0.0054017,
+              0.0027517
+            ],
+            [
+              0.0054017,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-27",
+        "plotNumber": "27",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-28",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0056263,
+              0.0025271
+            ],
+            [
+              0.0058509,
+              0.0025271
+            ],
+            [
+              0.0058509,
+              0.0027517
+            ],
+            [
+              0.0056263,
+              0.0027517
+            ],
+            [
+              0.0056263,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-28",
+        "plotNumber": "28",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-29",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0058509,
+              0.0025271
+            ],
+            [
+              0.0060755,
+              0.0025271
+            ],
+            [
+              0.0060755,
+              0.0027517
+            ],
+            [
+              0.0058509,
+              0.0027517
+            ],
+            [
+              0.0058509,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-29",
+        "plotNumber": "29",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-30",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0060755,
+              0.0025271
+            ],
+            [
+              0.0063,
+              0.0025271
+            ],
+            [
+              0.0063,
+              0.0027517
+            ],
+            [
+              0.0060755,
+              0.0027517
+            ],
+            [
+              0.0060755,
+              0.0025271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-30",
+        "plotNumber": "30",
+        "sectorCode": "B",
+        "blockCode": "B1",
+        "streetCode": "B1-ST3",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-31",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0040543,
+              0.0035153
+            ],
+            [
+              0.0042788,
+              0.0035153
+            ],
+            [
+              0.0042788,
+              0.0037398
+            ],
+            [
+              0.0040543,
+              0.0037398
+            ],
+            [
+              0.0040543,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-31",
+        "plotNumber": "31",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST1",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-32",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0042788,
+              0.0035153
+            ],
+            [
+              0.0045034,
+              0.0035153
+            ],
+            [
+              0.0045034,
+              0.0037398
+            ],
+            [
+              0.0042788,
+              0.0037398
+            ],
+            [
+              0.0042788,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-32",
+        "plotNumber": "32",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-33",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0045034,
+              0.0035153
+            ],
+            [
+              0.004728,
+              0.0035153
+            ],
+            [
+              0.004728,
+              0.0037398
+            ],
+            [
+              0.0045034,
+              0.0037398
+            ],
+            [
+              0.0045034,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-33",
+        "plotNumber": "33",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-34",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.004728,
+              0.0035153
+            ],
+            [
+              0.0049526,
+              0.0035153
+            ],
+            [
+              0.0049526,
+              0.0037398
+            ],
+            [
+              0.004728,
+              0.0037398
+            ],
+            [
+              0.004728,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-34",
+        "plotNumber": "34",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-35",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0049526,
+              0.0035153
+            ],
+            [
+              0.0051771,
+              0.0035153
+            ],
+            [
+              0.0051771,
+              0.0037398
+            ],
+            [
+              0.0049526,
+              0.0037398
+            ],
+            [
+              0.0049526,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-35",
+        "plotNumber": "35",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-36",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0051771,
+              0.0035153
+            ],
+            [
+              0.0054017,
+              0.0035153
+            ],
+            [
+              0.0054017,
+              0.0037398
+            ],
+            [
+              0.0051771,
+              0.0037398
+            ],
+            [
+              0.0051771,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-36",
+        "plotNumber": "36",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-37",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0054017,
+              0.0035153
+            ],
+            [
+              0.0056263,
+              0.0035153
+            ],
+            [
+              0.0056263,
+              0.0037398
+            ],
+            [
+              0.0054017,
+              0.0037398
+            ],
+            [
+              0.0054017,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-37",
+        "plotNumber": "37",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-38",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0056263,
+              0.0035153
+            ],
+            [
+              0.0058509,
+              0.0035153
+            ],
+            [
+              0.0058509,
+              0.0037398
+            ],
+            [
+              0.0056263,
+              0.0037398
+            ],
+            [
+              0.0056263,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-38",
+        "plotNumber": "38",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-39",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0058509,
+              0.0035153
+            ],
+            [
+              0.0060755,
+              0.0035153
+            ],
+            [
+              0.0060755,
+              0.0037398
+            ],
+            [
+              0.0058509,
+              0.0037398
+            ],
+            [
+              0.0058509,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-39",
+        "plotNumber": "39",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST1",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-40",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0060755,
+              0.0035153
+            ],
+            [
+              0.0063,
+              0.0035153
+            ],
+            [
+              0.0063,
+              0.0037398
+            ],
+            [
+              0.0060755,
+              0.0037398
+            ],
+            [
+              0.0060755,
+              0.0035153
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-40",
+        "plotNumber": "40",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST1",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-41",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0040543,
+              0.0042339
+            ],
+            [
+              0.0042788,
+              0.0042339
+            ],
+            [
+              0.0042788,
+              0.0044585
+            ],
+            [
+              0.0040543,
+              0.0044585
+            ],
+            [
+              0.0040543,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-41",
+        "plotNumber": "41",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST2",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-42",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0042788,
+              0.0042339
+            ],
+            [
+              0.0045034,
+              0.0042339
+            ],
+            [
+              0.0045034,
+              0.0044585
+            ],
+            [
+              0.0042788,
+              0.0044585
+            ],
+            [
+              0.0042788,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-42",
+        "plotNumber": "42",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-43",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0045034,
+              0.0042339
+            ],
+            [
+              0.004728,
+              0.0042339
+            ],
+            [
+              0.004728,
+              0.0044585
+            ],
+            [
+              0.0045034,
+              0.0044585
+            ],
+            [
+              0.0045034,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-43",
+        "plotNumber": "43",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-44",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.004728,
+              0.0042339
+            ],
+            [
+              0.0049526,
+              0.0042339
+            ],
+            [
+              0.0049526,
+              0.0044585
+            ],
+            [
+              0.004728,
+              0.0044585
+            ],
+            [
+              0.004728,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-44",
+        "plotNumber": "44",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-45",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0049526,
+              0.0042339
+            ],
+            [
+              0.0051771,
+              0.0042339
+            ],
+            [
+              0.0051771,
+              0.0044585
+            ],
+            [
+              0.0049526,
+              0.0044585
+            ],
+            [
+              0.0049526,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-45",
+        "plotNumber": "45",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-46",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0051771,
+              0.0042339
+            ],
+            [
+              0.0054017,
+              0.0042339
+            ],
+            [
+              0.0054017,
+              0.0044585
+            ],
+            [
+              0.0051771,
+              0.0044585
+            ],
+            [
+              0.0051771,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-46",
+        "plotNumber": "46",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-47",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0054017,
+              0.0042339
+            ],
+            [
+              0.0056263,
+              0.0042339
+            ],
+            [
+              0.0056263,
+              0.0044585
+            ],
+            [
+              0.0054017,
+              0.0044585
+            ],
+            [
+              0.0054017,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-47",
+        "plotNumber": "47",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-48",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0056263,
+              0.0042339
+            ],
+            [
+              0.0058509,
+              0.0042339
+            ],
+            [
+              0.0058509,
+              0.0044585
+            ],
+            [
+              0.0056263,
+              0.0044585
+            ],
+            [
+              0.0056263,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-48",
+        "plotNumber": "48",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-49",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0058509,
+              0.0042339
+            ],
+            [
+              0.0060755,
+              0.0042339
+            ],
+            [
+              0.0060755,
+              0.0044585
+            ],
+            [
+              0.0058509,
+              0.0044585
+            ],
+            [
+              0.0058509,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-49",
+        "plotNumber": "49",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST2",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-50",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0060755,
+              0.0042339
+            ],
+            [
+              0.0063,
+              0.0042339
+            ],
+            [
+              0.0063,
+              0.0044585
+            ],
+            [
+              0.0060755,
+              0.0044585
+            ],
+            [
+              0.0060755,
+              0.0042339
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-50",
+        "plotNumber": "50",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST2",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-51",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0040543,
+              0.0049526
+            ],
+            [
+              0.0042788,
+              0.0049526
+            ],
+            [
+              0.0042788,
+              0.0051771
+            ],
+            [
+              0.0040543,
+              0.0051771
+            ],
+            [
+              0.0040543,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-51",
+        "plotNumber": "51",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST3",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-52",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0042788,
+              0.0049526
+            ],
+            [
+              0.0045034,
+              0.0049526
+            ],
+            [
+              0.0045034,
+              0.0051771
+            ],
+            [
+              0.0042788,
+              0.0051771
+            ],
+            [
+              0.0042788,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-52",
+        "plotNumber": "52",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-53",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0045034,
+              0.0049526
+            ],
+            [
+              0.004728,
+              0.0049526
+            ],
+            [
+              0.004728,
+              0.0051771
+            ],
+            [
+              0.0045034,
+              0.0051771
+            ],
+            [
+              0.0045034,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-53",
+        "plotNumber": "53",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-54",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.004728,
+              0.0049526
+            ],
+            [
+              0.0049526,
+              0.0049526
+            ],
+            [
+              0.0049526,
+              0.0051771
+            ],
+            [
+              0.004728,
+              0.0051771
+            ],
+            [
+              0.004728,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-54",
+        "plotNumber": "54",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-55",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0049526,
+              0.0049526
+            ],
+            [
+              0.0051771,
+              0.0049526
+            ],
+            [
+              0.0051771,
+              0.0051771
+            ],
+            [
+              0.0049526,
+              0.0051771
+            ],
+            [
+              0.0049526,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-55",
+        "plotNumber": "55",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-56",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0051771,
+              0.0049526
+            ],
+            [
+              0.0054017,
+              0.0049526
+            ],
+            [
+              0.0054017,
+              0.0051771
+            ],
+            [
+              0.0051771,
+              0.0051771
+            ],
+            [
+              0.0051771,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-56",
+        "plotNumber": "56",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-57",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0054017,
+              0.0049526
+            ],
+            [
+              0.0056263,
+              0.0049526
+            ],
+            [
+              0.0056263,
+              0.0051771
+            ],
+            [
+              0.0054017,
+              0.0051771
+            ],
+            [
+              0.0054017,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-57",
+        "plotNumber": "57",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Available",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-58",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0056263,
+              0.0049526
+            ],
+            [
+              0.0058509,
+              0.0049526
+            ],
+            [
+              0.0058509,
+              0.0051771
+            ],
+            [
+              0.0056263,
+              0.0051771
+            ],
+            [
+              0.0056263,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-58",
+        "plotNumber": "58",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Reserved",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-59",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0058509,
+              0.0049526
+            ],
+            [
+              0.0060755,
+              0.0049526
+            ],
+            [
+              0.0060755,
+              0.0051771
+            ],
+            [
+              0.0058509,
+              0.0051771
+            ],
+            [
+              0.0058509,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-59",
+        "plotNumber": "59",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST3",
+        "roadCode": null,
+        "plotType": "Residential",
+        "status": "Allocated",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-P-B-60",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0060755,
+              0.0049526
+            ],
+            [
+              0.0063,
+              0.0049526
+            ],
+            [
+              0.0063,
+              0.0051771
+            ],
+            [
+              0.0060755,
+              0.0051771
+            ],
+            [
+              0.0060755,
+              0.0049526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-P-B-60",
+        "plotNumber": "60",
+        "sectorCode": "B",
+        "blockCode": "B2",
+        "streetCode": "B2-ST3",
+        "roadCode": null,
+        "plotType": "Commercial",
+        "status": "Unknown",
+        "areaSquareMetres": 625,
+        "dimensions": "25 m x 25 m",
+        "authorityReference": null
+      }
+    }
+  ]
+}

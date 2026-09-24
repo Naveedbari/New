@@ -1,0 +1,291 @@
+{
+  "type": "FeatureCollection",
+  "name": "streets",
+  "metadata": {
+    "version": "dev-sample-0.1",
+    "name": "Development sample scheme (synthetic)",
+    "crs": "EPSG:4326",
+    "isDevelopmentData": true,
+    "disclaimer": "SYNTHETIC DEVELOPMENT DATA. Not a real housing scheme. Located near 0°N 0°E on purpose. Must never be loaded into staging or production.",
+    "layer": "streets",
+    "coordinateOrder": "lon,lat"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "DEV-ST-A1-ST1",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.0010898,
+            0.0010449
+          ],
+          [
+            0.0036051,
+            0.0010449
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-ST-A1-ST1",
+        "code": "A1-ST1",
+        "name": "Street 1",
+        "blockCode": "A1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-ST-A1-ST2",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.0010898,
+            0.0017636
+          ],
+          [
+            0.0036051,
+            0.0017636
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-ST-A1-ST2",
+        "code": "A1-ST2",
+        "name": "Street 2",
+        "blockCode": "A1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-ST-A1-ST3",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.0010898,
+            0.0024822
+          ],
+          [
+            0.0036051,
+            0.0024822
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-ST-A1-ST3",
+        "code": "A1-ST3",
+        "name": "Street 3",
+        "blockCode": "A1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-ST-A2-ST1",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.0010898,
+            0.0034704
+          ],
+          [
+            0.0036051,
+            0.0034704
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-ST-A2-ST1",
+        "code": "A2-ST1",
+        "name": "Street 1",
+        "blockCode": "A2"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-ST-A2-ST2",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.0010898,
+            0.004189
+          ],
+          [
+            0.0036051,
+            0.004189
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-ST-A2-ST2",
+        "code": "A2-ST2",
+        "name": "Street 2",
+        "blockCode": "A2"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-ST-A2-ST3",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.0010898,
+            0.0049077
+          ],
+          [
+            0.0036051,
+            0.0049077
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-ST-A2-ST3",
+        "code": "A2-ST3",
+        "name": "Street 3",
+        "blockCode": "A2"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-ST-B1-ST1",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.0039644,
+            0.0010449
+          ],
+          [
+            0.0064797,
+            0.0010449
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-ST-B1-ST1",
+        "code": "B1-ST1",
+        "name": "Street 1",
+        "blockCode": "B1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-ST-B1-ST2",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.0039644,
+            0.0017636
+          ],
+          [
+            0.0064797,
+            0.0017636
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-ST-B1-ST2",
+        "code": "B1-ST2",
+        "name": "Street 2",
+        "blockCode": "B1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-ST-B1-ST3",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.0039644,
+            0.0024822
+          ],
+          [
+            0.0064797,
+            0.0024822
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-ST-B1-ST3",
+        "code": "B1-ST3",
+        "name": "Street 3",
+        "blockCode": "B1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-ST-B2-ST1",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.0039644,
+            0.0034704
+          ],
+          [
+            0.0064797,
+            0.0034704
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-ST-B2-ST1",
+        "code": "B2-ST1",
+        "name": "Street 1",
+        "blockCode": "B2"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-ST-B2-ST2",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.0039644,
+            0.004189
+          ],
+          [
+            0.0064797,
+            0.004189
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-ST-B2-ST2",
+        "code": "B2-ST2",
+        "name": "Street 2",
+        "blockCode": "B2"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-ST-B2-ST3",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.0039644,
+            0.0049077
+          ],
+          [
+            0.0064797,
+            0.0049077
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-ST-B2-ST3",
+        "code": "B2-ST3",
+        "name": "Street 3",
+        "blockCode": "B2"
+      }
+    }
+  ]
+}

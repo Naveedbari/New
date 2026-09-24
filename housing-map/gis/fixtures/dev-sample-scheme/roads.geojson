@@ -1,0 +1,96 @@
+{
+  "type": "FeatureCollection",
+  "name": "roads",
+  "metadata": {
+    "version": "dev-sample-0.1",
+    "name": "Development sample scheme (synthetic)",
+    "crs": "EPSG:4326",
+    "isDevelopmentData": true,
+    "disclaimer": "SYNTHETIC DEVELOPMENT DATA. Not a real housing scheme. Located near 0°N 0°E on purpose. Must never be loaded into staging or production.",
+    "layer": "roads",
+    "coordinateOrder": "lon,lat"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "DEV-R-MB",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.001,
+            0.0032907
+          ],
+          [
+            0.0065695,
+            0.0032907
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-R-MB",
+        "code": "MB",
+        "name": "Main Boulevard (sample)",
+        "roadType": "Boulevard"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-R-DR",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.0037848,
+            0.001
+          ],
+          [
+            0.0037848,
+            0.0055814
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-R-DR",
+        "code": "DR",
+        "name": "Sector Divide Road (sample)",
+        "roadType": "Main"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-R-PR",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            0.001,
+            0.001
+          ],
+          [
+            0.0065695,
+            0.001
+          ],
+          [
+            0.0065695,
+            0.0055814
+          ],
+          [
+            0.001,
+            0.0055814
+          ],
+          [
+            0.001,
+            0.001
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-R-PR",
+        "code": "PR",
+        "name": "Perimeter Road (sample)",
+        "roadType": "Perimeter"
+      }
+    }
+  ]
+}

@@ -1,0 +1,163 @@
+{
+  "type": "FeatureCollection",
+  "name": "blocks",
+  "metadata": {
+    "version": "dev-sample-0.1",
+    "name": "Development sample scheme (synthetic)",
+    "crs": "EPSG:4326",
+    "isDevelopmentData": true,
+    "disclaimer": "SYNTHETIC DEVELOPMENT DATA. Not a real housing scheme. Located near 0°N 0°E on purpose. Must never be loaded into staging or production.",
+    "layer": "blocks",
+    "coordinateOrder": "lon,lat"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "DEV-B-A1",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.001,
+              0.001
+            ],
+            [
+              0.0036949,
+              0.001
+            ],
+            [
+              0.0036949,
+              0.0031559
+            ],
+            [
+              0.001,
+              0.0031559
+            ],
+            [
+              0.001,
+              0.001
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-B-A1",
+        "code": "A1",
+        "name": "Block A1 (sample)",
+        "sectorCode": "A"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-B-A2",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.001,
+              0.0034254
+            ],
+            [
+              0.0036949,
+              0.0034254
+            ],
+            [
+              0.0036949,
+              0.0055814
+            ],
+            [
+              0.001,
+              0.0055814
+            ],
+            [
+              0.001,
+              0.0034254
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-B-A2",
+        "code": "A2",
+        "name": "Block A2 (sample)",
+        "sectorCode": "A"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-B-B1",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0038746,
+              0.001
+            ],
+            [
+              0.0065695,
+              0.001
+            ],
+            [
+              0.0065695,
+              0.0031559
+            ],
+            [
+              0.0038746,
+              0.0031559
+            ],
+            [
+              0.0038746,
+              0.001
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-B-B1",
+        "code": "B1",
+        "name": "Block B1 (sample)",
+        "sectorCode": "B"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEV-B-B2",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.0038746,
+              0.0034254
+            ],
+            [
+              0.0065695,
+              0.0034254
+            ],
+            [
+              0.0065695,
+              0.0055814
+            ],
+            [
+              0.0038746,
+              0.0055814
+            ],
+            [
+              0.0038746,
+              0.0034254
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "DEV-B-B2",
+        "code": "B2",
+        "name": "Block B2 (sample)",
+        "sectorCode": "B"
+      }
+    }
+  ]
+}
