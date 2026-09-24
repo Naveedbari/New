@@ -8,14 +8,26 @@ affect the site's build or deployment.
 
 ## Contents
 
-- `docs/`: product and technical specification (v0.1, files `00`–`12`)
-- `docs/GIS-Feasibility-Report.md`: **Milestone 0** assessment of the supplied map
-- `gis/source/`: placeholder only. Source maps are not committed (see its README)
+| Path | What |
+|---|---|
+| `docs/` | Specification v0.1 (`00`–`12`), `GIS-Feasibility-Report.md` (M0), `Milestone-1-Notes.md` |
+| `api/` | ASP.NET Core 10 API + PostGIS ([README](api/README.md)) |
+| `mobile/` | Ionic Angular + Capacitor Android app ([README](mobile/README.md)) |
+| `gis/fixtures/` | **Synthetic** development dataset (not real data) |
+| `gis/scripts/` | Fixture generator |
+| `gis/source/` | Placeholder only. Source maps are never committed |
+| `docker-compose.yml` | Local PostGIS |
 
-## Current status
+## Quick start
 
-Milestone 0 (Discovery & Feasibility) is **in progress**. The only map supplied so far
-is a low-resolution real-estate brochure image. It is not georeferenced, and plot
-numbers cannot be read from it. The official layout plan must be obtained from
-DHA Bahawalpur before the GIS pipeline (Milestone 2) can start. See §6 of the
-feasibility report for the list of data to request.
+```bash
+docker compose up -d                                   # PostGIS on :5432
+cd api && dotnet run --project src/HousingMap.Api      # API on :5095, migrates + seeds dev data
+cd mobile && npm ci && npm start                       # App on :4200
+```
+
+## Status
+
+- **Milestone 0** (feasibility): open. Only a low-resolution brochure image was supplied, so the
+  official DHA Bahawalpur layout data is still needed. See `docs/GIS-Feasibility-Report.md` §6.
+- **Milestone 1** (foundation): done with synthetic data. See `docs/Milestone-1-Notes.md`.

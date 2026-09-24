@@ -1,0 +1,78 @@
+name: Housing Map CI
+
+on:
+  push:
+    paths:
+      - "housing-map/**"
+      - ".github/workflows/housing-map-ci.yml"
+  pull_request:
+    paths:
+      - "housing-map/**"
+      - ".github/workflows/housing-map-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  api:
+    name: API (build, format, tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: housing-map/api
+    services:
+      postgis:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_USER: housingmap
+          POSTGRES_PASSWORD: housingmap_dev
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U housingmap"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      HOUSINGMAP_TEST_CONNECTION: Host=localhost;Port=5432;Database=housingmap_test;Username=housingmap;Password=housingmap_dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet restore HousingMap.slnx
+      - run: dotnet format HousingMap.slnx --verify-no-changes --no-restore
+      - run: dotnet build HousingMap.slnx --configuration Release --no-restore
+      - run: dotnet test HousingMap.slnx --configuration Release --no-build
+
+  mobile:
+    name: Mobile (lint, tests, build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: housing-map/mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: housing-map/mobile/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm test
+      - run: npm run build
+
+  gis-fixture:
+    name: GIS fixture is up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node housing-map/gis/scripts/generate-dev-fixture.mjs
+      - run: git diff --exit-code -- housing-map/gis/fixtures
