@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" />
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-list-header>About</ion-list-header>
+    <ion-item>
+      <ion-label>App version</ion-label>
+      <ion-note slot="end">{{ version }}</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label>Environment</ion-label>
+      <ion-note slot="end">{{ config.name }}</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap">
+        <h3>Map service</h3>
+        <p>{{ config.apiBaseUrl }}</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-list-header>Privacy</ion-list-header>
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        <p>
+          This version does not use your location. The location privacy policy will be shown here
+          once it has been approved by the housing authority.
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

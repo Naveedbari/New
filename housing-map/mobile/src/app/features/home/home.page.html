@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Housing Map</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/settings" aria-label="Settings">
+        <ion-icon slot="icon-only" name="settings-outline" aria-hidden="true" />
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <section class="map-placeholder" aria-label="Map">
+    <ion-icon name="map-outline" aria-hidden="true" />
+    <p>The map will appear here in Milestone 4.</p>
+  </section>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Map data</ion-card-subtitle>
+      <ion-card-title>Service status</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      @let status = store.status();
+      @if (status.state === 'loading') {
+        <app-loading-state message="Connecting to the map service…" />
+      } @else if (status.state === 'error') {
+        <app-error-state [message]="status.error.message" (retry)="store.load()" />
+      } @else if (status.state === 'ready') {
+        @if (status.info.activeDataset; as dataset) {
+          @if (dataset.isDevelopmentData) {
+            <ion-badge color="warning" class="dev-badge">
+              Development sample data — not a real map
+            </ion-badge>
+          }
+          <dl>
+            <dt>Dataset</dt>
+            <dd>{{ dataset.name }}</dd>
+            <dt>Version</dt>
+            <dd>{{ dataset.version }}</dd>
+            <dt>Plots</dt>
+            <dd>{{ dataset.featureCounts.plots }}</dd>
+            <dt>Sectors</dt>
+            <dd>{{ dataset.featureCounts.sectors }}</dd>
+            <dt>Roads</dt>
+            <dd>{{ dataset.featureCounts.roads }}</dd>
+          </dl>
+        } @else {
+          <app-empty-state message="No map data has been published yet." />
+        }
+      }
+    </ion-card-content>
+  </ion-card>
+</ion-content>
