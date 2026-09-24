@@ -1,0 +1,21 @@
+# Local development database: PostgreSQL 16 + PostGIS 3.4.
+# Credentials are for local development only and match api/src/HousingMap.Api/appsettings.Development.json.
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: housingmap
+      POSTGRES_PASSWORD: housingmap_dev
+      POSTGRES_DB: housingmap_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - housingmap-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U housingmap -d housingmap_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  housingmap-db:

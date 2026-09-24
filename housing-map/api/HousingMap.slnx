@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/HousingMap.Api/HousingMap.Api.csproj" />
+    <Project Path="src/HousingMap.Application/HousingMap.Application.csproj" />
+    <Project Path="src/HousingMap.Domain/HousingMap.Domain.csproj" />
+    <Project Path="src/HousingMap.Infrastructure/HousingMap.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/HousingMap.IntegrationTests/HousingMap.IntegrationTests.csproj" />
+    <Project Path="tests/HousingMap.UnitTests/HousingMap.UnitTests.csproj" />
+  </Folder>
+</Solution>
