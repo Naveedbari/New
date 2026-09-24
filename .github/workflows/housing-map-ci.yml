@@ -67,12 +67,13 @@ jobs:
       - run: npm run build
 
   gis-fixture:
-    name: GIS fixture is up to date
+    name: GIS scripts and fixture
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: node --test housing-map/gis/scripts/*.test.mjs
       - run: node housing-map/gis/scripts/generate-dev-fixture.mjs
       - run: git diff --exit-code -- housing-map/gis/fixtures

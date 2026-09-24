@@ -14,7 +14,8 @@ affect the site's build or deployment.
 | `api/` | ASP.NET Core 10 API + PostGIS ([README](api/README.md)) |
 | `mobile/` | Ionic Angular + Capacitor Android app ([README](mobile/README.md)) |
 | `gis/fixtures/` | **Synthetic** development dataset (not real data) |
-| `gis/scripts/` | Fixture generator |
+| `gis/scripts/` | Fixture generator, georeferencing tool |
+| `gis/control-points/` | Control points for the brochure map (coordinates pending) |
 | `gis/source/` | Placeholder only. Source maps are never committed |
 | `docker-compose.yml` | Local PostGIS |
 

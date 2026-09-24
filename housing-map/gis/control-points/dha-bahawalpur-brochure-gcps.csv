@@ -1,0 +1,14 @@
+# Ground control points for the DHA Bahawalpur brochure map (JPEG 1536x1075, not committed).
+# pixel_x / pixel_y: position on the brochure image, origin top-left, y down. Picked from the image.
+# longitude / latitude: WGS 84 decimal degrees (EPSG:4326), from Google Maps / Google Earth or a
+#   phone GPS standing at the spot. Leave blank until measured. Do NOT estimate or guess.
+# source: where each coordinate came from, e.g. "Google Maps satellite" or "phone GPS 2026-09-25".
+id,pixel_x,pixel_y,longitude,latitude,source,description
+GCP-01,271,315,,,,"West roundabout: Main Boulevard (MB-01) crossing the diagonal avenue, between Sector G/H and Sector F"
+GCP-02,755,463,,,,"Roundabout at the north-west corner of Sector A, where Main Boulevard meets the avenue running south-west past Sector D"
+GCP-03,1199,516,,,,"Large central junction east of the Jamia Masjid park, north-west corner of DHA Club & Allied Facilities"
+GCP-04,1487,629,,,,"East roundabout at the far end of the commercial boulevard (CN-001..003 / CB-001..002), east edge of the scheme"
+GCP-05,1045,746,,,,"Roundabout south-east of the Army Officers Housing Scheme (AOHS), at the DHA Office Complex"
+GCP-06,985,906,,,,"South roundabout at the east edge of Sector E (near SKMT), on the avenue running south from the DHA Office Complex"
+GCP-07,1228,128,,,,"Where the north-south avenue (towards Sector-Zee / Hootwala) meets the Southern Bypass beside the canal bridge"
+GCP-08,644,166,,,,"Where the diagonal avenue on the east side of Sector J/H meets the canal-side road (north edge of the scheme)"
