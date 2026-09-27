@@ -20,6 +20,8 @@ import {
   IonList,
   IonNote,
   IonSearchbar,
+  IonSelect,
+  IonSelectOption,
   IonTitle,
   IonToolbar,
   NavController,
@@ -59,6 +61,8 @@ const today = (): string => {
     IonNote,
     IonIcon,
     IonSearchbar,
+    IonSelect,
+    IonSelectOption,
     IonCard,
     IonCardHeader,
     IonCardTitle,
@@ -99,6 +103,10 @@ export class TournamentNewPage {
   // Step 2 – pools and courts. Team counts per pool are worked out automatically.
   readonly poolCount = signal<number | null>(null);
   readonly courtCount = signal<number | null>(null);
+  /** With a single pool the user picks the court instead of it being drawn. */
+  readonly isSinglePool = computed(() => this.poolCount() === 1);
+  readonly singleCourt = signal<number | null>(null);
+  readonly courtOptions = Array.from({ length: 10 }, (_, i) => i + 1);
   readonly sizes = computed(() => {
     const pools = this.poolCount();
     return pools && !this.poolError() ? poolSizes(this.selectedTeams().length, pools) : [];
@@ -108,6 +116,7 @@ export class TournamentNewPage {
     if (!sizes.length) return '';
     const max = sizes[0]!;
     const min = sizes[sizes.length - 1]!;
+    if (sizes.length === 1) return `1 pool of ${max} teams`;
     if (max === min) return `${sizes.length} pools × ${max} teams each`;
     const big = sizes.filter((n) => n === max).length;
     return `${big} pool(s) of ${max} teams and ${sizes.length - big} pool(s) of ${min} teams`;
@@ -115,7 +124,9 @@ export class TournamentNewPage {
   readonly courtSummary = computed(() => {
     const pools = this.poolCount() ?? 0;
     const courts = this.courtCount() ?? 0;
-    if (!pools || !courts || this.poolError()) return '';
+    if (!pools || this.poolError()) return '';
+    if (this.isSinglePool()) return `The whole tournament will be played on ${courtName(this.singleCourt()!)}.`;
+    if (!courts) return '';
     if (courts >= pools) return 'Every pool gets its own court.';
     const perCourt = Math.ceil(pools / courts);
     return `Courts will be shared — up to ${perCourt} pools per court.`;
@@ -127,6 +138,7 @@ export class TournamentNewPage {
     if (!pools) return 'Enter the number of pools.';
     if (!Number.isInteger(pools) || pools < 1) return 'Number of pools must be a whole number of 1 or more.';
     if (selected / pools < 2) return `${selected} teams can make at most ${Math.floor(selected / 2)} pools (2+ teams per pool).`;
+    if (pools === 1) return this.singleCourt() ? '' : 'Choose the court for this tournament.';
     if (!courts) return 'Enter the number of courts.';
     if (!Number.isInteger(courts) || courts < 1) return 'Number of courts must be a whole number of 1 or more.';
     return '';
@@ -184,8 +196,11 @@ export class TournamentNewPage {
   draw(): void {
     if (this.poolError()) return;
     const times = this.pools().map((p) => p.startTime);
-    const drawn = drawPools(this.selectedTeams(), this.poolCount()!, this.courtCount()!);
-    this.pools.set(drawn.map((p, i) => ({ ...p, startTime: times[i] ?? null })));
+    const single = this.isSinglePool();
+    const drawn = drawPools(this.selectedTeams(), this.poolCount()!, single ? 1 : this.courtCount()!);
+    this.pools.set(
+      drawn.map((p, i) => ({ ...p, court: single ? this.singleCourt() : p.court, startTime: times[i] ?? null })),
+    );
     this.step.set('draw');
   }
 
@@ -204,7 +219,12 @@ export class TournamentNewPage {
     }
     this.saving.set(true);
     try {
-      const id = await this.tournaments.start(this.season()!, this.playedOn, this.courtCount()!, this.pools());
+      const id = await this.tournaments.start(
+        this.season()!,
+        this.playedOn,
+        this.isSinglePool() ? 1 : this.courtCount()!,
+        this.pools(),
+      );
       await this.toast('Tournament started!', 'success');
       await this.nav.navigateRoot('/tabs/tournaments');
       await this.nav.navigateForward(['/tournaments', id, 'fixtures']);

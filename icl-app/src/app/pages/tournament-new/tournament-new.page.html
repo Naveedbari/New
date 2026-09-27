@@ -74,10 +74,21 @@
             <ion-input label="How many pools?" labelPlacement="stacked" type="number" inputmode="numeric" min="1"
               [value]="poolCount()" (ionInput)="poolCount.set(toNumber($event.detail.value))"></ion-input>
           </ion-item>
-          <ion-item>
-            <ion-input label="How many courts / grounds?" labelPlacement="stacked" type="number" inputmode="numeric" min="1"
-              [value]="courtCount()" (ionInput)="courtCount.set(toNumber($event.detail.value))"></ion-input>
-          </ion-item>
+          @if (isSinglePool()) {
+            <ion-item>
+              <ion-select id="single-court" label="Which court?" labelPlacement="stacked" interface="action-sheet"
+                placeholder="Choose a court" [value]="singleCourt()" (ionChange)="singleCourt.set($event.detail.value)">
+                @for (c of courtOptions; track c) {
+                  <ion-select-option [value]="c">{{ courtName(c) }}</ion-select-option>
+                }
+              </ion-select>
+            </ion-item>
+          } @else {
+            <ion-item>
+              <ion-input label="How many courts / grounds?" labelPlacement="stacked" type="number" inputmode="numeric" min="1"
+                [value]="courtCount()" (ionInput)="courtCount.set(toNumber($event.detail.value))"></ion-input>
+            </ion-item>
+          }
         </ion-list>
 
         @if (poolError()) {
@@ -91,7 +102,7 @@
 
     @case ('draw') {
       <div class="ion-padding-horizontal ion-padding-top">
-        <p class="lead"><strong>{{ name() }}</strong> — teams and courts were drawn at random.</p>
+        <p class="lead"><strong>{{ name() }}</strong> — {{ isSinglePool() ? 'match order was drawn at random.' : 'teams and courts were drawn at random.' }}</p>
       </div>
       <div class="pools">
         @for (pool of pools(); track pool.name) {
