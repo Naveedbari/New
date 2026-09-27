@@ -5,7 +5,7 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
-import { PreloadAllModules, RouteReuseStrategy, provideRouter, withPreloading } from '@angular/router';
+import { PreloadAllModules, RouteReuseStrategy, provideRouter, withHashLocation, withPreloading } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular';
 
 import { routes } from './app.routes';
@@ -18,7 +18,8 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular({ mode: 'md' }),
-    provideRouter(routes, withPreloading(PreloadAllModules)),
+    // Hash URLs keep deep links working on static hosting (a reload never hits the server path).
+    provideRouter(routes, withPreloading(PreloadAllModules), withHashLocation()),
     provideAppInitializer(async () => {
       const db = inject(DatabaseService);
       const auth = inject(AuthService);
