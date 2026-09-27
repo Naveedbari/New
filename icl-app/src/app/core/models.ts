@@ -41,6 +41,19 @@ export interface Pool {
 /** 1 = team1 won, 2 = team2 won, null = not played yet. */
 export type MatchWinner = 1 | 2 | null;
 
+export type CoinSide = 'heads' | 'tails';
+export type TossDecision = 'bat' | 'bowl';
+
+export interface Toss {
+  /** Which side called the toss: 1 = team1, 2 = team2. */
+  caller: 1 | 2;
+  call: CoinSide;
+  result: CoinSide;
+  winner: 1 | 2;
+  /** Chosen by the toss winner at match time; null until then. */
+  decision: TossDecision | null;
+}
+
 export interface Match {
   id?: number;
   poolId?: number;
@@ -48,6 +61,7 @@ export interface Match {
   team1: PoolTeam;
   team2: PoolTeam;
   winner: MatchWinner;
+  toss: Toss | null;
 }
 
 export interface PoolFixtures {

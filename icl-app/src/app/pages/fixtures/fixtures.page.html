@@ -4,7 +4,7 @@
     <ion-title>Fixtures · {{ tournament()?.name }}</ion-title>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-segment [value]="filter" (ionChange)="setFilter($any($event.detail.value))">
+    <ion-segment [value]="filter()" (ionChange)="filter.set($any($event.detail.value))">
       <ion-segment-button value="all"><ion-label>All</ion-label></ion-segment-button>
       <ion-segment-button value="pending"><ion-label>Upcoming</ion-label></ion-segment-button>
       <ion-segment-button value="played"><ion-label>Results</ion-label></ion-segment-button>
@@ -15,10 +15,12 @@
 <ion-content>
   @if (progress().total) {
     <p class="progress">
-      {{ progress().played }} of {{ progress().total }} matches played · tap a match to set the winner
+      {{ progress().played }} of {{ progress().total }} matches played
       @if (tournament()?.matchMinutes) {
-        <br />{{ tournament()?.matchMinutes }} min per match
-        @if (tournament()?.overs) { · {{ tournament()?.overs }} overs }
+        · {{ tournament()?.matchMinutes }} min per match
+      }
+      @if (tournament()?.overs) {
+        · {{ tournament()?.overs }} overs
       }
     </p>
   } @else if (loaded()) {
@@ -26,53 +28,111 @@
   }
 
   @for (g of visible(); track g.pool.id) {
-    <ion-list>
-      <ion-item-divider sticky="true" color="light">
-        <ion-label>
-          <strong>{{ g.pool.name }}</strong>
-          <span class="meta">
-            @if (g.pool.court) {
-              <ion-icon name="location-outline"></ion-icon> {{ courtName(g.pool.court) }}
-            }
-            @if (g.pool.startTime) {
-              <ion-icon name="time-outline"></ion-icon> {{ g.pool.startTime }}@if (bookingEnd(g)) {–{{ bookingEnd(g) }}}
-            }
-          </span>
-        </ion-label>
-      </ion-item-divider>
+    <section class="pool">
+      <header class="pool-head">
+        <h2>{{ g.pool.name }}</h2>
+        <span class="meta">
+          @if (g.pool.court) {
+            <span><ion-icon name="location-outline"></ion-icon> {{ courtName(g.pool.court) }}</span>
+          }
+          @if (g.pool.startTime) {
+            <span>
+              <ion-icon name="time-outline"></ion-icon>
+              {{ g.pool.startTime }}@if (bookingEnd(g)) {–{{ bookingEnd(g) }}}
+            </span>
+          }
+        </span>
+      </header>
 
       @for (m of g.matches; track m.id) {
-        <ion-item button [detail]="false" (click)="pickWinner(m)">
-          <div class="match">
-            <span class="no">
-              M{{ m.position + 1 }}
+        <article class="match-card" [class.done]="!!m.winner">
+          <div class="card-top">
+            <span class="match-no">Match {{ m.position + 1 }}</span>
+            <span class="when">
+              @if (matchDate(); as d) {
+                <span><ion-icon name="calendar-outline"></ion-icon> {{ d | date: 'EEE d MMM' }}</span>
+              }
               @if (slot(g, m); as s) {
-                <span class="slot" [class.over]="s.overBooking">{{ s.from }}–{{ s.to }}</span>
+                <span class="slot" [class.over]="s.overBooking">
+                  <ion-icon name="time-outline"></ion-icon> {{ s.from }}–{{ s.to }}
+                </span>
               }
             </span>
-            <span class="team left" [class.won]="m.winner === 1" [class.lost]="m.winner === 2">{{ m.team1.name }}</span>
-            <span class="vs">vs</span>
-            <span class="team right" [class.won]="m.winner === 2" [class.lost]="m.winner === 1">{{ m.team2.name }}</span>
           </div>
-          @if (m.winner) {
-            <ion-badge slot="end" color="success">
-              <ion-icon name="trophy"></ion-icon> {{ m.winner === 1 ? m.team1.name : m.team2.name }}
-            </ion-badge>
-          } @else {
-            <ion-badge slot="end" color="medium">Pending</ion-badge>
-          }
-        </ion-item>
+
+          <div class="teams">
+            @for (side of [1, 2]; track side) {
+              @let t = team(m, $any(side));
+              <div class="team" [class.won]="m.winner === side" [class.lost]="m.winner && m.winner !== side">
+                @if (t.logo) {
+                  <img class="logo" [src]="t.logo" [alt]="t.name + ' logo'" />
+                } @else {
+                  <div class="logo placeholder">{{ initial(t.name) }}</div>
+                }
+                <span class="name">{{ t.name }}</span>
+                @if (m.toss?.winner === side) {
+                  <span class="toss-tag">Won toss</span>
+                }
+              </div>
+              @if (side === 1) {
+                <span class="vs">VS</span>
+              }
+            }
+          </div>
+
+          <div class="status-row">
+            @if (m.winner) {
+              <span class="pill result-won">
+                <ion-icon name="trophy"></ion-icon> {{ team(m, m.winner).name }} won
+              </span>
+            } @else {
+              <span class="pill result-pending">Result: Pending</span>
+            }
+          </div>
+
+          <div class="toss-box">
+            @if (m.toss; as toss) {
+              <p class="toss-line">
+                <strong>Toss:</strong> {{ team(m, toss.caller).name }} called {{ toss.call }}, it was
+                {{ toss.result }}. <strong>{{ team(m, toss.winner).name }}</strong> won the toss.
+              </p>
+              <div class="decision">
+                <span>{{ team(m, toss.winner).name }} will</span>
+                <div class="choice">
+                  <button type="button" [class.on]="toss.decision === 'bat'" (click)="setDecision(m, 'bat')">Bat first</button>
+                  <button type="button" [class.on]="toss.decision === 'bowl'" (click)="setDecision(m, 'bowl')">Bowl first</button>
+                </div>
+                @if (!toss.decision) {
+                  <span class="hint">Decision pending, set it at match time.</span>
+                }
+              </div>
+            } @else {
+              <p class="toss-line muted">Toss not done yet.</p>
+            }
+          </div>
+
+          <div class="actions">
+            <ion-button fill="outline" size="small" [routerLink]="['/tournaments', id, 'matches', m.id, 'toss']">
+              <ion-icon slot="start" name="ribbon-outline"></ion-icon>
+              {{ m.toss ? 'Toss details' : 'Toss' }}
+            </ion-button>
+            <ion-button size="small" (click)="pickWinner(m)">
+              <ion-icon slot="start" name="trophy-outline"></ion-icon>
+              {{ m.winner ? 'Change result' : 'Set result' }}
+            </ion-button>
+          </div>
+        </article>
       } @empty {
-        <ion-item lines="none"><ion-label color="medium">No matches in this view.</ion-label></ion-item>
+        <p class="progress">No matches in this view.</p>
       }
 
-      @if (filter === 'all') {
+      @if (filter() === 'all') {
         <div class="standings">
           @for (s of wins(g); track s.name) {
             <span class="chip">{{ s.name }} <strong>{{ s.won }}W</strong>/{{ s.played }}P</span>
           }
         </div>
       }
-    </ion-list>
+    </section>
   }
 </ion-content>

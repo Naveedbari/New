@@ -1,6 +1,18 @@
 import { Injectable, inject } from '@angular/core';
 import { DatabaseService } from './database.service';
-import { Match, MatchWinner, Pool, PoolFixtures, PoolTeam, Team, Tournament, TournamentStatus } from './models';
+import {
+  CoinSide,
+  Match,
+  MatchWinner,
+  Pool,
+  PoolFixtures,
+  PoolTeam,
+  Team,
+  Toss,
+  TossDecision,
+  Tournament,
+  TournamentStatus,
+} from './models';
 
 interface TournamentRow {
   id: number;
@@ -116,7 +128,7 @@ export function roundRobin(teams: PoolTeam[]): Omit<Match, 'position'>[] {
     const idx = remaining.findIndex(([a, b]) => !busy.has(a.name) && !busy.has(b.name));
     ordered.push(remaining.splice(idx === -1 ? 0 : idx, 1)[0]!);
   }
-  return ordered.map(([team1, team2]) => ({ team1, team2, winner: null }));
+  return ordered.map(([team1, team2]) => ({ team1, team2, winner: null, toss: null }));
 }
 
 /** Randomly splits all `teams` into `poolCount` balanced pools and gives each a court. */
@@ -278,6 +290,11 @@ export class TournamentService {
       team2_id: number | null;
       team2_name: string;
       winner: MatchWinner;
+      toss_caller: 1 | 2 | null;
+      toss_call: CoinSide | null;
+      toss_result: CoinSide | null;
+      toss_winner: 1 | 2 | null;
+      toss_decision: TossDecision | null;
       t1_name: string | null;
       t1_logo: string | null;
       t2_name: string | null;
@@ -302,12 +319,34 @@ export class TournamentService {
           team1: { teamId: r.team1_id, name: r.t1_name ?? r.team1_name, logo: r.t1_logo },
           team2: { teamId: r.team2_id, name: r.t2_name ?? r.team2_name, logo: r.t2_logo },
           winner: r.winner,
+          toss:
+            r.toss_caller && r.toss_call && r.toss_result && r.toss_winner
+              ? {
+                  caller: r.toss_caller,
+                  call: r.toss_call,
+                  result: r.toss_result,
+                  winner: r.toss_winner,
+                  decision: r.toss_decision,
+                }
+              : null,
         })),
     }));
   }
 
   async setWinner(matchId: number, winner: MatchWinner): Promise<void> {
     await this.db.run('UPDATE matches SET winner = ? WHERE id = ?', [winner, matchId]);
+  }
+
+  async setToss(matchId: number, toss: Toss | null): Promise<void> {
+    await this.db.run(
+      `UPDATE matches SET toss_caller = ?, toss_call = ?, toss_result = ?, toss_winner = ?, toss_decision = ?
+       WHERE id = ?`,
+      [toss?.caller ?? null, toss?.call ?? null, toss?.result ?? null, toss?.winner ?? null, toss?.decision ?? null, matchId],
+    );
+  }
+
+  async setTossDecision(matchId: number, decision: TossDecision | null): Promise<void> {
+    await this.db.run('UPDATE matches SET toss_decision = ? WHERE id = ?', [decision, matchId]);
   }
 
   async setPoolStartTime(poolId: number, startTime: string | null): Promise<void> {

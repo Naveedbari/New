@@ -15,6 +15,13 @@ const DB_NAME = 'icl_db';
 const ADDED_COLUMNS: Record<string, Record<string, string>> = {
   tournaments: { match_minutes: 'INTEGER', overs: 'INTEGER' },
   tournament_pools: { booking_minutes: 'INTEGER' },
+  matches: {
+    toss_caller: 'INTEGER',
+    toss_call: 'TEXT',
+    toss_result: 'TEXT',
+    toss_winner: 'INTEGER',
+    toss_decision: 'TEXT',
+  },
 };
 
 const SCHEMA = `
@@ -67,7 +74,12 @@ CREATE TABLE IF NOT EXISTS matches (
   team1_name TEXT NOT NULL,
   team2_id INTEGER,
   team2_name TEXT NOT NULL,
-  winner INTEGER
+  winner INTEGER,
+  toss_caller INTEGER,
+  toss_call TEXT,
+  toss_result TEXT,
+  toss_winner INTEGER,
+  toss_decision TEXT
 );
 CREATE TABLE IF NOT EXISTS settings (
   key TEXT PRIMARY KEY,

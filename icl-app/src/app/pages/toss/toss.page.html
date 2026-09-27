@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="'/tournaments/' + tournamentId + '/fixtures'"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Toss · Match {{ (match()?.position ?? 0) + 1 }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (match(); as m) {
+    <div class="fixture">
+      @for (side of [1, 2]; track side) {
+        @let t = teamOf($any(side))!;
+        <div class="team" [class.highlight]="caller() === side || m.toss?.winner === side">
+          @if (t.logo) {
+            <img class="logo" [src]="t.logo" [alt]="t.name + ' logo'" />
+          } @else {
+            <div class="logo placeholder">{{ initial(t.name) }}</div>
+          }
+          <span>{{ t.name }}</span>
+        </div>
+        @if (side === 1) {
+          <span class="vs">VS</span>
+        }
+      }
+    </div>
+
+    @switch (step()) {
+      @case ('caller') {
+        <h2>Which team will call the toss?</h2>
+        <div class="options">
+          @for (side of [1, 2]; track side) {
+            @let t = teamOf($any(side))!;
+            <button type="button" class="option" (click)="chooseCaller($any(side))">
+              @if (t.logo) {
+                <img class="logo small" [src]="t.logo" alt="" />
+              } @else {
+                <div class="logo small placeholder">{{ initial(t.name) }}</div>
+              }
+              {{ t.name }}
+            </button>
+          }
+        </div>
+      }
+
+      @case ('call') {
+        <h2>{{ callerTeam()?.name }} calls…</h2>
+        <div class="options">
+          <button type="button" class="option coin-option" (click)="chooseCall('heads')">
+            <span class="mini-coin">H</span> Heads
+          </button>
+          <button type="button" class="option coin-option" (click)="chooseCall('tails')">
+            <span class="mini-coin">T</span> Tails
+          </button>
+        </div>
+        <ion-button fill="clear" expand="block" (click)="step.set('caller')">Change calling team</ion-button>
+      }
+
+      @default {
+        <div class="stage">
+          <div class="coin" [class.spin]="spinning()" [class.show-tails]="face() === 'tails'">
+            <div class="side heads">H</div>
+            <div class="side tails">T</div>
+          </div>
+        </div>
+
+        @if (step() === 'flipping') {
+          <p class="status">{{ callerTeam()?.name }} called {{ call() }}. Flipping…</p>
+        } @else if (m.toss; as toss) {
+          <div class="result">
+            <p class="outcome">It's {{ toss.result | uppercase }}!</p>
+            <p>
+              {{ teamOf(toss.caller)?.name }} called {{ toss.call }}.
+              <strong>{{ winnerTeam()?.name }}</strong> won the toss.
+            </p>
+          </div>
+
+          <div class="decision">
+            <p>{{ winnerTeam()?.name }} chooses to:</p>
+            <div class="choice">
+              <button type="button" [class.on]="toss.decision === 'bat'" (click)="setDecision('bat')">Bat first</button>
+              <button type="button" [class.on]="toss.decision === 'bowl'" (click)="setDecision('bowl')">Bowl first</button>
+            </div>
+            @if (!toss.decision) {
+              <p class="hint">You can leave this for now and set it on the match card at match time.</p>
+            }
+          </div>
+
+          <ion-button expand="block" (click)="done()">Back to fixtures</ion-button>
+          <ion-button expand="block" fill="clear" color="medium" (click)="redo()">
+            <ion-icon slot="start" name="refresh-outline"></ion-icon> Redo toss
+          </ion-button>
+        }
+      }
+    }
+  }
+</ion-content>

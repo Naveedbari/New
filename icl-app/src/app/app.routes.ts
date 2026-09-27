@@ -56,6 +56,11 @@ export const routes: Routes = [
       import('./pages/tournament-form/tournament-form.page').then((m) => m.TournamentFormPage),
   },
   {
+    path: 'tournaments/:id/matches/:matchId/toss',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/toss/toss.page').then((m) => m.TossPage),
+  },
+  {
     path: 'tournaments/:id/fixtures',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/fixtures/fixtures.page').then((m) => m.FixturesPage),
