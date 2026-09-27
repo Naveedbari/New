@@ -33,6 +33,8 @@ export interface Pool {
   court: number | null;
   /** Court booking start time for this pool, "HH:mm". */
   startTime: string | null;
+  /** Length of the court booking for this pool, in minutes. */
+  bookingMinutes: number | null;
   teams: PoolTeam[];
 }
 
@@ -66,5 +68,8 @@ export interface Tournament {
   championLogo?: string | null;
   mvpName: string | null;
   courtCount?: number | null;
+  /** Match length and overs as they were when the tournament started. */
+  matchMinutes?: number | null;
+  overs?: number | null;
   pools?: Pool[];
 }

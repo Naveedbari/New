@@ -30,7 +30,9 @@ import {
 import { addIcons } from 'ionicons';
 import { locationOutline, shuffle as shuffleIcon } from 'ionicons/icons';
 import { Pool, Team } from '../../core/models';
+import { SettingsService } from '../../core/settings.service';
 import { TeamService } from '../../core/team.service';
+import { addMinutes, formatDuration } from '../../core/time.util';
 import { TournamentService, courtName, drawPools, poolSizes, seasonName } from '../../core/tournament.service';
 
 type Step = 'teams' | 'pools' | 'draw';
@@ -76,6 +78,8 @@ export class TournamentNewPage {
   private readonly tournaments = inject(TournamentService);
   private readonly nav = inject(NavController);
   private readonly toasts = inject(ToastController);
+  readonly settings = inject(SettingsService);
+  readonly formatDuration = formatDuration;
 
   readonly step = signal<Step>('teams');
   readonly saving = signal(false);
@@ -196,10 +200,17 @@ export class TournamentNewPage {
   draw(): void {
     if (this.poolError()) return;
     const times = this.pools().map((p) => p.startTime);
+    const bookings = this.pools().map((p) => p.bookingMinutes);
+    const defaultBooking = this.settings.settings().bookingMinutes;
     const single = this.isSinglePool();
     const drawn = drawPools(this.selectedTeams(), this.poolCount()!, single ? 1 : this.courtCount()!);
     this.pools.set(
-      drawn.map((p, i) => ({ ...p, court: single ? this.singleCourt() : p.court, startTime: times[i] ?? null })),
+      drawn.map((p, i) => ({
+        ...p,
+        court: single ? this.singleCourt() : p.court,
+        startTime: times[i] ?? null,
+        bookingMinutes: bookings[i] ?? defaultBooking,
+      })),
     );
     this.step.set('draw');
   }
@@ -210,11 +221,31 @@ export class TournamentNewPage {
     );
   }
 
-  readonly missingTimes = computed(() => this.pools().some((p) => !p.startTime));
+  setBookingHours(index: number, value: string | null | undefined): void {
+    const hours = this.toNumber(value);
+    this.pools.update((pools) =>
+      pools.map((p, i) => (i === index ? { ...p, bookingMinutes: hours && hours > 0 ? Math.round(hours * 60) : null } : p)),
+    );
+  }
+
+  /** Schedule check for one pool: total playing time vs. the court booking. */
+  schedule(pool: Pool): { matches: number; needed: string; ends: string | null; overBy: number } {
+    const matches = this.matchCount(pool.teams.length);
+    const minutes = matches * this.settings.settings().matchMinutes;
+    const booking = pool.bookingMinutes ?? 0;
+    return {
+      matches,
+      needed: formatDuration(minutes),
+      ends: pool.startTime ? addMinutes(pool.startTime, minutes) : null,
+      overBy: booking ? Math.max(0, minutes - booking) : 0,
+    };
+  }
+
+  readonly missingTimes = computed(() => this.pools().some((p) => !p.startTime || !p.bookingMinutes));
 
   async start(): Promise<void> {
     if (this.missingTimes()) {
-      this.toast('Enter a start time for every pool', 'warning');
+      this.toast('Enter a start time and booking length for every pool', 'warning');
       return;
     }
     this.saving.set(true);
@@ -224,6 +255,10 @@ export class TournamentNewPage {
         this.playedOn,
         this.isSinglePool() ? 1 : this.courtCount()!,
         this.pools(),
+        {
+          matchMinutes: this.settings.settings().matchMinutes,
+          overs: this.settings.settings().oversPerMatch,
+        },
       );
       await this.toast('Tournament started!', 'success');
       await this.nav.navigateRoot('/tabs/tournaments');

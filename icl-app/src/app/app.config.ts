@@ -11,6 +11,7 @@ import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular';
 import { routes } from './app.routes';
 import { AuthService } from './core/auth.service';
 import { DatabaseService } from './core/database.service';
+import { SettingsService } from './core/settings.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,8 +24,10 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(async () => {
       const db = inject(DatabaseService);
       const auth = inject(AuthService);
+      const settings = inject(SettingsService);
       await db.init();
       await auth.load();
+      await settings.load();
     }),
   ],
 };

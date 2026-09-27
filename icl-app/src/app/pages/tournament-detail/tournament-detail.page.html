@@ -18,6 +18,8 @@
       <p class="lead">
         {{ asDate(t.playedOn) | date: 'd MMM y' }}
         @if (t.courtCount) { · {{ t.courtCount }} court{{ t.courtCount === 1 ? '' : 's' }} }
+        @if (t.matchMinutes) { · {{ t.matchMinutes }} min/match }
+        @if (t.overs) { · {{ t.overs }} overs }
         <ion-badge [color]="t.status === 'completed' ? 'success' : 'warning'">
           {{ t.status === 'completed' ? 'Completed' : 'Ongoing' }}
         </ion-badge>

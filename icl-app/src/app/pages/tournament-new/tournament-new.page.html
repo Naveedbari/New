@@ -103,6 +103,7 @@
     @case ('draw') {
       <div class="ion-padding-horizontal ion-padding-top">
         <p class="lead"><strong>{{ name() }}</strong> — {{ isSinglePool() ? 'match order was drawn at random.' : 'teams and courts were drawn at random.' }}</p>
+        <p class="hint">{{ settings.settings().matchMinutes }} min per match · {{ settings.settings().oversPerMatch }} overs (change in Settings)</p>
       </div>
       <div class="pools">
         @for (pool of pools(); track pool.name) {
@@ -112,10 +113,18 @@
               <span class="court"><ion-icon name="location-outline"></ion-icon> {{ courtName(pool.court!) }}</span>
             </ion-card-header>
             <ion-card-content>
-              <ion-item lines="none" class="time-item">
-                <ion-input label="Start time *" labelPlacement="stacked" type="time"
-                  [value]="pool.startTime" (ionInput)="setStartTime($index, $event.detail.value)"></ion-input>
-              </ion-item>
+              <div class="booking-row">
+                <ion-item lines="none" class="time-item">
+                  <ion-input [id]="'start-' + $index" label="Start time *" labelPlacement="stacked" type="time"
+                    [value]="pool.startTime" (ionInput)="setStartTime($index, $event.detail.value)"></ion-input>
+                </ion-item>
+                <ion-item lines="none" class="time-item">
+                  <ion-input [id]="'booking-' + $index" label="Booking (hours) *" labelPlacement="stacked" type="number"
+                    inputmode="decimal" min="0.25" step="0.25"
+                    [value]="pool.bookingMinutes ? pool.bookingMinutes / 60 : null"
+                    (ionInput)="setBookingHours($index, $event.detail.value)"></ion-input>
+                </ion-item>
+              </div>
               <ol>
                 @for (t of pool.teams; track t.teamId) {
                   <li>
@@ -126,7 +135,17 @@
                   </li>
                 }
               </ol>
-              <p class="hint">{{ matchCount(pool.teams.length) }} matches will be scheduled automatically.</p>
+              @let plan = schedule(pool);
+              <p class="hint">
+                {{ plan.matches }} matches × {{ settings.settings().matchMinutes }} min = {{ plan.needed }}
+                @if (plan.ends) { · {{ pool.startTime }}–{{ plan.ends }} }
+              </p>
+              @if (plan.overBy) {
+                <ion-note color="danger" class="over">
+                  Needs {{ formatDuration(plan.overBy) }} more than the {{ formatDuration(pool.bookingMinutes!) }} booking.
+                  Book longer, add a pool, or shorten matches in Settings.
+                </ion-note>
+              }
             </ion-card-content>
           </ion-card>
         }

@@ -14,7 +14,13 @@
 
 <ion-content>
   @if (progress().total) {
-    <p class="progress">{{ progress().played }} of {{ progress().total }} matches played · tap a match to set the winner</p>
+    <p class="progress">
+      {{ progress().played }} of {{ progress().total }} matches played · tap a match to set the winner
+      @if (tournament()?.matchMinutes) {
+        <br />{{ tournament()?.matchMinutes }} min per match
+        @if (tournament()?.overs) { · {{ tournament()?.overs }} overs }
+      }
+    </p>
   } @else if (loaded()) {
     <p class="progress">This tournament has no fixtures.</p>
   }
@@ -29,7 +35,7 @@
               <ion-icon name="location-outline"></ion-icon> {{ courtName(g.pool.court) }}
             }
             @if (g.pool.startTime) {
-              <ion-icon name="time-outline"></ion-icon> {{ g.pool.startTime }}
+              <ion-icon name="time-outline"></ion-icon> {{ g.pool.startTime }}@if (bookingEnd(g)) {–{{ bookingEnd(g) }}}
             }
           </span>
         </ion-label>
@@ -38,7 +44,12 @@
       @for (m of g.matches; track m.id) {
         <ion-item button [detail]="false" (click)="pickWinner(m)">
           <div class="match">
-            <span class="no">M{{ m.position + 1 }}</span>
+            <span class="no">
+              M{{ m.position + 1 }}
+              @if (slot(g, m); as s) {
+                <span class="slot" [class.over]="s.overBooking">{{ s.from }}–{{ s.to }}</span>
+              }
+            </span>
             <span class="team left" [class.won]="m.winner === 1" [class.lost]="m.winner === 2">{{ m.team1.name }}</span>
             <span class="vs">vs</span>
             <span class="team right" [class.won]="m.winner === 2" [class.lost]="m.winner === 1">{{ m.team2.name }}</span>

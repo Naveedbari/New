@@ -18,9 +18,12 @@ jeep-sqlite / IndexedDB).
   2. Enter the number of pools and courts. Teams are split evenly, e.g. 8 teams / 2 pools → 4 + 4.
   3. The app randomly draws teams into pools and gives each pool a court (Court A, B, …).
      When there are more pools than courts, pools share courts. Enter each pool's start
-     time (court booking), reshuffle if you like, then start.
+     time and booking length. The app warns when a pool's matches don't fit the booking.
+     Reshuffle if you like, then start.
+- **Settings**: match duration (minutes), overs per match, and the default court booking
+  length per pool. A tournament keeps the match length and overs it started with.
 - **Fixtures**: round-robin matches are generated for each pool in random order, avoiding
-  back-to-back games where possible. Tap a match to record the winner. Results appear next
+  back-to-back games where possible. Each match gets a time slot (pool start + match number × match length). Tap a match to record the winner. Results appear next
   to each match, with a wins/played summary per pool.
 - **Declare champion & MVP**: completes the tournament, and it then appears on Home.
 

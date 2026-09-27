@@ -28,6 +28,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/tournaments/tournaments.page').then((m) => m.TournamentsPage),
       },
       {
+        path: 'settings',
+        loadComponent: () => import('./pages/settings/settings.page').then((m) => m.SettingsPage),
+      },
+      {
         path: 'teams',
         loadComponent: () => import('./pages/teams/teams.page').then((m) => m.TeamsPage),
       },

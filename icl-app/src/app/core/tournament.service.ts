@@ -12,6 +12,8 @@ interface TournamentRow {
   champion_team_name: string | null;
   mvp_name: string | null;
   court_count: number | null;
+  match_minutes: number | null;
+  overs: number | null;
   logo: string | null;
   current_team_name: string | null;
 }
@@ -21,6 +23,7 @@ interface PoolTeamRow {
   pool_name: string;
   court: number | null;
   start_time: string | null;
+  booking_minutes: number | null;
   team_id: number | null;
   team_name: string;
   current_team_name: string | null;
@@ -43,6 +46,8 @@ const toTournament = (r: TournamentRow): Tournament => ({
   championLogo: r.logo,
   mvpName: r.mvp_name,
   courtCount: r.court_count,
+  matchMinutes: r.match_minutes,
+  overs: r.overs,
 });
 
 /** Fisher–Yates shuffle (returns a new array). */
@@ -126,6 +131,7 @@ export function drawPools(teams: Team[], poolCount: number, courtCount: number):
       name: poolName(i),
       court: courts[i]!,
       startTime: null,
+      bookingMinutes: null,
       teams: members.map((t) => ({ teamId: t.id ?? null, name: t.name, logo: t.logo })),
     };
   });
@@ -170,7 +176,7 @@ export class TournamentService {
 
   private async pools(tournamentId: number): Promise<Pool[]> {
     const rows = await this.db.query<PoolTeamRow>(
-      `SELECT p.id AS pool_id, p.name AS pool_name, p.court, p.start_time, pt.team_id, pt.team_name,
+      `SELECT p.id AS pool_id, p.name AS pool_name, p.court, p.start_time, p.booking_minutes, pt.team_id, pt.team_name,
               tm.name AS current_team_name, tm.logo
        FROM tournament_pools p
        LEFT JOIN pool_teams pt ON pt.pool_id = p.id
@@ -183,7 +189,14 @@ export class TournamentService {
     for (const r of rows) {
       let pool = pools.get(r.pool_id);
       if (!pool) {
-        pool = { id: r.pool_id, name: r.pool_name, court: r.court, startTime: r.start_time, teams: [] };
+        pool = {
+          id: r.pool_id,
+          name: r.pool_name,
+          court: r.court,
+          startTime: r.start_time,
+          bookingMinutes: r.booking_minutes,
+          teams: [],
+        };
         pools.set(r.pool_id, pool);
       }
       if (r.team_name !== null) {
@@ -194,16 +207,24 @@ export class TournamentService {
   }
 
   /** Creates an ongoing tournament together with its drawn pools. Returns the new id. */
-  async start(season: number, playedOn: string, courtCount: number, pools: Pool[]): Promise<number> {
+  async start(
+    season: number,
+    playedOn: string,
+    courtCount: number,
+    pools: Pool[],
+    format: { matchMinutes: number; overs: number },
+  ): Promise<number> {
     return this.db.transaction(async (run) => {
       const id = (await run(
-        'INSERT INTO tournaments (name, season, played_on, status, court_count) VALUES (?, ?, ?, ?, ?)',
-        [seasonName(season), season, playedOn, 'ongoing', courtCount],
+        `INSERT INTO tournaments (name, season, played_on, status, court_count, match_minutes, overs)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [seasonName(season), season, playedOn, 'ongoing', courtCount, format.matchMinutes, format.overs],
       ))!;
       for (const [pi, pool] of pools.entries()) {
         const poolId = await run(
-          'INSERT INTO tournament_pools (tournament_id, name, court, start_time, position) VALUES (?, ?, ?, ?, ?)',
-          [id, pool.name, pool.court, pool.startTime, pi],
+          `INSERT INTO tournament_pools (tournament_id, name, court, start_time, booking_minutes, position)
+           VALUES (?, ?, ?, ?, ?, ?)`,
+          [id, pool.name, pool.court, pool.startTime, pool.bookingMinutes, pi],
         );
         for (const [mi, m] of roundRobin(pool.teams).entries()) {
           await run(

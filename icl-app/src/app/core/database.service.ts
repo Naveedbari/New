@@ -8,6 +8,15 @@ import {
 
 const DB_NAME = 'icl_db';
 
+/**
+ * Columns added after the first release. CREATE TABLE IF NOT EXISTS won't add
+ * them to an existing database, so they are added here when missing.
+ */
+const ADDED_COLUMNS: Record<string, Record<string, string>> = {
+  tournaments: { match_minutes: 'INTEGER', overs: 'INTEGER' },
+  tournament_pools: { booking_minutes: 'INTEGER' },
+};
+
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,6 +42,8 @@ CREATE TABLE IF NOT EXISTS tournaments (
   played_on TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'ongoing',
   court_count INTEGER,
+  match_minutes INTEGER,
+  overs INTEGER,
   champion_team_id INTEGER,
   champion_team_name TEXT,
   mvp_name TEXT,
@@ -44,6 +55,7 @@ CREATE TABLE IF NOT EXISTS tournament_pools (
   name TEXT NOT NULL,
   court INTEGER,
   start_time TEXT,
+  booking_minutes INTEGER,
   position INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS matches (
@@ -56,6 +68,10 @@ CREATE TABLE IF NOT EXISTS matches (
   team2_id INTEGER,
   team2_name TEXT NOT NULL,
   winner INTEGER
+);
+CREATE TABLE IF NOT EXISTS settings (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_matches_tournament ON matches (tournament_id);
 CREATE TABLE IF NOT EXISTS pool_teams (
@@ -96,6 +112,7 @@ export class DatabaseService {
 
     await this.db.open();
     await this.db.execute(SCHEMA);
+    await this.migrate();
     await this.persist();
   }
 
@@ -127,6 +144,19 @@ export class DatabaseService {
   private async persist(): Promise<void> {
     if (this.isWeb) {
       await this.sqlite.saveToStore(DB_NAME);
+    }
+  }
+
+  private async migrate(): Promise<void> {
+    for (const [table, columns] of Object.entries(ADDED_COLUMNS)) {
+      const existing = new Set(
+        (await this.query<{ name: string }>(`PRAGMA table_info(${table})`)).map((c) => c.name),
+      );
+      for (const [column, type] of Object.entries(columns)) {
+        if (!existing.has(column)) {
+          await this.db.execute(`ALTER TABLE ${table} ADD COLUMN ${column} ${type}`);
+        }
+      }
     }
   }
 

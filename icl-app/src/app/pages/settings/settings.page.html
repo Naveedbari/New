@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title><span class="icl-brand">ICL</span> · Settings</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="auth.confirmLogout()" aria-label="Logout">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (submit)="$event.preventDefault(); save()">
+    <ion-list lines="full">
+      <ion-list-header><ion-label>Match format</ion-label></ion-list-header>
+      <ion-item>
+        <ion-input id="match-minutes" label="Match duration (minutes)" labelPlacement="stacked" type="number"
+          inputmode="numeric" min="5" step="5" [value]="matchMinutes()"
+          (ionInput)="matchMinutes.set(toNumber($event.detail.value))"
+          helperText="Time for one match, including changeover. Used to schedule fixtures."></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input id="overs" label="Overs per match" labelPlacement="stacked" type="number" inputmode="numeric"
+          min="1" [value]="overs()" (ionInput)="overs.set(toNumber($event.detail.value))"></ion-input>
+      </ion-item>
+
+      <ion-list-header><ion-label>Court booking</ion-label></ion-list-header>
+      <ion-item>
+        <ion-input id="booking-hours" label="Default booking per pool (hours)" labelPlacement="stacked" type="number"
+          inputmode="decimal" min="0.25" step="0.25" [value]="bookingHours()"
+          (ionInput)="bookingHours.set(toNumber($event.detail.value))"
+          helperText="Pre-filled for each pool when you start a tournament. You can change it per pool."></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div class="ion-padding">
+      @if (error()) {
+        <ion-note color="danger">{{ error() }}</ion-note>
+      } @else {
+        <ion-note>{{ fitSummary() }}</ion-note>
+      }
+      <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="saving() || !!error()">
+        Save settings
+      </ion-button>
+      <p class="hint">Changes apply to new tournaments. Tournaments already started keep the format they began with.</p>
+    </div>
+
+    <ion-list lines="full">
+      <ion-list-header><ion-label>Account</ion-label></ion-list-header>
+      <ion-item>
+        <ion-label>
+          <p>Logged in as</p>
+          <h2>{{ auth.user()?.username }}</h2>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </form>
+</ion-content>

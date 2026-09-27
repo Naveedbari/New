@@ -22,6 +22,7 @@ import { addIcons } from 'ionicons';
 import { locationOutline, timeOutline, trophy } from 'ionicons/icons';
 import { Match, MatchWinner, PoolFixtures, Tournament } from '../../core/models';
 import { TournamentService, courtName } from '../../core/tournament.service';
+import { addMinutes, formatDuration } from '../../core/time.util';
 
 type Filter = 'all' | 'pending' | 'played';
 
@@ -71,6 +72,26 @@ export class FixturesPage {
   });
 
   readonly courtName = courtName;
+  readonly formatDuration = formatDuration;
+
+  /** Time slot for a match: pool start + (match number × match length). */
+  slot(group: PoolFixtures, match: Match): { from: string; to: string; overBooking: boolean } | null {
+    const minutes = this.tournament()?.matchMinutes;
+    const start = group.pool.startTime;
+    if (!minutes || !start) return null;
+    const offset = match.position * minutes;
+    const booking = group.pool.bookingMinutes;
+    return {
+      from: addMinutes(start, offset),
+      to: addMinutes(start, offset + minutes),
+      overBooking: !!booking && offset + minutes > booking,
+    };
+  }
+
+  bookingEnd(group: PoolFixtures): string | null {
+    const { startTime, bookingMinutes } = group.pool;
+    return startTime && bookingMinutes ? addMinutes(startTime, bookingMinutes) : null;
+  }
 
   constructor() {
     addIcons({ trophy, timeOutline, locationOutline });
