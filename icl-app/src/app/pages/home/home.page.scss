@@ -1,0 +1,126 @@
+.greeting {
+  margin: 16px 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.champion-card {
+  margin: 12px 16px 20px;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  background: linear-gradient(160deg, var(--ion-color-primary) 0%, var(--ion-color-primary-tint) 100%);
+  color: var(--ion-color-primary-contrast);
+  box-shadow: 0 10px 28px rgba(var(--ion-color-primary-rgb), 0.35);
+
+  ion-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 16px 20px;
+  }
+}
+
+.ribbon {
+  background: var(--ion-color-secondary);
+  color: var(--ion-color-secondary-contrast);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 13px;
+  text-align: center;
+  padding: 8px;
+
+  ion-icon {
+    vertical-align: -2px;
+  }
+}
+
+.logo-wrap {
+  padding: 4px;
+  border-radius: 50%;
+  background: var(--ion-color-secondary);
+}
+
+.logo {
+  display: block;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ion-color-primary);
+  font-size: 52px;
+  font-weight: 800;
+}
+
+.team {
+  margin: 14px 0 0;
+  font-size: 26px;
+  font-weight: 800;
+  text-align: center;
+  color: inherit;
+}
+
+.tournament {
+  margin: 2px 0 0;
+  opacity: 0.8;
+  color: inherit;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  margin-top: 18px;
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  text-align: center;
+
+  ion-icon {
+    font-size: 22px;
+    color: var(--ion-color-secondary);
+  }
+
+  .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.8;
+    margin-top: 4px;
+  }
+
+  .value {
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 2px;
+    word-break: break-word;
+  }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 64px 24px;
+  color: var(--ion-color-medium);
+  text-align: center;
+
+  ion-icon {
+    font-size: 64px;
+  }
+}

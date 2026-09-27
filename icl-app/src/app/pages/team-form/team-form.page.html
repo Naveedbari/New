@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start"><ion-back-button defaultHref="/tabs/teams"></ion-back-button></ion-buttons>
+    <ion-title>{{ id ? 'Edit Team' : 'Add Team' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="logo-picker">
+    <button type="button" class="logo-circle" (click)="pickLogo()" aria-label="Choose team logo">
+      @if (logo()) {
+        <img [src]="logo()" alt="Team logo" />
+      } @else {
+        <ion-icon name="camera-outline"></ion-icon>
+        <span>Team logo</span>
+      }
+    </button>
+    @if (logo()) {
+      <ion-button fill="clear" size="small" color="medium" (click)="logo.set(null)">
+        <ion-icon slot="start" name="close-circle"></ion-icon> Remove logo
+      </ion-button>
+    }
+    <input #fileInput type="file" accept="image/*" hidden (change)="onFile($event)" />
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <ion-list lines="full">
+      <ion-item>
+        <ion-input
+          label="Team name *"
+          labelPlacement="floating"
+          formControlName="name"
+          autocapitalize="words"
+          errorText="Team name is required"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          label="Captain name *"
+          labelPlacement="floating"
+          formControlName="captainName"
+          autocapitalize="words"
+          errorText="Captain name is required"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          label="Captain phone *"
+          labelPlacement="floating"
+          type="tel"
+          inputmode="tel"
+          formControlName="captainPhone"
+          errorText="Enter a valid phone number"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-textarea
+          label="Address"
+          labelPlacement="floating"
+          formControlName="address"
+          [autoGrow]="true"
+          rows="2"
+        ></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-textarea
+          label="Comment"
+          labelPlacement="floating"
+          formControlName="comment"
+          [autoGrow]="true"
+          rows="3"
+          [counter]="true"
+          maxlength="500"
+        ></ion-textarea>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="saving()">
+      {{ id ? 'Save changes' : 'Add team' }}
+    </ion-button>
+  </form>
+</ion-content>

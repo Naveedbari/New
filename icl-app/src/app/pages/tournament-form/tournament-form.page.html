@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start"><ion-back-button defaultHref="/tabs/home"></ion-back-button></ion-buttons>
+    <ion-title>{{ isOngoing() ? 'Declare Champion' : id ? 'Edit Result' : 'Past Tournament Result' }}</ion-title>
+    @if (id) {
+      <ion-buttons slot="end">
+        <ion-button (click)="confirmDelete()" aria-label="Delete tournament">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (!teams().length) {
+    <ion-note color="warning">
+      <p>Add at least one team first, then pick it as the champion.</p>
+      <ion-button size="small" routerLink="/teams/new">Add team</ion-button>
+    </ion-note>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <ion-list lines="full">
+      <ion-item>
+        <ion-input
+          label="Tournament name *"
+          labelPlacement="floating"
+          placeholder="e.g. ICL Season 3"
+          formControlName="name"
+          errorText="Tournament name is required"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          label="Date played *"
+          labelPlacement="stacked"
+          type="date"
+          formControlName="playedOn"
+          errorText="Date is required"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-select
+          label="Champion team *"
+          labelPlacement="floating"
+          interface="action-sheet"
+          formControlName="championTeamId"
+        >
+          @for (team of teams(); track team.id) {
+            <ion-select-option [value]="team.id">{{ team.name }}</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          label="MVP (Most Valuable Player) *"
+          labelPlacement="floating"
+          formControlName="mvpName"
+          autocapitalize="words"
+          errorText="MVP name is required"
+        ></ion-input>
+      </ion-item>
+    </ion-list>
+
+    @if (form.controls.championTeamId.touched && form.controls.championTeamId.invalid) {
+      <ion-note color="danger" class="ion-padding-start">Please select the champion team</ion-note>
+    }
+
+    <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="saving()">
+      {{ isOngoing() ? 'Declare champion' : 'Save result' }}
+    </ion-button>
+  </form>
+</ion-content>

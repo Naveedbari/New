@@ -1,0 +1,29 @@
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+  provideZoneChangeDetection,
+} from '@angular/core';
+import { PreloadAllModules, RouteReuseStrategy, provideRouter, withPreloading } from '@angular/router';
+import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular';
+
+import { routes } from './app.routes';
+import { AuthService } from './core/auth.service';
+import { DatabaseService } from './core/database.service';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    provideIonicAngular({ mode: 'md' }),
+    provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideAppInitializer(async () => {
+      const db = inject(DatabaseService);
+      const auth = inject(AuthService);
+      await db.init();
+      await auth.load();
+    }),
+  ],
+};

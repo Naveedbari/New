@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title><span class="icl-brand">ICL</span> · Teams</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="auth.confirmLogout()" aria-label="Logout">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      [(ngModel)]="term"
+      (ionInput)="refresh()"
+      [debounce]="250"
+      [placeholder]="placeholders[field]"
+      [inputmode]="field === 'phone' ? 'tel' : 'text'"
+    ></ion-searchbar>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="field" (ionChange)="refresh()">
+      <ion-segment-button value="all"><ion-label>All</ion-label></ion-segment-button>
+      <ion-segment-button value="name"><ion-label>Team</ion-label></ion-segment-button>
+      <ion-segment-button value="captain"><ion-label>Captain</ion-label></ion-segment-button>
+      <ion-segment-button value="phone"><ion-label>Phone</ion-label></ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (teams().length) {
+    <ion-list>
+      @for (team of teams(); track team.id) {
+        <ion-item [routerLink]="['/teams', team.id]" [detail]="true">
+          @if (team.logo) {
+            <img slot="start" class="team-logo" [src]="team.logo" [alt]="team.name + ' logo'" />
+          } @else {
+            <div slot="start" class="team-logo-placeholder">{{ initials(team.name) }}</div>
+          }
+          <ion-label>
+            <h2>{{ team.name }}</h2>
+            <p><ion-icon name="person-outline"></ion-icon> {{ team.captainName }}</p>
+            <p><ion-icon name="call-outline"></ion-icon> {{ team.captainPhone }}</p>
+          </ion-label>
+        </ion-item>
+      }
+    </ion-list>
+    <p class="count">{{ teams().length }} team{{ teams().length === 1 ? '' : 's' }}</p>
+  } @else if (loaded()) {
+    <div class="empty">
+      <ion-icon name="people-outline"></ion-icon>
+      @if (term) {
+        <p>No teams match “{{ term }}”.</p>
+      } @else {
+        <p>No teams yet.</p>
+        <ion-button routerLink="/teams/new">Add your first team</ion-button>
+      }
+    </div>
+  }
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="secondary" routerLink="/teams/new" aria-label="Add team">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title><span class="icl-brand">ICL</span> · Tournaments</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (tournaments().length) {
+    <ion-list>
+      @for (t of tournaments(); track t.id) {
+        <ion-item [routerLink]="['/tournaments', t.id]" [detail]="true">
+          <ion-icon slot="start" [name]="t.status === 'completed' ? 'trophy' : 'flag-outline'"
+            [color]="t.status === 'completed' ? 'secondary' : 'primary'"></ion-icon>
+          <ion-label>
+            <h2>{{ t.name }}</h2>
+            <p>{{ asDate(t.playedOn) | date: 'd MMM y' }}</p>
+            @if (t.status === 'completed') {
+              <p>Champion: {{ t.championTeamName }} · MVP: {{ t.mvpName }}</p>
+            }
+          </ion-label>
+          <ion-badge slot="end" [color]="t.status === 'completed' ? 'success' : 'warning'">
+            {{ t.status === 'completed' ? 'Completed' : 'Ongoing' }}
+          </ion-badge>
+        </ion-item>
+      }
+    </ion-list>
+  } @else if (loaded()) {
+    <div class="empty">
+      <ion-icon name="flag-outline"></ion-icon>
+      <p>No tournaments yet.</p>
+      <ion-button routerLink="/tournaments/start">Start new tournament</ion-button>
+    </div>
+  }
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="secondary" routerLink="/tournaments/start" aria-label="Start new tournament">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

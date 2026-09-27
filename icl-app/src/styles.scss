@@ -1,0 +1,46 @@
+@use './theme/variables';
+
+/* Ionic core + utilities */
+@import '@ionic/angular/css/core.css';
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
+@import '@ionic/angular/css/padding.css';
+@import '@ionic/angular/css/float-elements.css';
+@import '@ionic/angular/css/text-alignment.css';
+@import '@ionic/angular/css/text-transformation.css';
+@import '@ionic/angular/css/flex-utils.css';
+@import '@ionic/angular/css/display.css';
+@import '@ionic/angular/css/palettes/dark.system.css';
+
+
+.icl-brand {
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.team-logo,
+.team-logo-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.team-logo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.pin-input {
+  --padding-start: 0;
+  text-align: center;
+  font-size: 28px;
+  letter-spacing: 0.6em;
+}

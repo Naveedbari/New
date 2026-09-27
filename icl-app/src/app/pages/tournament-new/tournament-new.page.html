@@ -1,0 +1,150 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      @if (step() === 'teams') {
+        <ion-back-button defaultHref="/tabs/tournaments"></ion-back-button>
+      } @else {
+        <ion-button (click)="back()">Back</ion-button>
+      }
+    </ion-buttons>
+    <ion-title>{{ name() || 'Start New Tournament' }}</ion-title>
+  </ion-toolbar>
+  <ion-toolbar class="steps">
+    <div class="stepper">
+      <span [class.active]="step() === 'teams'">1 · Teams</span>
+      <span [class.active]="step() === 'pools'">2 · Pools</span>
+      <span [class.active]="step() === 'draw'">3 · Draw</span>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @switch (step()) {
+    @case ('teams') {
+      <ion-list lines="full">
+        <ion-item>
+          <ion-input label="Season *" labelPlacement="stacked" type="number" inputmode="numeric" min="1"
+            [value]="season()" (ionInput)="season.set(toNumber($event.detail.value))"
+            [helperText]="name() ? 'Tournament name: ' + name() : ''"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Start date" labelPlacement="stacked" type="date" [(ngModel)]="playedOn"></ion-input>
+        </ion-item>
+      </ion-list>
+
+      @if (allTeams().length) {
+        <div class="select-bar">
+          <strong>Select teams ({{ selectedTeams().length }}/{{ allTeams().length }})</strong>
+          <ion-button fill="clear" size="small" (click)="toggleAll()">
+            {{ selectedIds().size === allTeams().length ? 'Clear all' : 'Select all' }}
+          </ion-button>
+        </div>
+        <ion-searchbar placeholder="Filter teams" [value]="filter()" (ionInput)="filter.set($event.detail.value ?? '')"></ion-searchbar>
+        <ion-list>
+          @for (team of visibleTeams(); track team.id) {
+            <ion-item>
+              @if (team.logo) {
+                <img slot="start" class="team-logo" [src]="team.logo" [alt]="team.name + ' logo'" />
+              } @else {
+                <div slot="start" class="team-logo-placeholder">{{ team.name.charAt(0).toUpperCase() }}</div>
+              }
+              <ion-checkbox justify="space-between" [checked]="isSelected(team.id!)"
+                (ionChange)="toggle(team.id!, $event.detail.checked)">
+                <ion-label>
+                  <h2>{{ team.name }}</h2>
+                  <p>{{ team.captainName }} · {{ team.captainPhone }}</p>
+                </ion-label>
+              </ion-checkbox>
+            </ion-item>
+          }
+        </ion-list>
+      } @else {
+        <div class="empty">
+          <p>No teams have been added yet.</p>
+          <ion-button routerLink="/teams/new">Add team</ion-button>
+        </div>
+      }
+    }
+
+    @case ('pools') {
+      <div class="ion-padding">
+        <p class="lead"><strong>{{ selectedTeams().length }}</strong> teams selected.</p>
+        <ion-list lines="full" class="rounded">
+          <ion-item>
+            <ion-input label="How many pools?" labelPlacement="stacked" type="number" inputmode="numeric" min="1"
+              [value]="poolCount()" (ionInput)="poolCount.set(toNumber($event.detail.value))"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input label="How many courts / grounds?" labelPlacement="stacked" type="number" inputmode="numeric" min="1"
+              [value]="courtCount()" (ionInput)="courtCount.set(toNumber($event.detail.value))"></ion-input>
+          </ion-item>
+        </ion-list>
+
+        @if (poolError()) {
+          <ion-note color="danger"><p>{{ poolError() }}</p></ion-note>
+        } @else {
+          <p class="summary">Teams will be split automatically: <strong>{{ sizeSummary() }}</strong>.</p>
+          <p class="summary">{{ courtSummary() }}</p>
+        }
+      </div>
+    }
+
+    @case ('draw') {
+      <div class="ion-padding-horizontal ion-padding-top">
+        <p class="lead"><strong>{{ name() }}</strong> — teams and courts were drawn at random.</p>
+      </div>
+      <div class="pools">
+        @for (pool of pools(); track pool.name) {
+          <ion-card class="pool">
+            <ion-card-header>
+              <ion-card-title>{{ pool.name }}</ion-card-title>
+              <span class="court"><ion-icon name="location-outline"></ion-icon> {{ courtName(pool.court!) }}</span>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item lines="none" class="time-item">
+                <ion-input label="Start time *" labelPlacement="stacked" type="time"
+                  [value]="pool.startTime" (ionInput)="setStartTime($index, $event.detail.value)"></ion-input>
+              </ion-item>
+              <ol>
+                @for (t of pool.teams; track t.teamId) {
+                  <li>
+                    @if (t.logo) {
+                      <img class="mini-logo" [src]="t.logo" alt="" />
+                    }
+                    {{ t.name }}
+                  </li>
+                }
+              </ol>
+              <p class="hint">{{ matchCount(pool.teams.length) }} matches will be scheduled automatically.</p>
+            </ion-card-content>
+          </ion-card>
+        }
+      </div>
+    }
+  }
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar class="ion-padding-horizontal">
+    @switch (step()) {
+      @case ('teams') {
+        <ion-button expand="block" [disabled]="selectedTeams().length < 2" (click)="toPools()">
+          Next: set up pools
+        </ion-button>
+      }
+      @case ('pools') {
+        <ion-button expand="block" [disabled]="!!poolError()" (click)="draw()">
+          <ion-icon slot="start" name="shuffle"></ion-icon> Draw pools
+        </ion-button>
+      }
+      @case ('draw') {
+        <div class="footer-row">
+          <ion-button fill="outline" (click)="draw()">
+            <ion-icon slot="start" name="shuffle"></ion-icon> Reshuffle
+          </ion-button>
+          <ion-button [disabled]="saving() || missingTimes()" (click)="start()">Start tournament</ion-button>
+        </div>
+      }
+    }
+  </ion-toolbar>
+</ion-footer>

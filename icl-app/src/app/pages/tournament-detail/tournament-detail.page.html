@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start"><ion-back-button defaultHref="/tabs/tournaments"></ion-back-button></ion-buttons>
+    <ion-title>{{ tournament()?.name ?? 'Tournament' }}</ion-title>
+    @if (tournament()) {
+      <ion-buttons slot="end">
+        <ion-button (click)="confirmDelete()" aria-label="Delete tournament">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (tournament(); as t) {
+    <div class="ion-padding">
+      <p class="lead">
+        {{ asDate(t.playedOn) | date: 'd MMM y' }}
+        @if (t.courtCount) { · {{ t.courtCount }} court{{ t.courtCount === 1 ? '' : 's' }} }
+        <ion-badge [color]="t.status === 'completed' ? 'success' : 'warning'">
+          {{ t.status === 'completed' ? 'Completed' : 'Ongoing' }}
+        </ion-badge>
+      </p>
+
+      @if (t.status === 'completed') {
+        <ion-card class="pool">
+          <ion-card-content>
+            <p><ion-icon name="trophy" color="secondary"></ion-icon> Champion: <strong>{{ t.championTeamName }}</strong></p>
+            <p><ion-icon name="star" color="secondary"></ion-icon> MVP: <strong>{{ t.mvpName }}</strong></p>
+          </ion-card-content>
+        </ion-card>
+        <ion-button fill="outline" expand="block" [routerLink]="['/tournaments', t.id, 'edit']">
+          <ion-icon slot="start" name="create-outline"></ion-icon> Edit result
+        </ion-button>
+      } @else {
+        <ion-button expand="block" color="secondary" [routerLink]="['/tournaments', t.id, 'edit']">
+          <ion-icon slot="start" name="trophy"></ion-icon> Declare champion &amp; MVP
+        </ion-button>
+      }
+    </div>
+
+    @if (t.pools?.length) {
+      <div class="ion-padding-horizontal">
+        <ion-button expand="block" [routerLink]="['/tournaments', t.id, 'fixtures']">
+          <ion-icon slot="start" name="list-outline"></ion-icon> Fixtures &amp; results
+        </ion-button>
+      </div>
+      <div class="pools">
+        @for (pool of t.pools; track pool.id) {
+          <ion-card class="pool">
+            <ion-card-header>
+              <ion-card-title>{{ pool.name }}</ion-card-title>
+              @if (pool.court) {
+                <span class="court"><ion-icon name="location-outline"></ion-icon> {{ courtName(pool.court) }}</span>
+              }
+              @if (pool.startTime) {
+                <span class="court"><ion-icon name="time-outline"></ion-icon> {{ pool.startTime }}</span>
+              }
+            </ion-card-header>
+            <ion-card-content>
+              <ol>
+                @for (team of pool.teams; track $index) {
+                  <li>
+                    @if (team.logo) {
+                      <img class="mini-logo" [src]="team.logo" alt="" />
+                    }
+                    {{ team.name }}
+                  </li>
+                }
+              </ol>
+            </ion-card-content>
+          </ion-card>
+        }
+      </div>
+    }
+  }
+</ion-content>

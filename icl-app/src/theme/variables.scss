@@ -1,0 +1,27 @@
+// ICL brand colours: deep navy + gold trophy accent.
+:root {
+  --ion-color-primary: #0b1f4d;
+  --ion-color-primary-rgb: 11, 31, 77;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #0a1b44;
+  --ion-color-primary-tint: #23355f;
+
+  --ion-color-secondary: #f4b400;
+  --ion-color-secondary-rgb: 244, 180, 0;
+  --ion-color-secondary-contrast: #0b1f4d;
+  --ion-color-secondary-contrast-rgb: 11, 31, 77;
+  --ion-color-secondary-shade: #d79e00;
+  --ion-color-secondary-tint: #f5bc1a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ion-color-primary: #6f93ff;
+    --ion-color-primary-rgb: 111, 147, 255;
+    --ion-color-primary-contrast: #000000;
+    --ion-color-primary-contrast-rgb: 0, 0, 0;
+    --ion-color-primary-shade: #6281e0;
+    --ion-color-primary-tint: #7d9eff;
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "name": "icl-app",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "cap:sync": "ng build && npx cap sync",
+    "android": "ng build && npx cap sync android && npx cap open android",
+    "ios": "ng build && npx cap sync ios && npx cap open ios"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "^20.3.0",
+    "@angular/compiler": "^20.3.0",
+    "@angular/core": "^20.3.0",
+    "@angular/forms": "^20.3.0",
+    "@angular/platform-browser": "^20.3.0",
+    "@angular/router": "^20.3.0",
+    "@capacitor-community/sqlite": "^8.1.1",
+    "@capacitor/app": "^8.1.1",
+    "@capacitor/core": "^8.5.2",
+    "@ionic/angular": "^9.0.5",
+    "ionicons": "^8.1.0",
+    "jeep-sqlite": "^2.8.0",
+    "rxjs": "~7.8.0",
+    "sql.js": "1.11.0",
+    "tslib": "^2.3.0",
+    "zone.js": "^0.15.1"
+  },
+  "devDependencies": {
+    "@angular/build": "^20.3.37",
+    "@angular/cli": "^20.3.37",
+    "@angular/compiler-cli": "^20.3.0",
+    "@capacitor/cli": "^8.5.2",
+    "typescript": "~5.9.2"
+  },
+  "overrides": {
+    "sql.js": "1.11.0"
+  }
+}

@@ -1,0 +1,34 @@
+<ion-content class="ion-padding" [fullscreen]="true">
+  <div class="hero">
+    <div class="badge"><ion-icon name="trophy"></ion-icon></div>
+    <h1 class="icl-brand">ICL</h1>
+    <p class="subtitle">Indoor Champion League</p>
+  </div>
+
+  <form (ngSubmit)="login()">
+    <h2 class="ion-text-center">Welcome back, {{ auth.user()?.username }}</h2>
+    <p class="ion-text-center muted">Enter your PIN to continue.</p>
+
+    <ion-item lines="full">
+      <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
+      <ion-input
+        class="pin-input"
+        aria-label="PIN"
+        placeholder="••••"
+        type="password"
+        inputmode="numeric"
+        maxlength="6"
+        [value]="pin()"
+        (ionInput)="pin.set($event.detail.value ?? '')"
+      ></ion-input>
+    </ion-item>
+
+    @if (error()) {
+      <ion-text color="danger"><p class="ion-text-center">{{ error() }}</p></ion-text>
+    }
+
+    <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="busy() || !pin()">
+      Login
+    </ion-button>
+  </form>
+</ion-content>

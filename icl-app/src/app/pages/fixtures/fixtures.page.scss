@@ -1,0 +1,73 @@
+.progress {
+  margin: 12px 16px 4px;
+  font-size: 13px;
+  color: var(--ion-color-medium);
+}
+
+.meta {
+  margin-left: 10px;
+  font-size: 13px;
+  color: var(--ion-color-medium-shade);
+
+  ion-icon {
+    vertical-align: -2px;
+    margin-left: 6px;
+  }
+}
+
+.match {
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.no {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ion-color-medium);
+}
+
+.team {
+  font-weight: 600;
+  word-break: break-word;
+
+  &.left {
+    text-align: right;
+  }
+
+  &.won {
+    color: var(--ion-color-success-shade);
+  }
+
+  &.lost {
+    opacity: 0.55;
+  }
+}
+
+.vs {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ion-color-secondary-shade);
+  text-transform: uppercase;
+}
+
+ion-badge ion-icon {
+  vertical-align: -1px;
+}
+
+.standings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 16px 16px;
+}
+
+.chip {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--ion-color-light);
+}

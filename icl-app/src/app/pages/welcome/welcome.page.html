@@ -1,0 +1,61 @@
+<ion-content class="ion-padding" [fullscreen]="true">
+  <div class="hero">
+    <div class="badge"><ion-icon name="trophy"></ion-icon></div>
+    <h1 class="icl-brand">ICL</h1>
+    <p class="subtitle">Indoor Champion League</p>
+  </div>
+
+  <h2 class="ion-text-center">Welcome!</h2>
+  <p class="ion-text-center muted">Create your username and PIN to get started.</p>
+
+  <form [formGroup]="form" (ngSubmit)="create()">
+    <ion-list lines="full" class="form-list">
+      <ion-item>
+        <ion-icon slot="start" name="person-outline"></ion-icon>
+        <ion-input
+          label="Username"
+          labelPlacement="floating"
+          formControlName="username"
+          autocomplete="username"
+          [counter]="true"
+          maxlength="30"
+          errorText="Username must be at least 3 characters"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="keypad-outline"></ion-icon>
+        <ion-input
+          label="PIN (4–6 digits)"
+          labelPlacement="floating"
+          type="password"
+          inputmode="numeric"
+          maxlength="6"
+          formControlName="pin"
+          errorText="PIN must be 4 to 6 digits"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="keypad-outline"></ion-icon>
+        <ion-input
+          label="Confirm PIN"
+          labelPlacement="floating"
+          type="password"
+          inputmode="numeric"
+          maxlength="6"
+          formControlName="confirmPin"
+        ></ion-input>
+      </ion-item>
+    </ion-list>
+
+    @if (form.hasError('pinMismatch') && form.controls.confirmPin.touched) {
+      <ion-note color="danger" class="ion-padding-start">PINs do not match</ion-note>
+    }
+    @if (error()) {
+      <ion-text color="danger"><p class="ion-padding-start">{{ error() }}</p></ion-text>
+    }
+
+    <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="saving()">
+      Create account
+    </ion-button>
+  </form>
+</ion-content>

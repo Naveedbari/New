@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title><span class="icl-brand">ICL</span> · Home</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="auth.confirmLogout()" aria-label="Logout">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <p class="greeting">Hi, {{ auth.user()?.username }} 👋</p>
+  <div class="ion-padding-horizontal">
+    <ion-button expand="block" color="secondary" routerLink="/tournaments/start">
+      <ion-icon slot="start" name="flag"></ion-icon> Start new tournament
+    </ion-button>
+  </div>
+
+  @if (latest(); as t) {
+    <ion-card class="champion-card" [routerLink]="['/tournaments', t.id]">
+      <div class="ribbon"><ion-icon name="trophy"></ion-icon> Current Champion</div>
+      <ion-card-content>
+        <div class="logo-wrap">
+          @if (t.championLogo) {
+            <img class="logo" [src]="t.championLogo" [alt]="t.championTeamName + ' logo'" />
+          } @else {
+            <div class="logo placeholder">{{ initial(t.championTeamName) }}</div>
+          }
+        </div>
+        <h1 class="team">{{ t.championTeamName }}</h1>
+        <p class="tournament">{{ t.name }}</p>
+
+        <div class="facts">
+          <div class="fact">
+            <ion-icon name="star"></ion-icon>
+            <span class="label">MVP</span>
+            <span class="value">{{ t.mvpName }}</span>
+          </div>
+          <div class="fact">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <span class="label">Played on</span>
+            <span class="value">{{ asDate(t.playedOn) | date: 'd MMM y' }}</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    @if (history().length) {
+      <ion-list>
+        <ion-list-header><ion-label>Previous champions</ion-label></ion-list-header>
+        @for (h of history(); track h.id) {
+          <ion-item [routerLink]="['/tournaments', h.id]" [detail]="true">
+            @if (h.championLogo) {
+              <img slot="start" class="team-logo" [src]="h.championLogo" [alt]="h.championTeamName + ' logo'" />
+            } @else {
+              <div slot="start" class="team-logo-placeholder">{{ initial(h.championTeamName) }}</div>
+            }
+            <ion-label>
+              <h2>{{ h.championTeamName }}</h2>
+              <p>{{ h.name }} · {{ asDate(h.playedOn) | date: 'd MMM y' }}</p>
+              <p>MVP: {{ h.mvpName }}</p>
+            </ion-label>
+          </ion-item>
+        }
+      </ion-list>
+    }
+  } @else if (loaded()) {
+    <div class="empty">
+      <ion-icon name="ribbon-outline"></ion-icon>
+      <p>No champion yet. Start a tournament and declare its champion, or record a past result.</p>
+      <ion-button fill="outline" routerLink="/tournaments/new">Add past tournament result</ion-button>
+    </div>
+  }
+</ion-content>
