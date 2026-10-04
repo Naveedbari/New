@@ -135,6 +135,21 @@ export class TournamentNewPage {
     const perCourt = Math.ceil(pools / courts);
     return `Courts will be shared — up to ${perCourt} pools per court.`;
   });
+  /** Court booking per pool, asked for every tournament (no pre-fill). */
+  readonly bookingHours = signal<number | null>(null);
+  /** Playing time needed by the biggest pool vs. the booking. */
+  readonly bookingSummary = computed(() => {
+    if (this.poolError()) return null;
+    const biggest = this.sizes()[0] ?? 0;
+    const matches = this.matchCount(biggest);
+    const needed = matches * this.settings.settings().matchMinutes;
+    const booking = Math.round(this.bookingHours()! * 60);
+    return {
+      text: `${this.sizes().length === 1 ? 'The pool' : 'The largest pool'} plays ${matches} matches × ${this.settings.settings().matchMinutes} min = ${formatDuration(needed)} of a ${formatDuration(booking)} booking.`,
+      overBy: Math.max(0, needed - booking),
+    };
+  });
+
   readonly poolError = computed(() => {
     const pools = this.poolCount();
     const courts = this.courtCount();
@@ -142,11 +157,20 @@ export class TournamentNewPage {
     if (!pools) return 'Enter the number of pools.';
     if (!Number.isInteger(pools) || pools < 1) return 'Number of pools must be a whole number of 1 or more.';
     if (selected / pools < 2) return `${selected} teams can make at most ${Math.floor(selected / 2)} pools (2+ teams per pool).`;
-    if (pools === 1) return this.singleCourt() ? '' : 'Choose the court for this tournament.';
+    if (pools === 1) return this.singleCourt() ? this.bookingError() : 'Choose the court for this tournament.';
     if (!courts) return 'Enter the number of courts.';
     if (!Number.isInteger(courts) || courts < 1) return 'Number of courts must be a whole number of 1 or more.';
-    return '';
+    return this.bookingError();
   });
+
+  private bookingError(): string {
+    const hours = this.bookingHours();
+    if (!hours) return 'Enter how many hours the court is booked for each pool.';
+    if (hours <= 0 || hours > 24 || (hours * 60) % 15 !== 0) {
+      return 'Booking must be between 0.25 and 24 hours, in steps of 15 minutes (e.g. 1.5).';
+    }
+    return '';
+  }
 
   // Step 3 – draw
   readonly pools = signal<Pool[]>([]);
@@ -197,11 +221,15 @@ export class TournamentNewPage {
     this.step.set('pools');
   }
 
-  draw(): void {
+  /**
+   * Draws pools. From the pools step every pool gets the booking entered there;
+   * a reshuffle keeps any per-pool booking changes made on the draw step.
+   */
+  draw(fromPoolsStep = false): void {
     if (this.poolError()) return;
     const times = this.pools().map((p) => p.startTime);
-    const bookings = this.pools().map((p) => p.bookingMinutes);
-    const defaultBooking = this.settings.settings().bookingMinutes;
+    const defaultBooking = Math.round(this.bookingHours()! * 60);
+    const bookings = fromPoolsStep ? [] : this.pools().map((p) => p.bookingMinutes);
     const single = this.isSinglePool();
     const drawn = drawPools(this.selectedTeams(), this.poolCount()!, single ? 1 : this.courtCount()!);
     this.pools.set(

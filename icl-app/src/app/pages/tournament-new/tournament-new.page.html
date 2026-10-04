@@ -89,6 +89,12 @@
                 [value]="courtCount()" (ionInput)="courtCount.set(toNumber($event.detail.value))"></ion-input>
             </ion-item>
           }
+          <ion-item>
+            <ion-input id="booking-hours" label="Court booking per pool (hours) *" labelPlacement="stacked" type="number"
+              inputmode="decimal" min="0.25" step="0.25" placeholder="e.g. 2"
+              [value]="bookingHours()" (ionInput)="bookingHours.set(toNumber($event.detail.value))"
+              [helperText]="'Usual booking: ' + formatDuration(settings.settings().bookingMinutes) + ' (Settings)'"></ion-input>
+          </ion-item>
         </ion-list>
 
         @if (poolError()) {
@@ -96,6 +102,14 @@
         } @else {
           <p class="summary">Teams will be split automatically: <strong>{{ sizeSummary() }}</strong>.</p>
           <p class="summary">{{ courtSummary() }}</p>
+          @if (bookingSummary(); as b) {
+            <p class="summary">{{ b.text }}</p>
+            @if (b.overBy) {
+              <ion-note color="danger">
+                <p>That's {{ formatDuration(b.overBy) }} more than the booking. Book longer, add a pool, or shorten matches in Settings.</p>
+              </ion-note>
+            }
+          }
         }
       </div>
     }
@@ -163,7 +177,7 @@
         </ion-button>
       }
       @case ('pools') {
-        <ion-button expand="block" [disabled]="!!poolError()" (click)="draw()">
+        <ion-button expand="block" [disabled]="!!poolError()" (click)="draw(true)">
           <ion-icon slot="start" name="shuffle"></ion-icon> Draw pools
         </ion-button>
       }
