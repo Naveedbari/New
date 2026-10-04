@@ -35,10 +35,17 @@ npm start            # http://localhost:4200
 npm run build
 ```
 
+## Android APK
+
+Every push to the `claude/kind-newton-g7yll9` branch that changes `icl-app/` runs the
+**ICL Android APK** GitHub Actions workflow (`.github/workflows/icl-android.yml`). It builds a
+debug APK and publishes it as a pre-release (`icl-apk-<run number>`) on the repository's
+Releases page. You can also start it by hand from the Actions tab (Run workflow).
+
 ## Run on a device
 
 ```bash
-npx cap add android   # or: npx cap add ios   (first time only)
+npx cap add ios      # first time only; the android/ project is already committed
 npm run android       # build, sync and open Android Studio
 npm run ios           # build, sync and open Xcode
 ```
