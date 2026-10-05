@@ -29,6 +29,19 @@ import { TournamentService, courtName } from '../../core/tournament.service';
 import { addMinutes, formatDuration } from '../../core/time.util';
 
 type Filter = 'all' | 'pending' | 'played';
+type ResultsView = 'matches' | 'table';
+
+/** Points awarded for a win; a loss scores nothing (no draws without scores). */
+export const POINTS_PER_WIN = 2;
+
+export interface StandingRow {
+  team: PoolTeam;
+  played: number;
+  won: number;
+  lost: number;
+  remaining: number;
+  points: number;
+}
 
 @Component({
   selector: 'app-fixtures',
@@ -59,6 +72,10 @@ export class FixturesPage {
   readonly groups = signal<PoolFixtures[]>([]);
   readonly loaded = signal(false);
   readonly filter = signal<Filter>('all');
+  /** Inside the Results tab: the finished match cards, or the points table. */
+  readonly resultsView = signal<ResultsView>('matches');
+  readonly showTable = computed(() => this.filter() === 'played' && this.resultsView() === 'table');
+  readonly pointsPerWin = POINTS_PER_WIN;
 
   readonly visible = computed(() => {
     const f = this.filter();
@@ -121,6 +138,30 @@ export class FixturesPage {
 
   initial(name: string): string {
     return name.trim().charAt(0).toUpperCase();
+  }
+
+  /**
+   * Points table for one pool: most points first, then fewer games played
+   * (a team with games in hand ranks higher), then name.
+   */
+  standings(group: PoolFixtures): StandingRow[] {
+    const same = (a: PoolTeam, b: PoolTeam) =>
+      a.teamId != null && b.teamId != null ? a.teamId === b.teamId : a.name === b.name;
+    return group.pool.teams
+      .map((team) => {
+        const games = group.matches.filter((m) => same(m.team1, team) || same(m.team2, team));
+        const played = games.filter((m) => m.winner);
+        const won = played.filter((m) => same(m.winner === 1 ? m.team1 : m.team2, team)).length;
+        return {
+          team,
+          played: played.length,
+          won,
+          lost: played.length - won,
+          remaining: games.length - played.length,
+          points: won * POINTS_PER_WIN,
+        };
+      })
+      .sort((a, b) => b.points - a.points || a.played - b.played || a.team.name.localeCompare(b.team.name));
   }
 
   /** Pool standings: wins per team, most wins first. */

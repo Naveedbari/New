@@ -261,3 +261,84 @@
   border-radius: 999px;
   background: var(--ion-color-light);
 }
+
+.view-switch {
+  padding: 4px 16px 0;
+
+  ion-segment {
+    --background: var(--ion-color-light);
+    border-radius: 999px;
+  }
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(var(--ion-color-primary-rgb), 0.15);
+}
+
+.points {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+
+  th,
+  td {
+    padding: 10px 6px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  th {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ion-color-medium);
+    background: var(--ion-color-light);
+  }
+
+  tbody tr + tr td {
+    border-top: 1px solid rgba(var(--ion-color-medium-rgb), 0.2);
+  }
+
+  .pos {
+    width: 28px;
+    color: var(--ion-color-medium);
+  }
+
+  .team-col {
+    text-align: left;
+    width: 100%;
+  }
+
+  .pts {
+    font-weight: 800;
+    color: var(--ion-color-primary);
+  }
+
+  tr.leader td {
+    background: rgba(var(--ion-color-secondary-rgb), 0.12);
+  }
+}
+
+.team-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tname {
+  font-weight: 700;
+  white-space: normal;
+}
+
+.mini {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  font-size: 12px;
+}

@@ -27,6 +27,66 @@
     <p class="progress">This tournament has no fixtures.</p>
   }
 
+  @if (filter() === 'played' && progress().total) {
+    <div class="view-switch">
+      <ion-segment [value]="resultsView()" (ionChange)="resultsView.set($any($event.detail.value))">
+        <ion-segment-button value="matches"><ion-label>Matches</ion-label></ion-segment-button>
+        <ion-segment-button value="table"><ion-label>Points table</ion-label></ion-segment-button>
+      </ion-segment>
+    </div>
+  }
+
+  @if (showTable()) {
+    @for (g of groups(); track g.pool.id) {
+      <section class="pool">
+        <header class="pool-head">
+          <h2>{{ g.pool.name }}</h2>
+          @if (g.pool.court) {
+            <span class="meta"><span><ion-icon name="location-outline"></ion-icon> {{ courtName(g.pool.court) }}</span></span>
+          }
+        </header>
+        <div class="table-wrap">
+          <table class="points">
+            <thead>
+              <tr>
+                <th class="pos" scope="col">#</th>
+                <th class="team-col" scope="col">Team</th>
+                <th scope="col" title="Played">P</th>
+                <th scope="col" title="Won">W</th>
+                <th scope="col" title="Lost">L</th>
+                <th scope="col" title="Matches left">Left</th>
+                <th scope="col" title="Points">Pts</th>
+              </tr>
+            </thead>
+            <tbody>
+              @let rows = standings(g);
+              @for (row of rows; track row.team.name; let i = $index) {
+                <tr [class.leader]="i === 0 && row.points > (rows[1]?.points ?? 0)">
+                  <td class="pos">{{ i + 1 }}</td>
+                  <td class="team-col">
+                    <span class="team-cell">
+                      @if (row.team.logo) {
+                        <img class="mini" [src]="row.team.logo" alt="" />
+                      } @else {
+                        <span class="mini placeholder">{{ initial(row.team.name) }}</span>
+                      }
+                      <span class="tname">{{ row.team.name }}</span>
+                    </span>
+                  </td>
+                  <td>{{ row.played }}</td>
+                  <td>{{ row.won }}</td>
+                  <td>{{ row.lost }}</td>
+                  <td>{{ row.remaining }}</td>
+                  <td class="pts">{{ row.points }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+    <p class="progress">Win = {{ pointsPerWin }} points, loss = 0. Teams level on points are ordered by fewer matches played.</p>
+  } @else {
   @for (g of visible(); track g.pool.id) {
     <section class="pool">
       <header class="pool-head">
@@ -139,5 +199,6 @@
         </div>
       }
     </section>
+  }
   }
 </ion-content>
