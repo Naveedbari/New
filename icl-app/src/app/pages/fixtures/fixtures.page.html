@@ -70,7 +70,7 @@
                   <div class="logo placeholder">{{ initial(t.name) }}</div>
                 }
                 <span class="name">{{ t.name }}</span>
-                @if (m.toss?.winner === side) {
+                @if (!m.winner && m.toss?.winner === side) {
                   <span class="toss-tag">Won toss</span>
                 }
               </div>
@@ -90,6 +90,8 @@
             }
           </div>
 
+          <!-- Once a result is in, the toss no longer matters on the card. -->
+          @if (!m.winner) {
           <div class="toss-box">
             @if (m.toss; as toss) {
               <p class="toss-line">
@@ -110,12 +112,15 @@
               <p class="toss-line muted">Toss not done yet.</p>
             }
           </div>
+          }
 
           <div class="actions">
-            <ion-button fill="outline" size="small" [routerLink]="['/tournaments', id, 'matches', m.id, 'toss']">
-              <ion-icon slot="start" name="ribbon-outline"></ion-icon>
-              {{ m.toss ? 'Toss details' : 'Toss' }}
-            </ion-button>
+            @if (!m.winner) {
+              <ion-button fill="outline" size="small" [routerLink]="['/tournaments', id, 'matches', m.id, 'toss']">
+                <ion-icon slot="start" name="ribbon-outline"></ion-icon>
+                {{ m.toss ? 'Toss details' : 'Toss' }}
+              </ion-button>
+            }
             <ion-button size="small" (click)="pickWinner(m)">
               <ion-icon slot="start" name="trophy-outline"></ion-icon>
               {{ m.winner ? 'Change result' : 'Set result' }}
