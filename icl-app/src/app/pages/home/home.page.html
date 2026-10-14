@@ -45,6 +45,11 @@
         </div>
       </ion-card-content>
     </ion-card>
+    <div class="ion-padding-horizontal">
+      <ion-button id="home-frame" expand="block" fill="outline" [routerLink]="['/tournaments', t.id, 'champion-frame']">
+        <ion-icon slot="start" name="share-social-outline"></ion-icon> Share champion frame
+      </ion-button>
+    </div>
 
     @if (history().length) {
       <ion-list>

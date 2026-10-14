@@ -30,6 +30,7 @@ interface TournamentRow {
   overs: number | null;
   qualify_count: number | null;
   ko_format: KnockoutFormat | null;
+  champion_photo: string | null;
   logo: string | null;
   current_team_name: string | null;
 }
@@ -66,6 +67,7 @@ const toTournament = (r: TournamentRow): Tournament => ({
   overs: r.overs,
   qualifyCount: r.qualify_count,
   koFormat: r.ko_format,
+  championPhoto: r.champion_photo,
 });
 
 /** Fisher–Yates shuffle (returns a new array). */
@@ -520,6 +522,10 @@ export class TournamentService {
        WHERE id = ?`,
       [toss?.caller ?? null, toss?.call ?? null, toss?.result ?? null, toss?.winner ?? null, toss?.decision ?? null, matchId],
     );
+  }
+
+  async setChampionPhoto(tournamentId: number, photo: string | null): Promise<void> {
+    await this.db.run('UPDATE tournaments SET champion_photo = ? WHERE id = ?', [photo, tournamentId]);
   }
 
   /** Saves (or clears) the scores of several matches in one go. */

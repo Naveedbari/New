@@ -61,6 +61,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/toss/toss.page').then((m) => m.TossPage),
   },
   {
+    path: 'tournaments/:id/champion-frame',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/champion-frame/champion-frame.page').then((m) => m.ChampionFramePage),
+  },
+  {
     path: 'tournaments/:id/knockout',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/knockout/knockout.page').then((m) => m.KnockoutPage),

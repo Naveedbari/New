@@ -20,6 +20,7 @@ import {
   chevronDown,
   chevronForward,
   gridOutline,
+  imagesOutline,
   play,
   gitNetworkOutline,
   lockClosedOutline,
@@ -81,7 +82,7 @@ export class TournamentDetailPage {
   readonly courtName = courtName;
 
   constructor() {
-    addIcons({ trophy, star, createOutline, trashOutline, locationOutline, timeOutline, chevronDown, peopleOutline, gitNetworkOutline, lockClosedOutline, calendarOutline, chevronForward, gridOutline, play });
+    addIcons({ trophy, star, createOutline, trashOutline, locationOutline, timeOutline, chevronDown, peopleOutline, gitNetworkOutline, lockClosedOutline, calendarOutline, chevronForward, gridOutline, play, imagesOutline });
   }
 
   async ionViewWillEnter(): Promise<void> {

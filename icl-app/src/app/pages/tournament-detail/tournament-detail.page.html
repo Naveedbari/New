@@ -46,6 +46,11 @@
           <ion-icon slot="icon-only" name="create-outline"></ion-icon>
         </ion-button>
       </section>
+      <div class="frame-cta">
+        <ion-button id="open-frame" expand="block" fill="outline" [routerLink]="['/tournaments', t.id, 'champion-frame']">
+          <ion-icon slot="start" name="images-outline"></ion-icon> Champion frame · add photo &amp; share
+        </ion-button>
+      </div>
     }
 
     @if (t.pools?.length) {

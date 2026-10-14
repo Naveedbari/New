@@ -114,5 +114,7 @@ export interface Tournament {
   /** How many top teams from each pool go through to the next round. */
   qualifyCount?: number | null;
   koFormat?: KnockoutFormat | null;
+  /** Winners' group photo (JPEG data URL) for the champion frame. */
+  championPhoto?: string | null;
   pools?: Pool[];
 }

@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button [defaultHref]="'/tournaments/' + id"></ion-back-button></ion-buttons>
+    <ion-title>Champion frame</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (tournament(); as t) {
+    @if (!t.championTeamName) {
+      <p class="empty">Declare the champion first to create the frame.</p>
+    } @else {
+      <div class="preview">
+        @if (frame(); as src) {
+          <img [src]="src" [alt]="t.championTeamName + ' champion frame'" />
+        } @else {
+          <div class="loading"><ion-spinner name="crescent"></ion-spinner></div>
+        }
+      </div>
+
+      <p class="hint">
+        @if (t.championPhoto) {
+          Showing the winners' group photo.
+        } @else {
+          No group photo yet, so the frame shows the team {{ hasLogo() ? 'logo' : 'name' }}. Add a photo of the winners.
+        }
+      </p>
+
+      <div class="actions">
+        <ion-button id="share-frame" expand="block" color="secondary" [disabled]="!frame() || busy()" (click)="share()">
+          <ion-icon slot="start" name="share-social-outline"></ion-icon> Share frame
+        </ion-button>
+        <div class="row">
+          <ion-button id="add-photo" fill="outline" [disabled]="busy()" (click)="pickPhoto()">
+            <ion-icon slot="start" name="images-outline"></ion-icon>
+            {{ t.championPhoto ? 'Change photo' : 'Add group photo' }}
+          </ion-button>
+          @if (t.championPhoto) {
+            <ion-button fill="outline" [disabled]="busy()" (click)="removePhoto()" aria-label="Remove photo">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          }
+        </div>
+      </div>
+      <input #fileInput type="file" accept="image/*" hidden (change)="onFile($event)" />
+    }
+  }
+</ion-content>

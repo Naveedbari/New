@@ -17,7 +17,7 @@ import {
   IonToolbar,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { calendarOutline, flag, logOutOutline, medal, ribbonOutline, star, trophy } from 'ionicons/icons';
+import { calendarOutline, flag, logOutOutline, medal, ribbonOutline, shareSocialOutline, star, trophy } from 'ionicons/icons';
 import { AuthService } from '../../core/auth.service';
 import { Tournament } from '../../core/models';
 import { TournamentService } from '../../core/tournament.service';
@@ -55,7 +55,7 @@ export class HomePage {
   readonly history = computed(() => this.all().slice(1));
 
   constructor() {
-    addIcons({ trophy, flag, medal, star, calendarOutline, logOutOutline, ribbonOutline });
+    addIcons({ trophy, flag, medal, star, calendarOutline, logOutOutline, ribbonOutline, shareSocialOutline });
   }
 
   async ionViewWillEnter(): Promise<void> {
