@@ -39,7 +39,8 @@
   display: flex;
   gap: 8px;
 
-  ion-button:first-child {
+  ion-button:first-child,
+  ion-button.grow {
     flex: 1;
   }
 }

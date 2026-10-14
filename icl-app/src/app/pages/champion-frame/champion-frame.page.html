@@ -27,9 +27,14 @@
       </p>
 
       <div class="actions">
-        <ion-button id="share-frame" expand="block" color="secondary" [disabled]="!frame() || busy()" (click)="share()">
-          <ion-icon slot="start" name="share-social-outline"></ion-icon> Share frame
-        </ion-button>
+        <div class="row">
+          <ion-button id="share-frame" color="secondary" [disabled]="!frame() || busy()" (click)="share()">
+            <ion-icon slot="start" name="share-social-outline"></ion-icon> Share
+          </ion-button>
+          <ion-button id="download-frame" color="secondary" fill="outline" class="grow" [disabled]="!frame() || busy()" (click)="download()">
+            <ion-icon slot="start" name="download-outline"></ion-icon> Download
+          </ion-button>
+        </div>
         <div class="row">
           <ion-button id="add-photo" fill="outline" [disabled]="busy()" (click)="pickPhoto()">
             <ion-icon slot="start" name="images-outline"></ion-icon>

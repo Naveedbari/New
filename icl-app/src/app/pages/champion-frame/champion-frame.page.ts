@@ -17,7 +17,7 @@ import {
   ToastController,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { cameraOutline, imagesOutline, shareSocialOutline, trashOutline } from 'ionicons/icons';
+import { cameraOutline, downloadOutline, imagesOutline, shareSocialOutline, trashOutline } from 'ionicons/icons';
 import { renderChampionFrame } from '../../core/champion-frame';
 import { fileToLogo } from '../../core/image.util';
 import { Tournament } from '../../core/models';
@@ -47,7 +47,7 @@ export class ChampionFramePage {
   readonly hasLogo = signal(false);
 
   constructor() {
-    addIcons({ cameraOutline, imagesOutline, shareSocialOutline, trashOutline });
+    addIcons({ cameraOutline, downloadOutline, imagesOutline, shareSocialOutline, trashOutline });
   }
 
   async ionViewWillEnter(): Promise<void> {
@@ -108,7 +108,7 @@ export class ChampionFramePage {
     const png = this.frame();
     const t = this.tournament();
     if (!png || !t) return;
-    const fileName = `${t.name.replace(/[^\w]+/g, '-')}-champion.png`;
+    const fileName = this.fileName(t);
     const text = `${t.championTeamName} are the ${t.name} champions! 🏆`;
     this.busy.set(true);
     try {
@@ -127,10 +127,7 @@ export class ChampionFramePage {
         await navigator.share({ files: [file], title: `${t.name} champion`, text });
         return;
       }
-      const a = document.createElement('a');
-      a.href = png;
-      a.download = fileName;
-      a.click();
+      this.downloadInBrowser(png, fileName);
       await this.toast('Image downloaded');
     } catch (e) {
       // Closing the share sheet without choosing an app is not an error worth reporting.
@@ -140,6 +137,53 @@ export class ChampionFramePage {
     } finally {
       this.busy.set(false);
     }
+  }
+
+  /** Saves the frame to the device: Pictures/ICL on the phone (shows in the gallery), a file download in the browser. */
+  async download(): Promise<void> {
+    const png = this.frame();
+    const t = this.tournament();
+    if (!png || !t) return;
+    this.busy.set(true);
+    try {
+      if (!Capacitor.isNativePlatform()) {
+        this.downloadInBrowser(png, this.fileName(t));
+        await this.toast('Image downloaded');
+        return;
+      }
+      // Timestamped so a new save never collides with an older file.
+      const fileName = this.fileName(t).replace(/\.png$/, `-${Date.now()}.png`);
+      const data = png.split(',')[1]!;
+      try {
+        // Android 10 and older need storage permission for shared folders; newer versions don't.
+        const perm = await Filesystem.checkPermissions();
+        if (perm.publicStorage !== 'granted') await Filesystem.requestPermissions();
+      } catch {
+        /* not needed on this platform */
+      }
+      try {
+        await Filesystem.writeFile({ path: `Pictures/ICL/${fileName}`, data, directory: Directory.ExternalStorage, recursive: true });
+        await this.toast('Saved to Pictures › ICL');
+      } catch {
+        await Filesystem.writeFile({ path: `ICL/${fileName}`, data, directory: Directory.Documents, recursive: true });
+        await this.toast('Saved to Documents › ICL');
+      }
+    } catch {
+      await this.toast('Could not save the image');
+    } finally {
+      this.busy.set(false);
+    }
+  }
+
+  private fileName(t: Tournament): string {
+    return `${t.name.replace(/[^\w]+/g, '-')}-champion.png`;
+  }
+
+  private downloadInBrowser(png: string, fileName: string): void {
+    const a = document.createElement('a');
+    a.href = png;
+    a.download = fileName;
+    a.click();
   }
 
   private async toast(message: string): Promise<void> {
