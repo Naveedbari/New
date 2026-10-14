@@ -12,10 +12,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--ion-color-primary);
-  color: var(--ion-color-secondary);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(225, 222, 255, 0.85));
+  color: var(--icl-accent);
+  border: 1px solid var(--icl-glass-highlight);
   font-size: 52px;
-  box-shadow: 0 8px 24px rgba(var(--ion-color-primary-rgb), 0.35);
+  box-shadow: 0 16px 40px rgba(20, 14, 80, 0.35), 0 0 0 10px rgba(255, 255, 255, 0.08);
 }
 
 h1 {

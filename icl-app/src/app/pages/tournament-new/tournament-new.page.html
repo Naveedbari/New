@@ -1,10 +1,10 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-buttons slot="start">
       @if (step() === 'teams') {
         <ion-back-button defaultHref="/tabs/tournaments"></ion-back-button>
       } @else {
-        <ion-button (click)="back()">Back</ion-button>
+        <ion-button class="text-button" (click)="back()">Back</ion-button>
       }
     </ion-buttons>
     <ion-title>{{ name() || 'Start New Tournament' }}</ion-title>
@@ -172,12 +172,12 @@
   <ion-toolbar class="ion-padding-horizontal">
     @switch (step()) {
       @case ('teams') {
-        <ion-button expand="block" [disabled]="selectedTeams().length < 2" (click)="toPools()">
+        <ion-button expand="block" color="secondary" [disabled]="selectedTeams().length < 2" (click)="toPools()">
           Next: set up pools
         </ion-button>
       }
       @case ('pools') {
-        <ion-button expand="block" [disabled]="!!poolError()" (click)="draw(true)">
+        <ion-button expand="block" color="secondary" [disabled]="!!poolError()" (click)="draw(true)">
           <ion-icon slot="start" name="shuffle"></ion-icon> Draw pools
         </ion-button>
       }
@@ -186,7 +186,7 @@
           <ion-button fill="outline" (click)="draw()">
             <ion-icon slot="start" name="shuffle"></ion-icon> Reshuffle
           </ion-button>
-          <ion-button [disabled]="saving() || missingTimes()" (click)="start()">Start tournament</ion-button>
+          <ion-button color="secondary" [disabled]="saving() || missingTimes()" (click)="start()">Start tournament</ion-button>
         </div>
       }
     }

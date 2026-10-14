@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   padding: 24px 16px 16px;
-  background: linear-gradient(180deg, rgba(var(--ion-color-primary-rgb), 0.12), transparent);
+  background: transparent;
 
   h1 {
     margin: 12px 0 0;
@@ -24,8 +24,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--ion-color-primary);
-  color: var(--ion-color-primary-contrast);
+  background: linear-gradient(145deg, #ffffff, #e0deff);
+  color: #3b37a8;
   font-size: 44px;
   font-weight: 700;
 }

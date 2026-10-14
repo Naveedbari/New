@@ -5,41 +5,52 @@
 }
 
 .champion-card {
-  margin: 12px 16px 20px;
-  border-radius: 20px;
+  position: relative;
+  margin: 16px;
+  border-radius: 28px;
   overflow: hidden;
   cursor: pointer;
-  background: linear-gradient(160deg, var(--ion-color-primary) 0%, var(--ion-color-primary-tint) 100%);
-  color: var(--ion-color-primary-contrast);
-  box-shadow: 0 10px 28px rgba(var(--ion-color-primary-rgb), 0.35);
+  color: var(--icl-text);
+  background:
+    radial-gradient(90% 60% at 50% 0%, rgba(255, 201, 77, 0.28) 0%, transparent 70%),
+    var(--icl-glass);
+  border: 1px solid var(--icl-glass-border);
+  box-shadow: var(--icl-shadow), inset 0 1px 0 var(--icl-glass-highlight);
+  backdrop-filter: var(--icl-blur);
+  -webkit-backdrop-filter: var(--icl-blur);
 
   ion-card-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 16px 16px 20px;
+    padding: 8px 16px 20px;
   }
 }
 
 .ribbon {
-  background: var(--ion-color-secondary);
-  color: var(--ion-color-secondary-contrast);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 16px auto 6px;
+  width: fit-content;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 201, 77, 0.18);
+  border: 1px solid rgba(255, 201, 77, 0.45);
+  color: var(--icl-gold);
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 13px;
-  text-align: center;
-  padding: 8px;
-
-  ion-icon {
-    vertical-align: -2px;
-  }
+  letter-spacing: 0.12em;
+  font-size: 11px;
 }
 
 .logo-wrap {
-  padding: 4px;
+  margin-top: 8px;
+  padding: 5px;
   border-radius: 50%;
-  background: var(--ion-color-secondary);
+  background: linear-gradient(145deg, #fff1a8, #ffc23a 55%, #c98a00);
+  box-shadow: 0 0 40px rgba(255, 201, 77, 0.45);
 }
 
 .logo {
@@ -55,15 +66,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--ion-color-primary);
+  color: #3b37a8;
   font-size: 52px;
   font-weight: 800;
 }
 
 .team {
   margin: 14px 0 0;
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 800;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
   text-align: center;
   color: inherit;
 }
@@ -87,13 +100,14 @@
   flex-direction: column;
   align-items: center;
   padding: 10px 8px;
-  border-radius: 12px;
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   text-align: center;
 
   ion-icon {
     font-size: 22px;
-    color: var(--ion-color-secondary);
+    color: var(--icl-gold);
   }
 
   .label {

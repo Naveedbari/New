@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-buttons slot="start"><ion-back-button defaultHref="/tabs/home"></ion-back-button></ion-buttons>
     <ion-title>{{ isOngoing() ? 'Declare Champion' : id ? 'Edit Result' : 'Past Tournament Result' }}</ion-title>
     @if (id) {
@@ -67,7 +67,7 @@
       <ion-note color="danger" class="ion-padding-start">Please select the champion team</ion-note>
     }
 
-    <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="saving()">
+    <ion-button expand="block" type="submit" color="secondary" class="ion-margin-top" [disabled]="saving()">
       {{ isOngoing() ? 'Declare champion' : 'Save result' }}
     </ion-button>
   </form>
