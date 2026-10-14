@@ -175,6 +175,10 @@ export class FixturesPage {
     await modal.present();
     const { data, role } = await modal.onDidDismiss<NrrModalResult>();
     if (role !== 'save' || !data) return;
+    if (data.overs !== this.tournament()?.overs) {
+      await this.service.setOvers(this.id, data.overs);
+      this.tournament.update((t) => (t ? { ...t, overs: data.overs } : t));
+    }
     await this.service.setScores(data.scores);
     await this.reload();
   }

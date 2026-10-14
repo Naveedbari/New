@@ -26,6 +26,8 @@ interface Draft {
 
 export interface NrrModalResult {
   scores: { matchId: number; score: MatchScore }[];
+  /** Overs per match, as confirmed (or corrected) in the modal. */
+  overs: number;
 }
 
 @Component({
@@ -42,6 +44,9 @@ export class NrrModalComponent implements OnInit {
   @Input({ required: true }) qualifyCount!: number;
 
   readonly drafts = signal<Draft[]>([]);
+  /** Overs per match for this tournament; editable here in case it was set wrong at the start. */
+  readonly overs = signal(6);
+  readonly oversText = signal('6');
 
   constructor() {
     addIcons({ closeOutline, informationCircleOutline, trophy });
@@ -52,6 +57,8 @@ export class NrrModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.matches = this.group.matches.filter((m) => m.winner);
+    this.overs.set(this.oversPerMatch);
+    this.oversText.set(String(this.oversPerMatch));
     const full = String(this.oversPerMatch);
     this.drafts.set(
       this.matches.map((m) =>
@@ -82,6 +89,20 @@ export class NrrModalComponent implements OnInit {
     return side === 1 ? m.team1.name : m.team2.name;
   }
 
+  /** Changes overs per match; untouched first-innings prefills follow the new value. */
+  setOvers(text: string): void {
+    this.oversText.set(text);
+    const n = Number(text);
+    if (!Number.isInteger(n) || n < 1 || n > 50) return;
+    const old = String(this.overs());
+    this.overs.set(n);
+    this.drafts.update((list) =>
+      list.map((d, i) => (this.isBlankDraft(d) && d.inn1Overs === old ? { ...d, inn1Overs: String(n) } : d)),
+    );
+  }
+
+  readonly oversValid = computed(() => String(this.overs()) === this.oversText().trim());
+
   update(index: number, patch: Partial<Draft>): void {
     this.drafts.update((list) => list.map((d, i) => (i === index ? { ...d, ...patch } : d)));
   }
@@ -89,7 +110,7 @@ export class NrrModalComponent implements OnInit {
   /** Validates a draft; returns the score or an error message. */
   parse(index: number): { score?: MatchScore; error?: string } {
     const d = this.drafts()[index]!;
-    const maxBalls = this.oversPerMatch * 6;
+    const maxBalls = this.overs() * 6;
     const r1 = d.inn1Runs.trim() === '' ? NaN : Number(d.inn1Runs);
     const r2 = d.inn2Runs.trim() === '' ? NaN : Number(d.inn2Runs);
     const b1 = oversToBalls(d.inn1Overs);
@@ -101,7 +122,7 @@ export class NrrModalComponent implements OnInit {
       return { error: 'Runs must be whole numbers.' };
     }
     if (b1 < 1 || b2 < 1 || b1 > maxBalls || b2 > maxBalls) {
-      return { error: `Overs must be between 0.1 and ${this.oversPerMatch}.` };
+      return { error: `Overs must be between 0.1 and ${this.overs()}.` };
     }
     return { score: { batFirst: d.batFirst, inn1Runs: r1, inn1Balls: b1, inn2Runs: r2, inn2Balls: b2 } };
   }
@@ -123,14 +144,17 @@ export class NrrModalComponent implements OnInit {
 
   /** A match left completely blank is skipped; anything half-filled must be fixed first. */
   isBlank(index: number): boolean {
-    const d = this.drafts()[index]!;
+    return this.isBlankDraft(this.drafts()[index]!);
+  }
+
+  private isBlankDraft(d: Draft): boolean {
     return d.inn1Runs.trim() === '' && d.inn2Runs.trim() === '' && d.inn2Overs.trim() === '';
   }
 
   readonly canSave = computed(() => {
     const drafts = this.drafts();
     const filled = drafts.filter((_, i) => !this.isBlank(i));
-    return filled.length > 0 && drafts.every((_, i) => this.isBlank(i) || !!this.parse(i).score);
+    return this.oversValid() && filled.length > 0 && drafts.every((_, i) => this.isBlank(i) || !!this.parse(i).score);
   });
 
   /** Live points table with NRR from the scores typed so far. */
@@ -154,6 +178,6 @@ export class NrrModalComponent implements OnInit {
     const scores = this.matches
       .map((m, i) => ({ matchId: m.id!, score: this.parse(i).score }))
       .filter((s): s is { matchId: number; score: MatchScore } => !!s.score);
-    this.modalCtrl.dismiss({ scores } satisfies NrrModalResult, 'save');
+    this.modalCtrl.dismiss({ scores, overs: this.overs() } satisfies NrrModalResult, 'save');
   }
 }

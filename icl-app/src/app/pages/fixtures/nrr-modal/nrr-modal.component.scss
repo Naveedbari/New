@@ -162,6 +162,57 @@
   }
 }
 
+.match-overs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--icl-glass);
+  border: 1px solid var(--icl-glass-border);
+
+  span {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  strong {
+    font-size: 14px;
+    color: var(--icl-text);
+  }
+
+  small {
+    font-size: 12px;
+    color: var(--icl-text-3);
+  }
+
+  input {
+    width: 64px;
+    flex-shrink: 0;
+    padding: 8px 0;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    outline: none;
+    background: var(--icl-bg);
+    color: var(--icl-text);
+    font: inherit;
+    font-size: 20px;
+    font-weight: 800;
+    text-align: center;
+
+    &:focus {
+      border-color: var(--icl-accent);
+    }
+
+    &.bad {
+      border-color: var(--ion-color-danger);
+    }
+  }
+}
+
 .target-note {
   font-size: 12px;
   font-weight: 700;

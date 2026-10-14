@@ -528,6 +528,11 @@ export class TournamentService {
     await this.db.run('UPDATE tournaments SET champion_photo = ? WHERE id = ?', [photo, tournamentId]);
   }
 
+  /** Corrects the tournament's overs per match. */
+  async setOvers(tournamentId: number, overs: number): Promise<void> {
+    await this.db.run('UPDATE tournaments SET overs = ? WHERE id = ?', [overs, tournamentId]);
+  }
+
   /** Saves (or clears) the scores of several matches in one go. */
   async setScores(scores: { matchId: number; score: MatchScore | null }[]): Promise<void> {
     await this.db.transaction(async (run) => {

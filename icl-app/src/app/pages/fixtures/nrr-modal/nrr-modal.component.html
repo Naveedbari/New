@@ -13,9 +13,21 @@
   <p class="intro">
     <ion-icon name="information-circle-outline"></ion-icon>
     Enter the target and the chase for each played match (leave a match blank to skip it).
-    Overs use cricket notation: 4.3 = 4 overs 3 balls. Matches are {{ oversPerMatch }} overs.
+    Overs use cricket notation: 4.3 = 4 overs 3 balls.
     Net run rate decides positions once every match in the pool has scores.
   </p>
+
+  <label class="match-overs" for="match-overs">
+    <span>
+      <strong>Overs per match</strong>
+      <small>Set when the tournament started. Change it here if it's wrong.</small>
+    </span>
+    <input id="match-overs" type="text" inputmode="numeric" [value]="oversText()"
+      [class.bad]="!oversValid()" (input)="setOvers($any($event.target).value)" />
+  </label>
+  @if (!oversValid()) {
+    <p class="err">Overs per match must be a whole number from 1 to 50.</p>
+  }
 
   @for (m of matches; track m.id; let i = $index) {
     @let d = drafts()[i];
