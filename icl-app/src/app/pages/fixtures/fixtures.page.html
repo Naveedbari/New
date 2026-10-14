@@ -98,10 +98,20 @@
           </table>
         </div>
 
-        @if (t.complete && !t.tieUnresolved && (t.tieOnPoints || t.hasScores)) {
-          <ion-button fill="clear" size="small" class="edit-nrr" (click)="openNrr(g)">
-            <ion-icon slot="start" name="calculator-outline"></ion-icon> Edit scores &amp; run rate
-          </ion-button>
+        @if (!(t.complete && t.tieUnresolved) && playedCount(g)) {
+          <div class="nrr-row">
+            <ion-button fill="outline" size="small" class="edit-nrr" (click)="openNrr(g)">
+              <ion-icon slot="start" name="calculator-outline"></ion-icon>
+              {{ t.hasScores ? 'Edit run rate' : 'Add run rate' }}
+            </ion-button>
+            <span class="nrr-hint">
+              @if (t.nrrComplete) {
+                Run rate entered for all matches.
+              } @else {
+                {{ scoredCount(g) }} of {{ playedCount(g) }} played matches have scores.
+              }
+            </span>
+          </div>
         }
       </section>
     }

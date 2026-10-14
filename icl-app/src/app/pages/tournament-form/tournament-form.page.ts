@@ -26,6 +26,7 @@ import { Team } from '../../core/models';
 import { TeamService } from '../../core/team.service';
 import { confirmAction } from '../../core/confirm';
 import { TournamentService } from '../../core/tournament.service';
+import { knockoutChampion } from '../../core/bracket';
 
 const today = (): string => {
   const d = new Date();
@@ -96,14 +97,8 @@ export class TournamentFormPage {
     this.form.patchValue(t);
     // Pre-select the knockout winner when the champion hasn't been declared yet.
     if (!t.championTeamId) {
-      const ko = await this.tournaments.knockout(this.id);
-      const last = Math.max(0, ...ko.map((m) => m.koRound ?? 0));
-      const finals = ko.filter((m) => m.koRound === last);
-      const final = finals.length === 1 ? finals[0] : null;
-      if (final?.winner) {
-        const winner = final.winner === 1 ? final.team1 : final.team2;
-        this.form.patchValue({ championTeamId: winner.teamId });
-      }
+      const winner = knockoutChampion(await this.tournaments.knockout(this.id), t.koFormat);
+      if (winner) this.form.patchValue({ championTeamId: winner.teamId });
     }
   }
 

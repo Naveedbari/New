@@ -11,6 +11,7 @@ import {
   IonIcon,
   IonTitle,
   IonToolbar,
+  ModalController,
   NavController,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -32,9 +33,11 @@ import {
 } from 'ionicons/icons';
 import { Match, PoolFixtures, PoolTeam, Tournament } from '../../core/models';
 import { confirmAction } from '../../core/confirm';
-import { TournamentService, courtName, knockoutRoundName } from '../../core/tournament.service';
+import { TournamentService, courtName, koRoundTitle } from '../../core/tournament.service';
+import { knockoutChampion } from '../../core/bracket';
 import { SettingsService } from '../../core/settings.service';
 import { computeStandings } from '../../core/standings';
+import { KoModeModalComponent, KoModeResult, KoPairs } from './ko-mode-modal/ko-mode-modal.component';
 
 @Component({
   selector: 'app-tournament-detail',
@@ -57,6 +60,7 @@ export class TournamentDetailPage {
   private readonly service = inject(TournamentService);
   private readonly alerts = inject(AlertController);
   private readonly nav = inject(NavController);
+  private readonly modals = inject(ModalController);
   private readonly router = inject(Router);
   private readonly settings = inject(SettingsService);
 
@@ -101,23 +105,28 @@ export class TournamentDetailPage {
     return { played, total: all.length, pct: all.length ? (played / all.length) * 100 : 0 };
   });
 
-  /** Knockout progress: current round, matches played (byes excluded) and the winner once decided. */
+  /** Knockout progress: current stage, matches played (byes excluded) and the winner once decided. */
   readonly koProgress = computed(() => {
-    const ko = this.knockout().filter((m) => !m.isBye);
+    const all = this.knockout();
+    const format = this.tournament()?.koFormat;
+    const ko = all.filter((m) => !m.isBye);
     const played = ko.filter((m) => m.winner).length;
-    const lastRound = Math.max(0, ...this.knockout().map((m) => m.koRound ?? 0));
-    const current = this.knockout().filter((m) => m.koRound === lastRound);
-    const final = current.length === 1 ? current[0]! : null;
-    const winner = final?.winner ? (final.winner === 1 ? final.team1 : final.team2).name : null;
-    // Total includes rounds still to come: a bracket of n first-round slots has n - 1 matches minus byes.
-    const firstRound = this.knockout().filter((m) => m.koRound === 1);
-    const byes = firstRound.filter((m) => m.isBye).length;
-    const total = Math.max(ko.length, firstRound.length * 2 - 1 - byes);
+    const lastRound = Math.max(0, ...all.map((m) => m.koRound ?? 0));
+    const current = all.filter((m) => m.koRound === lastRound);
+    const winner = knockoutChampion(all, format)?.name ?? null;
+    let total: number;
+    if (format === 'playoff') {
+      total = 4;
+    } else {
+      // A bracket of n first-round slots has n - 1 matches, minus byes.
+      const firstRound = all.filter((m) => m.koRound === 1);
+      total = Math.max(ko.length, firstRound.length * 2 - 1 - firstRound.filter((m) => m.isBye).length);
+    }
     return {
       played,
       total,
       pct: total ? (played / total) * 100 : 0,
-      roundName: knockoutRoundName(current.length),
+      roundName: koRoundTitle(format, lastRound, current.length),
       winner,
     };
   });
@@ -158,19 +167,73 @@ export class TournamentDetailPage {
     return seeds;
   });
 
+  /** Every pool match has runs/overs entered, so positions can be ranked by NRR. */
+  readonly nrrReady = computed(() => {
+    const tables = this.standings();
+    return tables.length > 0 && tables.every((t) => t.nrrComplete);
+  });
+
+  /** Qualified teams per pool, in finishing order. */
+  private qualifiedByPool(): PoolTeam[][] {
+    const n = this.qualifyCount();
+    return this.standings().map((t) => t.rows.slice(0, n).map((r) => r.team));
+  }
+
+  /** Option 1: random draw, pairing one pool against another where possible. */
+  drawRandom = (): KoPairs => {
+    const shuffle = <T>(list: T[]): T[] => {
+      const a = [...list];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j]!, a[i]!];
+      }
+      return a;
+    };
+    const pools = this.qualifiedByPool();
+    if (pools.length === 2 && pools[0]!.length === pools[1]!.length) {
+      const a = shuffle(pools[0]!);
+      const b = shuffle(pools[1]!);
+      return a.map((team, i) => [team, b[i]!] as [PoolTeam, PoolTeam]);
+    }
+    return TournamentService.seededPairs(shuffle(pools.flat()));
+  };
+
+  /** Option 3 needs one overall order: points first, then net run rate. */
+  private playoffPairs(): KoPairs | null {
+    const n = this.qualifyCount();
+    const rows = this.standings()
+      .flatMap((t) => t.rows.slice(0, n))
+      .sort((a, b) => b.points - a.points || (b.nrr ?? -Infinity) - (a.nrr ?? -Infinity) || a.played - b.played);
+    if (rows.length !== 4) return null;
+    return [
+      [rows[0]!.team, rows[1]!.team],
+      [rows[2]!.team, rows[3]!.team],
+    ];
+  }
+
   async startKnockout(): Promise<void> {
     if (!this.poolsCleared()) return;
-    const seeds = this.seeds();
-    const ok = await confirmAction(
-      this.alerts,
-      'Start Round 2 · Knockout?',
-      `${seeds.length} qualified teams go into the knockout. Pool results can still be viewed but the bracket is drawn now.`,
-      'Start knockout',
-    );
-    if (!ok) return;
-    await this.service.startKnockout(this.id, seeds);
+    const modal = await this.modals.create({
+      component: KoModeModalComponent,
+      componentProps: {
+        nrrReady: this.nrrReady(),
+        qualifiedCount: this.seeds().length,
+        crossPairs: TournamentService.seededPairs(this.seeds()),
+        playoffPairs: this.playoffPairs(),
+        drawRandom: this.drawRandom,
+      },
+    });
+    await modal.present();
+    const { data, role } = await modal.onDidDismiss<KoModeResult>();
+    if (role === 'nrr') {
+      await this.router.navigate(['/tournaments', this.id, 'fixtures'], { queryParams: { tab: 'table' } });
+      return;
+    }
+    if (role !== 'start' || !data) return;
+    await this.service.startKnockout(this.id, data.pairs, data.format);
     await this.router.navigate(['/tournaments', this.id, 'knockout']);
   }
+
 
   asDate(iso: string): Date {
     const [y, m, d] = iso.split('-').map(Number);

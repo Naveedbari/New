@@ -62,7 +62,8 @@ export class FixturesPage {
   private readonly modals = inject(ModalController);
   private readonly settings = inject(SettingsService);
 
-  readonly id = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
+  private readonly activated = inject(ActivatedRoute);
+  readonly id = Number(this.activated.snapshot.paramMap.get('id'));
   readonly tournament = signal<Tournament | null>(null);
   readonly groups = signal<PoolFixtures[]>([]);
   readonly loaded = signal(false);
@@ -101,6 +102,8 @@ export class FixturesPage {
   }
 
   async ionViewWillEnter(): Promise<void> {
+    // Links such as "Add run rate" open this screen straight on the points table.
+    if (this.activated.snapshot.queryParamMap.get('tab') === 'table') this.filter.set('table');
     this.tournament.set(await this.service.get(this.id));
     await this.reload();
     this.loaded.set(true);
@@ -145,6 +148,14 @@ export class FixturesPage {
 
   table(group: PoolFixtures): PoolStandings {
     return this.tables().get(group.pool.id)!;
+  }
+
+  playedCount(g: PoolFixtures): number {
+    return g.matches.filter((m) => m.winner).length;
+  }
+
+  scoredCount(g: PoolFixtures): number {
+    return g.matches.filter((m) => m.score).length;
   }
 
   formatNrr(nrr: number | null): string {

@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Round 2 format</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()" aria-label="Close">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <p class="intro">{{ qualifiedCount }} teams qualified. Choose how the knockout is drawn.</p>
+
+  <div class="options" role="radiogroup" aria-label="Knockout format">
+    @for (o of options; track o.format; let i = $index) {
+      @let why = blocked(o.format);
+      <button type="button" class="option" role="radio" [id]="'mode-' + o.format"
+        [attr.aria-checked]="selected() === o.format" [class.on]="selected() === o.format" [class.off]="!!why"
+        [disabled]="!!why && o.format === 'playoff' && qualifiedCount !== 4" (click)="select(o.format)">
+        <span class="num">{{ i + 1 }}</span>
+        <span class="body">
+          <span class="title"><ion-icon [name]="o.icon"></ion-icon> {{ o.title }}</span>
+          <span class="desc">{{ o.description }}</span>
+          @if (why) {
+            <span class="why"><ion-icon name="alert-circle-outline"></ion-icon> {{ why }}</span>
+          }
+        </span>
+        <span class="radio" aria-hidden="true"></span>
+      </button>
+    }
+  </div>
+
+  @if (!nrrReady) {
+    <div class="nrr-note">
+      <p>Options 2 and 3 rank teams by points and then net run rate. Enter the match scores in the Round 1 points table to unlock them.</p>
+      <ion-button size="small" fill="outline" (click)="addRunRate()">
+        <ion-icon slot="start" name="calculator-outline"></ion-icon> Add run rate
+      </ion-button>
+    </div>
+  }
+
+  <section class="preview">
+    <header>
+      <h3>Draw preview</h3>
+      @if (selected() === 'random') {
+        <ion-button size="small" fill="clear" (click)="redraw()">
+          <ion-icon slot="start" name="refresh-outline"></ion-icon> Redraw
+        </ion-button>
+      }
+    </header>
+    @for (row of preview(); track $index) {
+      <div class="pv-row">
+        <span class="pv-label">{{ row.label }}</span>
+        <span class="pv-teams">{{ row.a }} <em>vs</em> {{ row.b }}</span>
+      </div>
+    }
+  </section>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar class="ion-padding-horizontal">
+    <ion-button id="start-ko" expand="block" color="secondary" [disabled]="!!blocked(selected())" (click)="start()">
+      Start Round 2 · Knockout
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

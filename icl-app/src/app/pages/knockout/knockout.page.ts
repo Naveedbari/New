@@ -20,8 +20,8 @@ import { addIcons } from 'ionicons';
 import { ribbonOutline, trophy, trophyOutline } from 'ionicons/icons';
 import { confirmAction } from '../../core/confirm';
 import { Match, MatchWinner, PoolTeam, Tournament } from '../../core/models';
-import { TournamentService, knockoutRoundName } from '../../core/tournament.service';
-import { BracketMatch, buildBracket } from '../../core/bracket';
+import { TournamentService, knockoutRoundName, koMatchLabel, koRoundTitle } from '../../core/tournament.service';
+import { BracketMatch, buildBracket, knockoutChampion } from '../../core/bracket';
 
 interface KoRound {
   number: number;
@@ -53,10 +53,43 @@ export class KnockoutPage {
     }
     return [...byRound.entries()]
       .sort(([a], [b]) => a - b)
-      .map(([number, matches]) => ({ number, name: knockoutRoundName(matches.length), matches }));
+      .map(([number, matches]) => ({ number, name: koRoundTitle(this.format(), number, matches.length), matches }));
   });
 
   readonly view = signal<'bracket' | 'matches'>('bracket');
+  readonly format = computed(() => this.tournament()?.koFormat ?? 'cross');
+
+  /** Label for one match card, e.g. "Qualifier 1", "Semi-final 2", "Final". */
+  label(m: Match): string {
+    const size = this.matches().filter((x) => x.koRound === m.koRound).length;
+    const base = koMatchLabel(this.format(), m, size);
+    return this.format() !== 'playoff' && size > 1 ? `${base} ${m.position + 1}` : base;
+  }
+
+  /** Playoff map boxes (option 3): Q1, Eliminator, Q2 and Final, with TBD until known. */
+  readonly playoff = computed(() => {
+    const ko = this.matches();
+    const at = (r: number, p: number) => ko.find((m) => m.koRound === r && m.position === p) ?? null;
+    const box = (m: Match | null, round: number, index: number, top: PoolTeam | null, bottom: PoolTeam | null): BracketMatch => ({
+      round,
+      index,
+      match: m,
+      isBye: false,
+      top: m ? { team: m.team1, won: m.winner === 1, lost: m.winner === 2 } : { team: top, won: false, lost: false },
+      bottom: m ? { team: m.team2, won: m.winner === 2, lost: m.winner === 1 } : { team: bottom, won: false, lost: false },
+    });
+    const winner = (m: Match | null) => (m?.winner ? (m.winner === 1 ? m.team1 : m.team2) : null);
+    const loser = (m: Match | null) => (m?.winner ? (m.winner === 1 ? m.team2 : m.team1) : null);
+    const q1 = at(1, 0);
+    const elim = at(1, 1);
+    const q2 = at(2, 0);
+    return {
+      q1: box(q1, 1, 0, null, null),
+      elim: box(elim, 1, 1, null, null),
+      q2: box(q2, 2, 0, loser(q1), winner(elim)),
+      final: box(at(3, 0), 3, 0, winner(q1), winner(q2)),
+    };
+  });
 
   /** Every bracket round, first round to final, including future (TBD) matches. */
   readonly bracket = computed(() => buildBracket(this.matches()));
@@ -88,15 +121,8 @@ export class KnockoutPage {
     if (b.match && !b.isBye) this.pickWinner(b.match);
   }
 
-  /** Champion once the final (a round with a single match) has a winner. */
-  readonly champion = computed<PoolTeam | null>(() => {
-    const rounds = this.rounds();
-    const last = rounds[rounds.length - 1];
-    if (!last || last.matches.length !== 1) return null;
-    const final = last.matches[0]!;
-    if (!final.winner) return null;
-    return final.winner === 1 ? final.team1 : final.team2;
-  });
+  /** Champion once the final is decided. */
+  readonly champion = computed<PoolTeam | null>(() => knockoutChampion(this.matches(), this.format()));
 
   constructor() {
     addIcons({ trophy, trophyOutline, ribbonOutline });

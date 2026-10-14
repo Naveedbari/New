@@ -20,6 +20,15 @@ export type TeamSearchField = 'all' | 'name' | 'captain' | 'phone';
 
 export type TournamentStatus = 'ongoing' | 'completed';
 
+/**
+ * Round 2 format:
+ * random  – qualifiers drawn at random (one pool against another where possible)
+ * cross   – winners v runners-up of the other pool (A1 v B2, B1 v A2)
+ * playoff – second-chance playoffs for 4 teams: Qualifier 1 (1v2), Eliminator (3v4),
+ *           Qualifier 2 (loser Q1 v winner Eliminator), Final (winner Q1 v winner Q2)
+ */
+export type KnockoutFormat = 'random' | 'cross' | 'playoff';
+
 export interface PoolTeam {
   teamId: number | null;
   name: string;
@@ -104,5 +113,6 @@ export interface Tournament {
   overs?: number | null;
   /** How many top teams from each pool go through to the next round. */
   qualifyCount?: number | null;
+  koFormat?: KnockoutFormat | null;
   pools?: Pool[];
 }

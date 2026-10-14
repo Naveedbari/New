@@ -12,11 +12,12 @@
 <ion-content class="ion-padding">
   <p class="intro">
     <ion-icon name="information-circle-outline"></ion-icon>
-    Enter the target and the chase for every match. Overs use cricket notation: 4.3 = 4 overs 3 balls.
-    Matches are {{ oversPerMatch }} overs.
+    Enter the target and the chase for each played match (leave a match blank to skip it).
+    Overs use cricket notation: 4.3 = 4 overs 3 balls. Matches are {{ oversPerMatch }} overs.
+    Net run rate decides positions once every match in the pool has scores.
   </p>
 
-  @for (m of group.matches; track m.id; let i = $index) {
+  @for (m of matches; track m.id; let i = $index) {
     @let d = drafts()[i];
     @if (d) {
       <section class="match">
@@ -105,7 +106,7 @@
 
 <ion-footer>
   <ion-toolbar class="ion-padding-horizontal">
-    <ion-button id="save-nrr" expand="block" color="secondary" [disabled]="!allValid()" (click)="save()">
+    <ion-button id="save-nrr" expand="block" color="secondary" [disabled]="!canSave()" (click)="save()">
       Save scores &amp; update table
     </ion-button>
   </ion-toolbar>

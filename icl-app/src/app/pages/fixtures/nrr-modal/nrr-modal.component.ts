@@ -47,10 +47,14 @@ export class NrrModalComponent implements OnInit {
     addIcons({ closeOutline, informationCircleOutline, trophy });
   }
 
+  /** Only played matches can have scores. */
+  matches: Match[] = [];
+
   ngOnInit(): void {
+    this.matches = this.group.matches.filter((m) => m.winner);
     const full = String(this.oversPerMatch);
     this.drafts.set(
-      this.group.matches.map((m) =>
+      this.matches.map((m) =>
         m.score
           ? {
               batFirst: m.score.batFirst,
@@ -104,7 +108,7 @@ export class NrrModalComponent implements OnInit {
 
   /** Warns when the runs disagree with the recorded match winner. */
   mismatch(index: number): string {
-    const m = this.group.matches[index]!;
+    const m = this.matches[index]!;
     const { score } = this.parse(index);
     if (!score || !m.winner) return '';
     const chaser: 1 | 2 = score.batFirst === 1 ? 2 : 1;
@@ -117,11 +121,22 @@ export class NrrModalComponent implements OnInit {
     return '';
   }
 
-  readonly allValid = computed(() => this.drafts().every((_, i) => !!this.parse(i).score));
+  /** A match left completely blank is skipped; anything half-filled must be fixed first. */
+  isBlank(index: number): boolean {
+    const d = this.drafts()[index]!;
+    return d.inn1Runs.trim() === '' && d.inn2Runs.trim() === '' && d.inn2Overs.trim() === '';
+  }
+
+  readonly canSave = computed(() => {
+    const drafts = this.drafts();
+    const filled = drafts.filter((_, i) => !this.isBlank(i));
+    return filled.length > 0 && drafts.every((_, i) => this.isBlank(i) || !!this.parse(i).score);
+  });
 
   /** Live points table with NRR from the scores typed so far. */
   readonly preview = computed(() => {
-    const matches = this.group.matches.map((m, i) => ({ ...m, score: this.parse(i).score ?? null }));
+    const typed = new Map(this.matches.map((m, i) => [m.id, this.parse(i).score ?? null]));
+    const matches = this.group.matches.map((m) => (typed.has(m.id) ? { ...m, score: typed.get(m.id)! } : m));
     return computeStandings({ pool: this.group.pool, matches }, this.qualifyCount);
   });
 
@@ -135,8 +150,10 @@ export class NrrModalComponent implements OnInit {
   }
 
   save(): void {
-    if (!this.allValid()) return;
-    const scores = this.group.matches.map((m, i) => ({ matchId: m.id!, score: this.parse(i).score! }));
+    if (!this.canSave()) return;
+    const scores = this.matches
+      .map((m, i) => ({ matchId: m.id!, score: this.parse(i).score }))
+      .filter((s): s is { matchId: number; score: MatchScore } => !!s.score);
     this.modalCtrl.dismiss({ scores } satisfies NrrModalResult, 'save');
   }
 }

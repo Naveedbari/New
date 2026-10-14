@@ -3,6 +3,7 @@ import { DatabaseService } from './database.service';
 import {
   CoinSide,
   Match,
+  KnockoutFormat,
   MatchScore,
   MatchWinner,
   Pool,
@@ -28,6 +29,7 @@ interface TournamentRow {
   match_minutes: number | null;
   overs: number | null;
   qualify_count: number | null;
+  ko_format: KnockoutFormat | null;
   logo: string | null;
   current_team_name: string | null;
 }
@@ -63,6 +65,7 @@ const toTournament = (r: TournamentRow): Tournament => ({
   matchMinutes: r.match_minutes,
   overs: r.overs,
   qualifyCount: r.qualify_count,
+  koFormat: r.ko_format,
 });
 
 /** Fisher–Yates shuffle (returns a new array). */
@@ -210,6 +213,21 @@ export function bracketOrder(size: number): number[] {
     order = order.flatMap((s) => [s, n - s]);
   }
   return order;
+}
+
+/** Label of one knockout match, e.g. "Qualifier 1" in playoffs or "Semi-final" in a bracket. */
+export function koMatchLabel(format: KnockoutFormat | null | undefined, m: Match, roundSize: number): string {
+  if (format === 'playoff') {
+    if (m.koRound === 1) return m.position === 0 ? 'Qualifier 1' : 'Eliminator';
+    return m.koRound === 2 ? 'Qualifier 2' : 'Final';
+  }
+  return roundSize === 1 ? 'Final' : roundSize === 2 ? 'Semi-final' : roundSize === 4 ? 'Quarter-final' : `Round of ${roundSize * 2}`;
+}
+
+/** Heading for a knockout round in list views. */
+export function koRoundTitle(format: KnockoutFormat | null | undefined, round: number, roundSize: number): string {
+  if (format === 'playoff') return round === 1 ? 'Qualifier 1 & Eliminator' : round === 2 ? 'Qualifier 2' : 'Final';
+  return knockoutRoundName(roundSize);
 }
 
 /** "Final", "Semi-finals", "Quarter-finals", else "Round of N". */
@@ -386,22 +404,34 @@ export class TournamentService {
   }
 
   /**
-   * Creates the first knockout round from seeded teams (seed 1 first). The bracket is
-   * the next power of two; missing seeds become byes for the top seeds, and seeds are
-   * placed so the top two can only meet in the final.
+   * Classic bracket pairs from seeded teams (seed 1 first): the bracket is the next power of
+   * two, missing seeds become byes for the top seeds, and seeds 1 and 2 can only meet in the final.
    */
-  async startKnockout(tournamentId: number, seeds: PoolTeam[]): Promise<void> {
-    if (seeds.length < 2) throw new Error('At least two teams are needed for a knockout.');
+  static seededPairs(seeds: PoolTeam[]): [PoolTeam, PoolTeam | null][] {
     let size = 2;
     while (size < seeds.length) size *= 2;
     const order = bracketOrder(size);
+    const pairs: [PoolTeam, PoolTeam | null][] = [];
+    for (let i = 0; i < order.length; i += 2) {
+      const a = seeds[order[i]! - 1] ?? null;
+      const b = seeds[order[i + 1]! - 1] ?? null;
+      pairs.push(a ? [a, b] : [b!, null]);
+    }
+    return pairs;
+  }
+
+  /** Creates the first knockout round from the given pairs (null opponent = bye) and format. */
+  async startKnockout(
+    tournamentId: number,
+    pairs: [PoolTeam, PoolTeam | null][],
+    format: KnockoutFormat,
+  ): Promise<void> {
+    if (pairs.length < 1) throw new Error('At least two teams are needed for a knockout.');
     await this.db.transaction(async (run) => {
       await run('DELETE FROM matches WHERE tournament_id = ? AND ko_round IS NOT NULL', [tournamentId]);
-      for (let i = 0; i < order.length; i += 2) {
-        const a = seeds[order[i]! - 1] ?? null;
-        const b = seeds[order[i + 1]! - 1] ?? null;
-        const [t1, t2] = a ? [a, b] : [b!, null];
-        await this.insertKoMatch(run, tournamentId, 1, i / 2, t1, t2);
+      await run('UPDATE tournaments SET ko_format = ? WHERE id = ?', [format, tournamentId]);
+      for (const [i, [t1, t2]] of pairs.entries()) {
+        await this.insertKoMatch(run, tournamentId, 1, i, t1, t2);
       }
     });
     await this.advanceKnockout(tournamentId);
@@ -420,6 +450,14 @@ export class TournamentService {
 
   /** While the latest round is complete and has more than one match, pairs its winners up. */
   private async advanceKnockout(tournamentId: number): Promise<void> {
+    const format = (await this.db.query<{ ko_format: KnockoutFormat | null }>(
+      'SELECT ko_format FROM tournaments WHERE id = ?',
+      [tournamentId],
+    ))[0]?.ko_format;
+    if (format === 'playoff') {
+      await this.advancePlayoff(tournamentId);
+      return;
+    }
     for (;;) {
       const all = await this.knockout(tournamentId);
       if (!all.length) return;
@@ -432,6 +470,27 @@ export class TournamentService {
           await this.insertKoMatch(run, tournamentId, round + 1, i / 2, winners[i]!, winners[i + 1] ?? null);
         }
       });
+    }
+  }
+
+  /** Playoffs: Q1 + Eliminator → Qualifier 2 (loser Q1 v winner Elim) → Final (winner Q1 v winner Q2). */
+  private async advancePlayoff(tournamentId: number): Promise<void> {
+    const all = await this.knockout(tournamentId);
+    const at = (round: number, pos: number) => all.find((m) => m.koRound === round && m.position === pos);
+    const winner = (m: Match) => (m.winner === 1 ? m.team1 : m.team2);
+    const loser = (m: Match) => (m.winner === 1 ? m.team2 : m.team1);
+    const q1 = at(1, 0);
+    const elim = at(1, 1);
+    if (!q1?.winner || !elim?.winner) return;
+    let q2 = at(2, 0);
+    if (!q2) {
+      await this.db.transaction((run) =>
+        this.insertKoMatch(run, tournamentId, 2, 0, loser(q1), winner(elim)),
+      );
+      return;
+    }
+    if (q2.winner && !at(3, 0)) {
+      await this.db.transaction((run) => this.insertKoMatch(run, tournamentId, 3, 0, winner(q1), winner(q2)));
     }
   }
 

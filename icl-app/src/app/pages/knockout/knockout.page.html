@@ -35,7 +35,41 @@
     </button>
   </ng-template>
 
-  @if (view() === 'bracket' && rounds().length) {
+  @if (view() === 'bracket' && rounds().length && format() === 'playoff') {
+    @let po = playoff();
+    <div class="po-map">
+      <svg class="po-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <!-- Q1 winner → Final -->
+        <path class="win" d="M30 18 H67.5 V36 H70" />
+        <!-- Q1 loser → Q2 -->
+        <path class="lose" d="M15 28 V44 H50 V46.5" />
+        <!-- Eliminator winner → Q2 -->
+        <path class="win" d="M30 82 H32.5 V62 H35" />
+        <!-- Q2 winner → Final -->
+        <path class="win" d="M65 62 H67.5 V36" />
+      </svg>
+      <span class="po-tag win-tag" style="left: 38%; top: 12.5%">Winner → Final</span>
+      <span class="po-tag lose-tag" style="left: 17%; top: 37.5%">Loser gets 2nd chance</span>
+
+      <div class="po-box" style="left: 0; top: 8%"><span class="po-label">Qualifier 1</span><ng-container *ngTemplateOutlet="box; context: { $implicit: po.q1 }"></ng-container></div>
+      <div class="po-box" style="left: 0; top: 72%"><span class="po-label">Eliminator</span><ng-container *ngTemplateOutlet="box; context: { $implicit: po.elim }"></ng-container></div>
+      <div class="po-box" style="left: 35%; top: 52%"><span class="po-label">Qualifier 2</span><ng-container *ngTemplateOutlet="box; context: { $implicit: po.q2 }"></ng-container></div>
+      <div class="po-box final" style="left: 70%; top: 26%"><span class="po-label">Final</span><ng-container *ngTemplateOutlet="box; context: { $implicit: po.final }"></ng-container></div>
+      <div class="cup po-cup" [class.won]="!!champion()"><ion-icon name="trophy"></ion-icon></div>
+      <div class="champ-name po-champ">
+        <span class="k">Champion</span>
+        <strong [class.muted]="!champion()">{{ champion()?.name ?? 'TBD' }}</strong>
+      </div>
+    </div>
+    <p class="progress">Tap a match to set its result. Qualifier 1's loser gets a second chance in Qualifier 2.</p>
+    @if (champion() && tournament()?.status !== 'completed') {
+      <div class="ion-padding-horizontal">
+        <ion-button expand="block" color="secondary" [routerLink]="['/tournaments', id, 'edit']">
+          <ion-icon slot="start" name="trophy"></ion-icon> Declare champion &amp; MVP
+        </ion-button>
+      </div>
+    }
+  } @else if (view() === 'bracket' && rounds().length) {
     @let sides = bracketSides();
     <div class="bracket-scroll">
       <div class="bracket" [style.--cols]="sides.left.length * 2 + 1" [style.--rows]="sides.left[0]?.length ?? 1">
@@ -127,7 +161,7 @@
         } @else {
           <article class="match-card" [class.done]="!!m.winner">
             <div class="card-top">
-              <span class="match-no">{{ round.matches.length === 1 ? 'Final' : 'Match ' + matchNumber(m) }}</span>
+              <span class="match-no">{{ label(m) }}</span>
             </div>
 
             <div class="teams">
