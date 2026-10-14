@@ -13,6 +13,8 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
+        <!-- App background behind the system bars, so no grey strips show -->
+        <item name="android:windowBackground">@color/icl_background</item>
     </style>
 
 
