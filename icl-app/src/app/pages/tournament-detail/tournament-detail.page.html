@@ -48,31 +48,38 @@
           <ion-icon slot="start" name="list-outline"></ion-icon> Fixtures &amp; results
         </ion-button>
       </div>
-      <div class="pools">
+      <div class="accordion">
         @for (pool of t.pools; track pool.id) {
-          <ion-card class="pool">
-            <ion-card-header>
-              <ion-card-title>{{ pool.name }}</ion-card-title>
-              @if (pool.court) {
-                <span class="court"><ion-icon name="location-outline"></ion-icon> {{ courtName(pool.court) }}</span>
-              }
-              @if (pool.startTime) {
-                <span class="court"><ion-icon name="time-outline"></ion-icon> {{ pool.startTime }}</span>
-              }
-            </ion-card-header>
-            <ion-card-content>
-              <ol>
+          @let open = isOpen(pool.id!);
+          <section class="acc-item" [class.open]="open">
+            <button type="button" class="acc-head" [attr.aria-expanded]="open" (click)="toggle(pool.id!)">
+              <span class="acc-title">{{ pool.name }}</span>
+              <span class="acc-meta">
+                @if (pool.court) {
+                  <span class="chip"><ion-icon name="location-outline"></ion-icon> {{ courtName(pool.court) }}</span>
+                }
+                @if (pool.startTime) {
+                  <span class="chip"><ion-icon name="time-outline"></ion-icon> {{ pool.startTime }}</span>
+                }
+                <span class="chip count"><ion-icon name="people-outline"></ion-icon> {{ pool.teams.length }}</span>
+              </span>
+              <ion-icon class="chevron" name="chevron-down"></ion-icon>
+            </button>
+            @if (open) {
+              <ol class="acc-body">
                 @for (team of pool.teams; track $index) {
                   <li>
                     @if (team.logo) {
-                      <img class="mini-logo" [src]="team.logo" alt="" />
+                      <img class="team-logo small" [src]="team.logo" alt="" />
+                    } @else {
+                      <span class="team-logo-placeholder small">{{ team.name.charAt(0).toUpperCase() }}</span>
                     }
-                    {{ team.name }}
+                    <span class="tname">{{ team.name }}</span>
                   </li>
                 }
               </ol>
-            </ion-card-content>
-          </ion-card>
+            }
+          </section>
         }
       </div>
     }

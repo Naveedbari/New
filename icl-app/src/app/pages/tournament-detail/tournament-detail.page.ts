@@ -9,8 +9,6 @@ import {
   IonButtons,
   IonCard,
   IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
   IonContent,
   IonHeader,
   IonIcon,
@@ -19,7 +17,17 @@ import {
   NavController,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { createOutline, listOutline, locationOutline, star, timeOutline, trashOutline, trophy } from 'ionicons/icons';
+import {
+  chevronDown,
+  createOutline,
+  listOutline,
+  locationOutline,
+  peopleOutline,
+  star,
+  timeOutline,
+  trashOutline,
+  trophy,
+} from 'ionicons/icons';
 import { Tournament } from '../../core/models';
 import { confirmAction } from '../../core/confirm';
 import { TournamentService, courtName } from '../../core/tournament.service';
@@ -38,13 +46,11 @@ import { TournamentService, courtName } from '../../core/tournament.service';
     IonIcon,
     IonContent,
     IonCard,
-    IonCardHeader,
-    IonCardTitle,
     IonCardContent,
     IonBadge,
   ],
   templateUrl: './tournament-detail.page.html',
-  styleUrl: '../tournament-new/tournament-new.page.scss',
+  styleUrls: ['../tournament-new/tournament-new.page.scss', './tournament-detail.page.scss'],
 })
 export class TournamentDetailPage {
   private readonly service = inject(TournamentService);
@@ -53,10 +59,22 @@ export class TournamentDetailPage {
 
   readonly id = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
   readonly tournament = signal<Tournament | null>(null);
+  /** Pools whose team list is expanded; all start collapsed. */
+  readonly openPools = signal<Set<number>>(new Set());
+
+  isOpen(poolId: number): boolean {
+    return this.openPools().has(poolId);
+  }
+
+  toggle(poolId: number): void {
+    const next = new Set(this.openPools());
+    next.has(poolId) ? next.delete(poolId) : next.add(poolId);
+    this.openPools.set(next);
+  }
   readonly courtName = courtName;
 
   constructor() {
-    addIcons({ trophy, star, createOutline, trashOutline, locationOutline, listOutline, timeOutline });
+    addIcons({ trophy, star, createOutline, trashOutline, locationOutline, listOutline, timeOutline, chevronDown, peopleOutline });
   }
 
   async ionViewWillEnter(): Promise<void> {
