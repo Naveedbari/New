@@ -10,6 +10,7 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCheckbox,
+  IonToggle,
   IonContent,
   IonFooter,
   IonHeader,
@@ -17,6 +18,7 @@ import {
   IonInput,
   IonItem,
   IonLabel,
+  IonListHeader,
   IonList,
   IonNote,
   IonSearchbar,
@@ -35,7 +37,7 @@ import { TeamService } from '../../core/team.service';
 import { addMinutes, formatDuration } from '../../core/time.util';
 import { TournamentService, courtName, drawPools, poolSizes, seasonName } from '../../core/tournament.service';
 
-type Step = 'teams' | 'pools' | 'draw';
+type Step = 'settings' | 'teams' | 'pools' | 'draw';
 
 const today = (): string => {
   const d = new Date();
@@ -58,7 +60,9 @@ const today = (): string => {
     IonList,
     IonItem,
     IonLabel,
+    IonListHeader,
     IonCheckbox,
+    IonToggle,
     IonInput,
     IonNote,
     IonIcon,
@@ -81,10 +85,38 @@ export class TournamentNewPage {
   readonly settings = inject(SettingsService);
   readonly formatDuration = formatDuration;
 
-  readonly step = signal<Step>('teams');
+  readonly step = signal<Step>('settings');
+
+  // Step 1 – review match format and booking. Pre-filled from Settings; changes apply to
+  // this tournament and are saved as the new defaults only when the user asks.
+  readonly matchMinutes = signal<number | null>(null);
+  readonly overs = signal<number | null>(null);
+  readonly reviewBookingHours = signal<number | null>(null);
+  readonly saveAsDefault = signal(false);
+  readonly settingsError = computed(() => {
+    const minutes = this.matchMinutes();
+    const overs = this.overs();
+    const hours = this.reviewBookingHours();
+    if (!minutes || !Number.isInteger(minutes) || minutes < 5 || minutes > 600) {
+      return 'Match duration must be a whole number between 5 and 600 minutes.';
+    }
+    if (!overs || !Number.isInteger(overs) || overs < 1 || overs > 50) {
+      return 'Overs per match must be a whole number between 1 and 50.';
+    }
+    if (!hours || hours <= 0 || hours > 24 || (hours * 60) % 15 !== 0) {
+      return 'Court booking must be between 0.25 and 24 hours, in steps of 15 minutes (e.g. 1.5).';
+    }
+    return '';
+  });
+  readonly settingsSummary = computed(() => {
+    if (this.settingsError()) return '';
+    const booking = Math.round(this.reviewBookingHours()! * 60);
+    const fits = Math.floor(booking / this.matchMinutes()!);
+    return `A ${formatDuration(booking)} booking fits ${fits} match${fits === 1 ? '' : 'es'} of ${this.matchMinutes()} minutes.`;
+  });
   readonly saving = signal(false);
 
-  // Step 1 – season + team selection
+  // Step 2 – season + team selection
   readonly season = signal<number | null>(null);
   readonly name = computed(() => (this.season() ? seasonName(this.season()!) : ''));
   playedOn = today();
@@ -104,7 +136,7 @@ export class TournamentNewPage {
       : this.allTeams();
   });
 
-  // Step 2 – pools and courts. Team counts per pool are worked out automatically.
+  // Step 3 – pools and courts. Team counts per pool are worked out automatically.
   readonly poolCount = signal<number | null>(null);
   readonly courtCount = signal<number | null>(null);
   /** With a single pool the user picks the court instead of it being drawn. */
@@ -142,10 +174,10 @@ export class TournamentNewPage {
     if (this.poolError()) return null;
     const biggest = this.sizes()[0] ?? 0;
     const matches = this.matchCount(biggest);
-    const needed = matches * this.settings.settings().matchMinutes;
+    const needed = matches * this.matchMinutes()!;
     const booking = Math.round(this.bookingHours()! * 60);
     return {
-      text: `${this.sizes().length === 1 ? 'The pool' : 'The largest pool'} plays ${matches} matches × ${this.settings.settings().matchMinutes} min = ${formatDuration(needed)} of a ${formatDuration(booking)} booking.`,
+      text: `${this.sizes().length === 1 ? 'The pool' : 'The largest pool'} plays ${matches} matches × ${this.matchMinutes()} min = ${formatDuration(needed)} of a ${formatDuration(booking)} booking.`,
       overBy: Math.max(0, needed - booking),
     };
   });
@@ -172,13 +204,17 @@ export class TournamentNewPage {
     return '';
   }
 
-  // Step 3 – draw
+  // Step 4 – draw
   readonly pools = signal<Pool[]>([]);
 
   constructor() {
     addIcons({ shuffle: shuffleIcon, locationOutline });
     this.teamService.search('').then((teams) => this.allTeams.set(teams));
     this.tournaments.nextSeason().then((n) => this.season.set(n));
+    const defaults = this.settings.settings();
+    this.matchMinutes.set(defaults.matchMinutes);
+    this.overs.set(defaults.oversPerMatch);
+    this.reviewBookingHours.set(defaults.bookingMinutes / 60);
   }
 
   isSelected(id: number): boolean {
@@ -196,6 +232,22 @@ export class TournamentNewPage {
     this.selectedIds.set(
       this.selectedIds().size === all.length ? new Set() : new Set(all.map((t) => t.id!)),
     );
+  }
+
+  async confirmSettings(): Promise<void> {
+    if (this.settingsError()) return;
+    const bookingMinutes = Math.round(this.reviewBookingHours()! * 60);
+    if (this.saveAsDefault()) {
+      await this.settings.save({
+        matchMinutes: this.matchMinutes()!,
+        oversPerMatch: this.overs()!,
+        bookingMinutes,
+      });
+      this.toast('Saved as your default settings', 'success');
+    }
+    // The reviewed booking pre-fills the pools step (still editable there).
+    this.bookingHours.set(bookingMinutes / 60);
+    this.step.set('teams');
   }
 
   async toPools(): Promise<void> {
@@ -259,7 +311,7 @@ export class TournamentNewPage {
   /** Schedule check for one pool: total playing time vs. the court booking. */
   schedule(pool: Pool): { matches: number; needed: string; ends: string | null; overBy: number } {
     const matches = this.matchCount(pool.teams.length);
-    const minutes = matches * this.settings.settings().matchMinutes;
+    const minutes = matches * this.matchMinutes()!;
     const booking = pool.bookingMinutes ?? 0;
     return {
       matches,
@@ -284,8 +336,8 @@ export class TournamentNewPage {
         this.isSinglePool() ? 1 : this.courtCount()!,
         this.pools(),
         {
-          matchMinutes: this.settings.settings().matchMinutes,
-          overs: this.settings.settings().oversPerMatch,
+          matchMinutes: this.matchMinutes()!,
+          overs: this.overs()!,
         },
       );
       await this.toast('Tournament started!', 'success');
@@ -299,7 +351,8 @@ export class TournamentNewPage {
   }
 
   back(): void {
-    this.step.set(this.step() === 'draw' ? 'pools' : 'teams');
+    const order: Step[] = ['settings', 'teams', 'pools', 'draw'];
+    this.step.set(order[Math.max(0, order.indexOf(this.step()) - 1)]!);
   }
 
   readonly courtName = courtName;

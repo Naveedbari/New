@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      @if (step() === 'teams') {
+      @if (step() === 'settings') {
         <ion-back-button defaultHref="/tabs/tournaments"></ion-back-button>
       } @else {
         <ion-button class="text-button" (click)="back()">Back</ion-button>
@@ -11,15 +11,53 @@
   </ion-toolbar>
   <ion-toolbar class="steps">
     <div class="stepper">
-      <span [class.active]="step() === 'teams'">1 · Teams</span>
-      <span [class.active]="step() === 'pools'">2 · Pools</span>
-      <span [class.active]="step() === 'draw'">3 · Draw</span>
+      <span [class.active]="step() === 'settings'">1 · Settings</span>
+      <span [class.active]="step() === 'teams'">2 · Teams</span>
+      <span [class.active]="step() === 'pools'">3 · Pools</span>
+      <span [class.active]="step() === 'draw'">4 · Draw</span>
     </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   @switch (step()) {
+    @case ('settings') {
+      <div class="ion-padding-horizontal ion-padding-top">
+        <p class="lead">Review the match settings for this tournament.</p>
+      </div>
+      <ion-list lines="full">
+        <ion-list-header><ion-label>Match format</ion-label></ion-list-header>
+        <ion-item>
+          <ion-input id="review-match-minutes" label="Match duration (minutes)" labelPlacement="stacked" type="number"
+            inputmode="numeric" min="5" step="5" [value]="matchMinutes()"
+            (ionInput)="matchMinutes.set(toNumber($event.detail.value))"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input id="review-overs" label="Overs per match" labelPlacement="stacked" type="number" inputmode="numeric"
+            min="1" [value]="overs()" (ionInput)="overs.set(toNumber($event.detail.value))"></ion-input>
+        </ion-item>
+        <ion-list-header><ion-label>Court booking</ion-label></ion-list-header>
+        <ion-item>
+          <ion-input id="review-booking" label="Booking per pool (hours)" labelPlacement="stacked" type="number"
+            inputmode="decimal" min="0.25" step="0.25" [value]="reviewBookingHours()"
+            (ionInput)="reviewBookingHours.set(toNumber($event.detail.value))"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-toggle [checked]="saveAsDefault()" (ionChange)="saveAsDefault.set($event.detail.checked)">
+            Save as my default settings
+          </ion-toggle>
+        </ion-item>
+      </ion-list>
+      <div class="ion-padding-horizontal">
+        @if (settingsError()) {
+          <ion-note color="danger"><p>{{ settingsError() }}</p></ion-note>
+        } @else {
+          <p class="summary">{{ settingsSummary() }}</p>
+          <p class="hint">These apply to this tournament. Turn on the switch to also use them for future tournaments.</p>
+        }
+      </div>
+    }
+
     @case ('teams') {
       <ion-list lines="full">
         <ion-item>
@@ -93,7 +131,7 @@
             <ion-input id="booking-hours" label="Court booking per pool (hours) *" labelPlacement="stacked" type="number"
               inputmode="decimal" min="0.25" step="0.25" placeholder="e.g. 2"
               [value]="bookingHours()" (ionInput)="bookingHours.set(toNumber($event.detail.value))"
-              [helperText]="'Usual booking: ' + formatDuration(settings.settings().bookingMinutes) + ' (Settings)'"></ion-input>
+              [helperText]="'From the settings review. Change it here if this tournament differs.'"></ion-input>
           </ion-item>
         </ion-list>
 
@@ -117,7 +155,7 @@
     @case ('draw') {
       <div class="ion-padding-horizontal ion-padding-top">
         <p class="lead"><strong>{{ name() }}</strong> — {{ isSinglePool() ? 'match order was drawn at random.' : 'teams and courts were drawn at random.' }}</p>
-        <p class="hint">{{ settings.settings().matchMinutes }} min per match · {{ settings.settings().oversPerMatch }} overs (change in Settings)</p>
+        <p class="hint">{{ matchMinutes() }} min per match · {{ overs() }} overs</p>
       </div>
       <div class="pools">
         @for (pool of pools(); track pool.name) {
@@ -151,7 +189,7 @@
               </ol>
               @let plan = schedule(pool);
               <p class="hint">
-                {{ plan.matches }} matches × {{ settings.settings().matchMinutes }} min = {{ plan.needed }}
+                {{ plan.matches }} matches × {{ matchMinutes() }} min = {{ plan.needed }}
                 @if (plan.ends) { · {{ pool.startTime }}–{{ plan.ends }} }
               </p>
               @if (plan.overBy) {
@@ -171,6 +209,11 @@
 <ion-footer>
   <ion-toolbar class="ion-padding-horizontal">
     @switch (step()) {
+      @case ('settings') {
+        <ion-button id="confirm-settings" expand="block" color="secondary" [disabled]="!!settingsError()" (click)="confirmSettings()">
+          Looks good: choose teams
+        </ion-button>
+      }
       @case ('teams') {
         <ion-button expand="block" color="secondary" [disabled]="selectedTeams().length < 2" (click)="toPools()">
           Next: set up pools
