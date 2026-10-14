@@ -37,10 +37,9 @@ npm run build
 
 ## Android APK
 
-Every push to the `claude/kind-newton-g7yll9` branch that changes `icl-app/` runs the
-**ICL Android APK** GitHub Actions workflow (`.github/workflows/icl-android.yml`). It builds a
+The **ICL Android APK** GitHub Actions workflow (`.github/workflows/icl-android.yml`) builds a
 debug APK and publishes it as a pre-release (`icl-apk-<run number>`) on the repository's
-Releases page. You can also start it by hand from the Actions tab (Run workflow).
+Releases page. It runs only when started by hand: Actions tab → ICL Android APK → Run workflow.
 
 ## Run on a device
 

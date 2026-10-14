@@ -1,12 +1,7 @@
 name: ICL Android APK
 
+# Manual only: run it from the Actions tab (or on request) when a new APK is wanted.
 on:
-  push:
-    branches:
-      - claude/kind-newton-g7yll9
-    paths:
-      - 'icl-app/**'
-      - '.github/workflows/icl-android.yml'
   workflow_dispatch:
 
 permissions:
