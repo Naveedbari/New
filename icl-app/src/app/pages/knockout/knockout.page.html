@@ -6,6 +6,98 @@
 </ion-header>
 
 <ion-content>
+  @if (rounds().length) {
+    <ion-segment class="view-seg" [value]="view()" (ionChange)="view.set($any($event.detail.value))">
+      <ion-segment-button value="bracket"><ion-label>Bracket</ion-label></ion-segment-button>
+      <ion-segment-button value="matches"><ion-label>Matches</ion-label></ion-segment-button>
+    </ion-segment>
+  }
+
+  <ng-template #box let-b>
+    <button type="button" class="mbox" [class.tbd]="!b.match" [class.playable]="b.match && !b.isBye"
+      [class.decided]="b.match?.winner" (click)="tapBox(b)"
+      [attr.aria-label]="(b.top.team?.name ?? 'TBD') + ' versus ' + (b.isBye ? 'bye' : (b.bottom.team?.name ?? 'TBD'))">
+      @for (slot of [b.top, b.bottom]; track $index) {
+        <span class="brow" [class.win]="slot.won || (b.isBye && $index === 0)" [class.lose]="slot.lost">
+          @if (slot.team; as tm) {
+            @if (tm.logo) {
+              <img class="blogo" [src]="tm.logo" alt="" />
+            } @else {
+              <span class="blogo ph">{{ initial(tm.name) }}</span>
+            }
+            <span class="bname">{{ tm.name }}</span>
+          } @else {
+            <span class="blogo ph empty"></span>
+            <span class="bname muted">{{ b.isBye ? 'Bye' : 'TBD' }}</span>
+          }
+        </span>
+      }
+    </button>
+  </ng-template>
+
+  @if (view() === 'bracket' && rounds().length) {
+    @let sides = bracketSides();
+    <div class="bracket-scroll">
+      <div class="bracket" [style.--cols]="sides.left.length * 2 + 1" [style.--rows]="sides.left[0]?.length ?? 1">
+        @for (col of sides.left; track $index; let ci = $index) {
+          <div class="col left" [class.recv]="ci > 0">
+            <span class="col-name">{{ sides.names[ci] }}</span>
+            <div class="col-body">
+              @for (pair of pairs(col); track $index) {
+                <div class="pair" [class.two]="pair.length === 2">
+                  @for (b of pair; track b.index) {
+                    <div class="slot"><ng-container *ngTemplateOutlet="box; context: { $implicit: b }"></ng-container></div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <div class="col final" [class.recv]="sides.left.length > 0">
+          <span class="col-name">Final</span>
+          <div class="col-body">
+            <div class="final-stack">
+              <div class="cup" [class.won]="!!champion()"><ion-icon name="trophy"></ion-icon></div>
+              @if (sides.final; as f) {
+                <div class="slot"><ng-container *ngTemplateOutlet="box; context: { $implicit: f }"></ng-container></div>
+              }
+              <div class="champ-name">
+                @if (champion(); as c) {
+                  <span class="k">Champion</span><strong>{{ c.name }}</strong>
+                } @else {
+                  <span class="k">Champion</span><strong class="muted">TBD</strong>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        @for (col of sides.right; track $index; let ci = $index) {
+          <div class="col right" [class.recv]="ci < sides.right.length - 1">
+            <span class="col-name">{{ sides.names[sides.right.length - 1 - ci] }}</span>
+            <div class="col-body">
+              @for (pair of pairs(col); track $index) {
+                <div class="pair" [class.two]="pair.length === 2">
+                  @for (b of pair; track b.index) {
+                    <div class="slot"><ng-container *ngTemplateOutlet="box; context: { $implicit: b }"></ng-container></div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    <p class="progress">Tap a match in the bracket to set its result.</p>
+    @if (champion() && tournament()?.status !== 'completed') {
+      <div class="ion-padding-horizontal">
+        <ion-button expand="block" color="secondary" [routerLink]="['/tournaments', id, 'edit']">
+          <ion-icon slot="start" name="trophy"></ion-icon> Declare champion &amp; MVP
+        </ion-button>
+      </div>
+    }
+  } @else {
   @if (champion(); as c) {
     <section class="champ">
       <span class="champ-label"><ion-icon name="trophy"></ion-icon> Knockout winner</span>
@@ -97,5 +189,6 @@
 
   @if (rounds().length && !champion()) {
     <p class="progress">Winners move on automatically. The next round appears when every match in this round has a result.</p>
+  }
   }
 </ion-content>

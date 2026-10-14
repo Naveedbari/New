@@ -57,3 +57,282 @@
   background: var(--icl-glass);
   border: 1px dashed var(--icl-glass-border);
 }
+
+/* ---------- Bracket view ---------- */
+.view-seg {
+  margin: 8px 16px 4px;
+}
+
+.bracket-scroll {
+  overflow-x: auto;
+  padding: 8px 16px 4px;
+}
+
+.bracket {
+  --w: 104px;
+  --g: 16px;
+  --line: rgba(255, 255, 255, 0.28);
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(var(--w), 1fr));
+  column-gap: var(--g);
+  min-width: calc(var(--cols) * var(--w) + (var(--cols) - 1) * var(--g));
+  min-height: max(320px, calc(var(--rows) * 120px + 40px));
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.col-name {
+  height: 28px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--icl-text-3);
+  white-space: nowrap;
+}
+
+.col-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.pair {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.slot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  padding: 6px 0;
+}
+
+/* Connector lines. Left side flows right, right side flows left, both into the final. */
+.left .slot::after,
+.right .slot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: calc(var(--g) / 2);
+  border-top: 2px solid var(--line);
+}
+
+.left .slot::after {
+  left: 100%;
+}
+
+.right .slot::after {
+  right: 100%;
+}
+
+.left .pair.two::after,
+.right .pair.two::after {
+  content: '';
+  position: absolute;
+  top: 25%;
+  bottom: 25%;
+  border-left: 2px solid var(--line);
+}
+
+.left .pair.two::after {
+  left: calc(100% + var(--g) / 2 - 1px);
+}
+
+.right .pair.two::after {
+  right: calc(100% + var(--g) / 2 - 1px);
+}
+
+.left.recv .slot::before,
+.right.recv .slot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: calc(var(--g) / 2);
+  border-top: 2px solid var(--line);
+}
+
+.left.recv .slot::before {
+  right: 100%;
+}
+
+.right.recv .slot::before {
+  left: 100%;
+}
+
+.final.recv .slot::before,
+.final.recv .slot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: calc(var(--g) / 2);
+  border-top: 2px solid var(--line);
+}
+
+.final.recv .slot::before {
+  right: 100%;
+}
+
+.final.recv .slot::after {
+  left: 100%;
+}
+
+.final-stack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* The final box sits exactly at the column's vertical centre so the lines meet it;
+   the trophy floats above and the champion's name below. */
+.final-stack .cup {
+  position: absolute;
+  left: 50%;
+  bottom: calc(50% + 46px);
+  transform: translateX(-50%);
+}
+
+.final-stack .champ-name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% + 46px);
+}
+
+.cup {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto;
+  border-radius: 50%;
+  font-size: 30px;
+  color: var(--icl-text-3);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--icl-glass-border);
+
+  &.won {
+    color: var(--icl-gold);
+    background: rgba(245, 183, 0, 0.12);
+    border-color: rgba(245, 183, 0, 0.45);
+    box-shadow: 0 0 28px rgba(245, 183, 0, 0.35);
+  }
+}
+
+.champ-name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  .k {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--icl-gold);
+  }
+
+  strong {
+    font-size: 14px;
+    font-weight: 800;
+    word-break: break-word;
+  }
+}
+
+.muted {
+  color: var(--icl-text-3);
+}
+
+/* Match box */
+.mbox {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--icl-glass);
+  border: 1px solid var(--icl-glass-border);
+  color: var(--icl-text);
+  font: inherit;
+  text-align: left;
+  cursor: default;
+
+  &.playable {
+    cursor: pointer;
+  }
+
+  &.playable:not(.decided) {
+    border-color: rgba(34, 197, 94, 0.45);
+  }
+
+  &.tbd {
+    border-style: dashed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--icl-accent);
+    outline-offset: 2px;
+  }
+}
+
+.brow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 7px 8px;
+  font-size: 12px;
+  font-weight: 700;
+
+  & + .brow {
+    border-top: 1px solid var(--icl-glass-border);
+  }
+
+  &.win {
+    color: var(--icl-accent);
+    background: rgba(34, 197, 94, 0.1);
+  }
+
+  &.lose {
+    opacity: 0.45;
+  }
+}
+
+.blogo {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+
+  &.ph {
+    display: grid;
+    place-items: center;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--icl-text);
+    background: #2a313c;
+  }
+
+  &.empty {
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.bname {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

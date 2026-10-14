@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
@@ -9,6 +10,9 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonLabel,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
   IonToolbar,
 } from '@ionic/angular';
@@ -17,6 +21,7 @@ import { ribbonOutline, trophy, trophyOutline } from 'ionicons/icons';
 import { confirmAction } from '../../core/confirm';
 import { Match, MatchWinner, PoolTeam, Tournament } from '../../core/models';
 import { TournamentService, knockoutRoundName } from '../../core/tournament.service';
+import { BracketMatch, buildBracket } from '../../core/bracket';
 
 interface KoRound {
   number: number;
@@ -26,7 +31,7 @@ interface KoRound {
 
 @Component({
   selector: 'app-knockout',
-  imports: [RouterLink, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonButton, IonIcon, IonContent],
+  imports: [NgTemplateOutlet, RouterLink, IonLabel, IonSegment, IonSegmentButton, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonButton, IonIcon, IonContent],
   templateUrl: './knockout.page.html',
   styleUrls: ['../fixtures/fixtures.page.scss', './knockout.page.scss'],
 })
@@ -50,6 +55,38 @@ export class KnockoutPage {
       .sort(([a], [b]) => a - b)
       .map(([number, matches]) => ({ number, name: knockoutRoundName(matches.length), matches }));
   });
+
+  readonly view = signal<'bracket' | 'matches'>('bracket');
+
+  /** Every bracket round, first round to final, including future (TBD) matches. */
+  readonly bracket = computed(() => buildBracket(this.matches()));
+
+  /**
+   * Two-sided layout: the first half of each round feeds in from the left, the second half
+   * from the right, meeting at the final in the middle. Columns: left rounds, final, right rounds.
+   */
+  readonly bracketSides = computed(() => {
+    const rounds = this.bracket();
+    const early = rounds.slice(0, -1);
+    return {
+      left: early.map((r) => r.slice(0, r.length / 2)),
+      right: early.map((r) => r.slice(r.length / 2)).reverse(),
+      final: rounds[rounds.length - 1]?.[0] ?? null,
+      names: early.map((r) => knockoutRoundName(r.length)),
+    };
+  });
+
+  /** Groups a column's boxes into pairs that feed the same next-round match. */
+  pairs(column: BracketMatch[]): BracketMatch[][] {
+    const out: BracketMatch[][] = [];
+    for (let i = 0; i < column.length; i += 2) out.push(column.slice(i, i + 2));
+    return out;
+  }
+
+  /** Tapping a playable bracket box records its result. */
+  tapBox(b: BracketMatch): void {
+    if (b.match && !b.isBye) this.pickWinner(b.match);
+  }
 
   /** Champion once the final (a round with a single match) has a winner. */
   readonly champion = computed<PoolTeam | null>(() => {
