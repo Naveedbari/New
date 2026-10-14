@@ -71,6 +71,47 @@ function spaced(ctx: CanvasRenderingContext2D, text: string, x: number, y: numbe
   ctx.textAlign = 'center';
 }
 
+/** Green team-colour grade over the group photo, with "CHAMPION" written across the bottom. */
+function drawPhotoEffect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number): void {
+  ctx.save();
+  // Partial green tone: recolour the photo's hue towards green, keeping its light and shade.
+  ctx.globalCompositeOperation = 'color';
+  ctx.fillStyle = 'rgba(34, 197, 94, 0.55)';
+  ctx.fillRect(x, y, w, h);
+  ctx.globalCompositeOperation = 'soft-light';
+  ctx.fillStyle = 'rgba(74, 222, 128, 0.45)';
+  ctx.fillRect(x, y, w, h);
+  ctx.globalCompositeOperation = 'source-over';
+
+  // Dark vignette at the edges and a green glow rising from the bottom.
+  const vignette = ctx.createRadialGradient(x + w / 2, y + h / 2, h * 0.35, x + w / 2, y + h / 2, w * 0.75);
+  vignette.addColorStop(0, 'rgba(7, 9, 11, 0)');
+  vignette.addColorStop(1, 'rgba(7, 9, 11, 0.6)');
+  ctx.fillStyle = vignette;
+  ctx.fillRect(x, y, w, h);
+  const rise = ctx.createLinearGradient(0, y + h * 0.45, 0, y + h);
+  rise.addColorStop(0, 'rgba(4, 19, 10, 0)');
+  rise.addColorStop(0.6, 'rgba(4, 30, 14, 0.7)');
+  rise.addColorStop(1, 'rgba(34, 197, 94, 0.55)');
+  ctx.fillStyle = rise;
+  ctx.fillRect(x, y, w, h);
+
+  // "CHAMPION" stamped over the photo
+  ctx.textAlign = 'center';
+  ctx.font = `800 118px ${FONT}`;
+  const ty = y + h - 52;
+  // Two glow passes (a wide halo, then a tight one) instead of an outline:
+  // the font's overlapping glyph contours show as spikes when stroked.
+  ctx.fillStyle = '#ffffff';
+  ctx.shadowColor = 'rgba(34, 197, 94, 1)';
+  ctx.shadowBlur = 48;
+  spaced(ctx, 'CHAMPION', x + w / 2, ty, 12);
+  ctx.shadowBlur = 14;
+  spaced(ctx, 'CHAMPION', x + w / 2, ty, 12);
+  ctx.shadowBlur = 0;
+  ctx.restore();
+}
+
 /**
  * Renders the champion frame as a PNG data URL (1080×1350, portrait for social sharing).
  * Picture priority: group photo → team logo → team name.
@@ -162,12 +203,7 @@ export async function renderChampionFrame(data: ChampionFrameData): Promise<stri
   if (data.photo) {
     try {
       drawCover(ctx, await loadImage(data.photo), px, py, pw, ph);
-      // Fade the bottom of the photo into the frame for legibility.
-      const fade = ctx.createLinearGradient(0, py + ph - 140, 0, py + ph);
-      fade.addColorStop(0, 'rgba(7, 9, 11, 0)');
-      fade.addColorStop(1, 'rgba(7, 9, 11, 0.55)');
-      ctx.fillStyle = fade;
-      ctx.fillRect(px, py, pw, ph);
+      drawPhotoEffect(ctx, px, py, pw, ph);
       drew = true;
     } catch {
       drew = false;
