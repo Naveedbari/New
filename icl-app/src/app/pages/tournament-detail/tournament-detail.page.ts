@@ -4,11 +4,8 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   AlertController,
   IonBackButton,
-  IonBadge,
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
   IonContent,
   IonHeader,
   IonIcon,
@@ -18,11 +15,14 @@ import {
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import {
+  calendarOutline,
   chevronDown,
+  chevronForward,
+  gridOutline,
+  play,
   gitNetworkOutline,
   lockClosedOutline,
   createOutline,
-  listOutline,
   locationOutline,
   peopleOutline,
   star,
@@ -32,7 +32,7 @@ import {
 } from 'ionicons/icons';
 import { Match, PoolFixtures, PoolTeam, Tournament } from '../../core/models';
 import { confirmAction } from '../../core/confirm';
-import { TournamentService, courtName } from '../../core/tournament.service';
+import { TournamentService, courtName, knockoutRoundName } from '../../core/tournament.service';
 import { SettingsService } from '../../core/settings.service';
 import { computeStandings } from '../../core/standings';
 
@@ -49,12 +49,9 @@ import { computeStandings } from '../../core/standings';
     IonButton,
     IonIcon,
     IonContent,
-    IonCard,
-    IonCardContent,
-    IonBadge,
   ],
   templateUrl: './tournament-detail.page.html',
-  styleUrls: ['../tournament-new/tournament-new.page.scss', './tournament-detail.page.scss'],
+  styleUrl: './tournament-detail.page.scss',
 })
 export class TournamentDetailPage {
   private readonly service = inject(TournamentService);
@@ -80,7 +77,7 @@ export class TournamentDetailPage {
   readonly courtName = courtName;
 
   constructor() {
-    addIcons({ trophy, star, createOutline, trashOutline, locationOutline, listOutline, timeOutline, chevronDown, peopleOutline, gitNetworkOutline, lockClosedOutline });
+    addIcons({ trophy, star, createOutline, trashOutline, locationOutline, timeOutline, chevronDown, peopleOutline, gitNetworkOutline, lockClosedOutline, calendarOutline, chevronForward, gridOutline, play });
   }
 
   async ionViewWillEnter(): Promise<void> {
@@ -93,6 +90,37 @@ export class TournamentDetailPage {
   readonly groups = signal<PoolFixtures[]>([]);
   readonly knockout = signal<Match[]>([]);
   readonly koStarted = computed(() => this.knockout().length > 0);
+
+  readonly teamCount = computed(() =>
+    (this.tournament()?.pools ?? []).reduce((n, p) => n + p.teams.length, 0),
+  );
+
+  readonly poolProgress = computed(() => {
+    const all = this.groups().flatMap((g) => g.matches);
+    const played = all.filter((m) => m.winner).length;
+    return { played, total: all.length, pct: all.length ? (played / all.length) * 100 : 0 };
+  });
+
+  /** Knockout progress: current round, matches played (byes excluded) and the winner once decided. */
+  readonly koProgress = computed(() => {
+    const ko = this.knockout().filter((m) => !m.isBye);
+    const played = ko.filter((m) => m.winner).length;
+    const lastRound = Math.max(0, ...this.knockout().map((m) => m.koRound ?? 0));
+    const current = this.knockout().filter((m) => m.koRound === lastRound);
+    const final = current.length === 1 ? current[0]! : null;
+    const winner = final?.winner ? (final.winner === 1 ? final.team1 : final.team2).name : null;
+    // Total includes rounds still to come: a bracket of n first-round slots has n - 1 matches minus byes.
+    const firstRound = this.knockout().filter((m) => m.koRound === 1);
+    const byes = firstRound.filter((m) => m.isBye).length;
+    const total = Math.max(ko.length, firstRound.length * 2 - 1 - byes);
+    return {
+      played,
+      total,
+      pct: total ? (played / total) * 100 : 0,
+      roundName: knockoutRoundName(current.length),
+      winner,
+    };
+  });
 
   private readonly qualifyCount = computed(
     () => this.tournament()?.qualifyCount ?? this.settings.settings().qualifyPerPool,

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start"><ion-back-button defaultHref="/tabs/tournaments"></ion-back-button></ion-buttons>
-    <ion-title>{{ tournament()?.name ?? 'Tournament' }}</ion-title>
+    <ion-title>Tournament</ion-title>
     @if (tournament()) {
       <ion-buttons slot="end">
         <ion-button (click)="confirmDelete()" aria-label="Delete tournament">
@@ -14,70 +14,114 @@
 
 <ion-content>
   @if (tournament(); as t) {
-    <div class="ion-padding">
-      <p class="lead">
-        {{ asDate(t.playedOn) | date: 'd MMM y' }}
-        @if (t.courtCount) { · {{ t.courtCount }} court{{ t.courtCount === 1 ? '' : 's' }} }
-        @if (t.matchMinutes) { · {{ t.matchMinutes }} min/match }
-        @if (t.overs) { · {{ t.overs }} overs }
-        <ion-badge [color]="t.status === 'completed' ? 'success' : 'warning'">
-          {{ t.status === 'completed' ? 'Completed' : 'Ongoing' }}
-        </ion-badge>
-      </p>
+    <!-- Hero: identity, status and key numbers -->
+    <section class="hero">
+      <div class="hero-top">
+        <span class="status" [class.done]="t.status === 'completed'">
+          <span class="dot"></span>{{ t.status === 'completed' ? 'Completed' : 'Live' }}
+        </span>
+        <span class="date"><ion-icon name="calendar-outline"></ion-icon> {{ asDate(t.playedOn) | date: 'EEE, d MMM y' }}</span>
+      </div>
+      <h1>{{ t.name }}</h1>
+      <div class="stats">
+        <div class="stat"><span class="v">{{ teamCount() }}</span><span class="k">Teams</span></div>
+        <div class="stat"><span class="v">{{ t.pools?.length ?? 0 }}</span><span class="k">Pools</span></div>
+        <div class="stat"><span class="v">{{ t.courtCount ?? '–' }}</span><span class="k">Courts</span></div>
+        <div class="stat"><span class="v">{{ t.overs ?? '–' }}</span><span class="k">Overs</span></div>
+        <div class="stat"><span class="v">{{ t.matchMinutes ?? '–' }}<small>m</small></span><span class="k">Per match</span></div>
+      </div>
+    </section>
 
-      @if (t.status === 'completed') {
-        <ion-card class="pool">
-          <ion-card-content>
-            <p><ion-icon name="trophy" color="secondary"></ion-icon> Champion: <strong>{{ t.championTeamName }}</strong></p>
-            <p><ion-icon name="star" color="secondary"></ion-icon> MVP: <strong>{{ t.mvpName }}</strong></p>
-          </ion-card-content>
-        </ion-card>
-        <ion-button fill="outline" expand="block" [routerLink]="['/tournaments', t.id, 'edit']">
-          <ion-icon slot="start" name="create-outline"></ion-icon> Edit result
-        </ion-button>
-      } @else {
-        <ion-button expand="block" color="secondary" [routerLink]="['/tournaments', t.id, 'edit']">
-          <ion-icon slot="start" name="trophy"></ion-icon> Declare champion &amp; MVP
-        </ion-button>
-      }
-    </div>
-
-    @if (t.pools?.length) {
-      <div class="ion-padding-horizontal">
-        <div class="rounds">
-          <ion-button expand="block" fill="outline" [routerLink]="['/tournaments', t.id, 'fixtures']">
-            <ion-icon slot="start" name="list-outline"></ion-icon> Round 1 · Pools
-          </ion-button>
-          @if (koStarted()) {
-            <ion-button id="round2" expand="block" fill="outline" [routerLink]="['/tournaments', t.id, 'knockout']">
-              <ion-icon slot="start" name="git-network-outline"></ion-icon> Round 2 · Knockout
-            </ion-button>
-          } @else {
-            <ion-button id="round2" expand="block" [color]="poolsCleared() ? 'secondary' : undefined"
-              [fill]="poolsCleared() ? 'solid' : 'outline'" [disabled]="!poolsCleared()" (click)="startKnockout()">
-              <ion-icon slot="start" [name]="poolsCleared() ? 'git-network-outline' : 'lock-closed-outline'"></ion-icon>
-              Start Round 2 · Knockout
-            </ion-button>
-            @if (lockReason()) {
-              <p class="lock-note">{{ lockReason() }}</p>
-            }
+    @if (t.status === 'completed') {
+      <section class="champ-card">
+        <ion-icon name="trophy" class="cup"></ion-icon>
+        <div class="champ-text">
+          <span class="k">Champion</span>
+          <strong>{{ t.championTeamName }}</strong>
+          @if (t.mvpName) {
+            <span class="mvp"><ion-icon name="star"></ion-icon> MVP {{ t.mvpName }}</span>
           }
         </div>
+        <ion-button fill="clear" size="small" [routerLink]="['/tournaments', t.id, 'edit']" aria-label="Edit result">
+          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+        </ion-button>
+      </section>
+    }
+
+    @if (t.pools?.length) {
+      <h2 class="section-title">Stages</h2>
+      <div class="stages">
+        <!-- Round 1 -->
+        <a class="stage" [routerLink]="['/tournaments', t.id, 'fixtures']">
+          <span class="stage-icon"><ion-icon name="grid-outline"></ion-icon></span>
+          <span class="stage-body">
+            <span class="stage-kicker">Round 1</span>
+            <span class="stage-title">Pool matches</span>
+            <span class="progress"><span [style.width.%]="poolProgress().pct"></span></span>
+            <span class="stage-sub">{{ poolProgress().played }} of {{ poolProgress().total }} matches played</span>
+          </span>
+          <span class="stage-end">
+            <span class="tag" [class.ok]="poolsCleared()">{{ poolsCleared() ? 'Done' : 'In play' }}</span>
+            <ion-icon name="chevron-forward"></ion-icon>
+          </span>
+        </a>
+
+        <!-- Round 2 -->
+        @if (koStarted()) {
+          <a id="round2" class="stage" [routerLink]="['/tournaments', t.id, 'knockout']">
+            <span class="stage-icon gold"><ion-icon name="git-network-outline"></ion-icon></span>
+            <span class="stage-body">
+              <span class="stage-kicker">Round 2</span>
+              <span class="stage-title">Knockout</span>
+              <span class="progress"><span [style.width.%]="koProgress().pct"></span></span>
+              <span class="stage-sub">
+                @if (koProgress().winner; as w) { Won by {{ w }} } @else { {{ koProgress().roundName }} · {{ koProgress().played }} of {{ koProgress().total }} played }
+              </span>
+            </span>
+            <span class="stage-end">
+              <span class="tag" [class.ok]="!!koProgress().winner">{{ koProgress().winner ? 'Done' : 'In play' }}</span>
+              <ion-icon name="chevron-forward"></ion-icon>
+            </span>
+          </a>
+        } @else {
+          <div class="stage" [class.locked]="!poolsCleared()">
+            <span class="stage-icon" [class.muted]="!poolsCleared()">
+              <ion-icon [name]="poolsCleared() ? 'git-network-outline' : 'lock-closed-outline'"></ion-icon>
+            </span>
+            <span class="stage-body">
+              <span class="stage-kicker">Round 2</span>
+              <span class="stage-title">Knockout</span>
+              <span class="stage-sub">
+                @if (poolsCleared()) { {{ seeds().length }} teams qualified. Ready to draw the bracket. } @else { {{ lockReason() }} }
+              </span>
+            </span>
+          </div>
+          <ion-button id="round2" class="stage-cta" expand="block" [color]="poolsCleared() ? 'secondary' : undefined"
+            [fill]="poolsCleared() ? 'solid' : 'outline'" [disabled]="!poolsCleared()" (click)="startKnockout()">
+            <ion-icon slot="start" [name]="poolsCleared() ? 'play' : 'lock-closed-outline'"></ion-icon>
+            Start Round 2 · Knockout
+          </ion-button>
+        }
       </div>
+
+      <h2 class="section-title">Pools</h2>
       <div class="accordion">
         @for (pool of t.pools; track pool.id) {
           @let open = isOpen(pool.id!);
           <section class="acc-item" [class.open]="open">
             <button type="button" class="acc-head" [attr.aria-expanded]="open" (click)="toggle(pool.id!)">
-              <span class="acc-title">{{ pool.name }}</span>
-              <span class="acc-meta">
-                @if (pool.court) {
-                  <span class="chip"><ion-icon name="location-outline"></ion-icon> {{ courtName(pool.court) }}</span>
-                }
-                @if (pool.startTime) {
-                  <span class="chip"><ion-icon name="time-outline"></ion-icon> {{ pool.startTime }}</span>
-                }
-                <span class="chip count"><ion-icon name="people-outline"></ion-icon> {{ pool.teams.length }}</span>
+              <span class="acc-badge">{{ pool.name.replace('Pool ', '') }}</span>
+              <span class="acc-main">
+                <span class="acc-title">{{ pool.name }}</span>
+                <span class="acc-meta">
+                  @if (pool.court) {
+                    <span><ion-icon name="location-outline"></ion-icon> {{ courtName(pool.court) }}</span>
+                  }
+                  @if (pool.startTime) {
+                    <span><ion-icon name="time-outline"></ion-icon> {{ pool.startTime }}</span>
+                  }
+                  <span><ion-icon name="people-outline"></ion-icon> {{ pool.teams.length }} teams</span>
+                </span>
               </span>
               <ion-icon class="chevron" name="chevron-down"></ion-icon>
             </button>
