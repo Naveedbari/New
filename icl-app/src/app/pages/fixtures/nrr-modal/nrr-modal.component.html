@@ -1,0 +1,112 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Run rate · {{ group.pool.name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()" aria-label="Close">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <p class="intro">
+    <ion-icon name="information-circle-outline"></ion-icon>
+    Enter the target and the chase for every match. Overs use cricket notation: 4.3 = 4 overs 3 balls.
+    Matches are {{ oversPerMatch }} overs.
+  </p>
+
+  @for (m of group.matches; track m.id; let i = $index) {
+    @let d = drafts()[i];
+    @if (d) {
+      <section class="match">
+        <header>
+          <span class="no">Match {{ m.position + 1 }}</span>
+          <span class="teams">{{ m.team1.name }} <em>vs</em> {{ m.team2.name }}</span>
+          @if (m.winner) {
+            <span class="won"><ion-icon name="trophy"></ion-icon> {{ teamName(m, m.winner) }}</span>
+          }
+        </header>
+
+        <div class="bat-first">
+          <span>Batted first</span>
+          <div class="choice">
+            <button type="button" [class.on]="d.batFirst === 1" (click)="update(i, { batFirst: 1 })">{{ m.team1.name }}</button>
+            <button type="button" [class.on]="d.batFirst === 2" (click)="update(i, { batFirst: 2 })">{{ m.team2.name }}</button>
+          </div>
+        </div>
+
+        <div class="innings">
+          <div class="inn">
+            <span class="inn-title">Target · {{ teamName(m, d.batFirst) }}</span>
+            <div class="pair">
+              <label>
+                <span>Runs</span>
+                <input [id]="'r1-' + i" type="number" inputmode="numeric" min="0" placeholder="0" [value]="d.inn1Runs"
+                  (input)="update(i, { inn1Runs: $any($event.target).value })" />
+              </label>
+              <label>
+                <span>Overs</span>
+                <input [id]="'o1-' + i" type="text" inputmode="decimal" placeholder="e.g. 5" [value]="d.inn1Overs"
+                  (input)="update(i, { inn1Overs: $any($event.target).value })" />
+              </label>
+            </div>
+            @if (d.inn1Runs !== '') {
+              <span class="target-note">Target {{ +d.inn1Runs + 1 }}</span>
+            }
+          </div>
+          <div class="inn">
+            <span class="inn-title">Chase · {{ teamName(m, d.batFirst === 1 ? 2 : 1) }}</span>
+            <div class="pair">
+              <label>
+                <span>Runs</span>
+                <input [id]="'r2-' + i" type="number" inputmode="numeric" min="0" placeholder="0" [value]="d.inn2Runs"
+                  (input)="update(i, { inn2Runs: $any($event.target).value })" />
+              </label>
+              <label>
+                <span>Overs</span>
+                <input [id]="'o2-' + i" type="text" inputmode="decimal" placeholder="e.g. 4.3" [value]="d.inn2Overs"
+                  (input)="update(i, { inn2Overs: $any($event.target).value })" />
+              </label>
+            </div>
+          </div>
+        </div>
+
+        @let p = parse(i);
+        @if (p.error && (d.inn1Runs !== '' || d.inn2Runs !== '' || d.inn2Overs !== '')) {
+          <p class="err">{{ p.error }}</p>
+        } @else if (mismatch(i)) {
+          <p class="warn">{{ mismatch(i) }}</p>
+        }
+      </section>
+    }
+  }
+
+  <section class="preview">
+    <h3>Net run rate preview</h3>
+    <table>
+      <thead>
+        <tr><th>#</th><th class="l">Team</th><th>Pts</th><th>NRR</th></tr>
+      </thead>
+      <tbody>
+        @for (row of preview().rows; track row.team.name; let i = $index) {
+          <tr [class.in]="i < preview().qualifyCount">
+            <td>{{ i + 1 }}</td>
+            <td class="l">{{ row.team.name }}</td>
+            <td>{{ row.points }}</td>
+            <td class="nrr" [class.neg]="(row.nrr ?? 0) < 0">{{ formatNrr(row.nrr) }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <p class="formula">NRR = (runs scored ÷ overs faced) − (runs conceded ÷ overs bowled)</p>
+  </section>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar class="ion-padding-horizontal">
+    <ion-button id="save-nrr" expand="block" color="secondary" [disabled]="!allValid()" (click)="save()">
+      Save scores &amp; update table
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

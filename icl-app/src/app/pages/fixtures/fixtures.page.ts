@@ -14,9 +14,11 @@ import {
   IonSegmentButton,
   IonTitle,
   IonToolbar,
+  ModalController,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import {
+  calculatorOutline,
   calendarOutline,
   locationOutline,
   ribbonOutline,
@@ -27,21 +29,12 @@ import {
 import { Match, MatchWinner, PoolFixtures, PoolTeam, TossDecision, Tournament } from '../../core/models';
 import { TournamentService, courtName } from '../../core/tournament.service';
 import { addMinutes, formatDuration } from '../../core/time.util';
+import { SettingsService } from '../../core/settings.service';
+import { POINTS_PER_WIN, PoolStandings, computeStandings } from '../../core/standings';
+import { NrrModalComponent, NrrModalResult } from './nrr-modal/nrr-modal.component';
 
 /** 'table' is the points table; the other two list match cards. */
 type Filter = 'all' | 'pending' | 'table';
-
-/** Points awarded for a win; a loss scores nothing (no draws without scores). */
-export const POINTS_PER_WIN = 2;
-
-export interface StandingRow {
-  team: PoolTeam;
-  played: number;
-  won: number;
-  lost: number;
-  remaining: number;
-  points: number;
-}
 
 @Component({
   selector: 'app-fixtures',
@@ -66,6 +59,8 @@ export interface StandingRow {
 export class FixturesPage {
   private readonly service = inject(TournamentService);
   private readonly sheets = inject(ActionSheetController);
+  private readonly modals = inject(ModalController);
+  private readonly settings = inject(SettingsService);
 
   readonly id = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
   readonly tournament = signal<Tournament | null>(null);
@@ -74,6 +69,10 @@ export class FixturesPage {
   readonly filter = signal<Filter>('all');
   readonly showTable = computed(() => this.filter() === 'table');
   readonly pointsPerWin = POINTS_PER_WIN;
+  /** Qualifying places per pool: the tournament's own value, else the current default. */
+  readonly qualifyCount = computed(
+    () => this.tournament()?.qualifyCount ?? this.settings.settings().qualifyPerPool,
+  );
 
   readonly visible = computed(() => {
     const f = this.filter();
@@ -98,7 +97,7 @@ export class FixturesPage {
   readonly formatDuration = formatDuration;
 
   constructor() {
-    addIcons({ trophy, trophyOutline, timeOutline, locationOutline, calendarOutline, ribbonOutline });
+    addIcons({ trophy, trophyOutline, timeOutline, locationOutline, calendarOutline, ribbonOutline, calculatorOutline });
   }
 
   async ionViewWillEnter(): Promise<void> {
@@ -138,28 +137,35 @@ export class FixturesPage {
     return name.trim().charAt(0).toUpperCase();
   }
 
-  /**
-   * Points table for one pool: most points first, then fewer games played
-   * (a team with games in hand ranks higher), then name.
-   */
-  standings(group: PoolFixtures): StandingRow[] {
-    const same = (a: PoolTeam, b: PoolTeam) =>
-      a.teamId != null && b.teamId != null ? a.teamId === b.teamId : a.name === b.name;
-    return group.pool.teams
-      .map((team) => {
-        const games = group.matches.filter((m) => same(m.team1, team) || same(m.team2, team));
-        const played = games.filter((m) => m.winner);
-        const won = played.filter((m) => same(m.winner === 1 ? m.team1 : m.team2, team)).length;
-        return {
-          team,
-          played: played.length,
-          won,
-          lost: played.length - won,
-          remaining: games.length - played.length,
-          points: won * POINTS_PER_WIN,
-        };
-      })
-      .sort((a, b) => b.points - a.points || a.played - b.played || a.team.name.localeCompare(b.team.name));
+  /** Points table with NRR and qualification status, cached per pool for the current data. */
+  readonly tables = computed(() => {
+    const q = this.qualifyCount();
+    return new Map(this.groups().map((g) => [g.pool.id, computeStandings(g, q)]));
+  });
+
+  table(group: PoolFixtures): PoolStandings {
+    return this.tables().get(group.pool.id)!;
+  }
+
+  formatNrr(nrr: number | null): string {
+    if (nrr === null) return '–';
+    return (nrr >= 0 ? '+' : '') + nrr.toFixed(3);
+  }
+
+  async openNrr(group: PoolFixtures): Promise<void> {
+    const modal = await this.modals.create({
+      component: NrrModalComponent,
+      componentProps: {
+        group,
+        oversPerMatch: this.tournament()?.overs ?? this.settings.settings().oversPerMatch,
+        qualifyCount: this.qualifyCount(),
+      },
+    });
+    await modal.present();
+    const { data, role } = await modal.onDidDismiss<NrrModalResult>();
+    if (role !== 'save' || !data) return;
+    await this.service.setScores(data.scores);
+    await this.reload();
   }
 
   /** Pool standings: wins per team, most wins first. */

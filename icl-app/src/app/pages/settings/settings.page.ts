@@ -49,12 +49,14 @@ export class SettingsPage {
   readonly matchMinutes = signal<number | null>(null);
   readonly overs = signal<number | null>(null);
   readonly bookingHours = signal<number | null>(null);
+  readonly qualify = signal<number | null>(null);
   readonly saving = signal(false);
 
   readonly error = computed(() => {
     const minutes = this.matchMinutes();
     const overs = this.overs();
     const hours = this.bookingHours();
+    const q = this.qualify();
     if (!minutes || !Number.isInteger(minutes) || minutes < 5 || minutes > 600) {
       return 'Match duration must be a whole number between 5 and 600 minutes.';
     }
@@ -63,6 +65,9 @@ export class SettingsPage {
     }
     if (!hours || hours <= 0 || hours > 24 || (hours * 60) % 15 !== 0) {
       return 'Court booking must be between 0.25 and 24 hours, in steps of 15 minutes (e.g. 1.5).';
+    }
+    if (!q || !Number.isInteger(q) || q < 1 || q > 16) {
+      return 'Qualifying teams per pool must be a whole number between 1 and 16.';
     }
     return '';
   });
@@ -84,6 +89,7 @@ export class SettingsPage {
     this.matchMinutes.set(s.matchMinutes);
     this.overs.set(s.oversPerMatch);
     this.bookingHours.set(s.bookingMinutes / 60);
+    this.qualify.set(s.qualifyPerPool);
   }
 
   toNumber(value: string | number | null | undefined): number | null {
@@ -99,6 +105,7 @@ export class SettingsPage {
         matchMinutes: this.matchMinutes()!,
         oversPerMatch: this.overs()!,
         bookingMinutes: Math.round(this.bookingHours()! * 60),
+        qualifyPerPool: this.qualify()!,
       });
       const t = await this.toasts.create({ message: 'Settings saved', color: 'success', duration: 1500 });
       await t.present();

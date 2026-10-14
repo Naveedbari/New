@@ -7,18 +7,22 @@ export interface LeagueSettings {
   oversPerMatch: number;
   /** Default court booking length for a pool. */
   bookingMinutes: number;
+  /** Top teams from each pool that qualify for the next round. */
+  qualifyPerPool: number;
 }
 
 export const DEFAULT_SETTINGS: LeagueSettings = {
   matchMinutes: 30,
   oversPerMatch: 6,
   bookingMinutes: 120,
+  qualifyPerPool: 2,
 };
 
 const KEYS: Record<keyof LeagueSettings, string> = {
   matchMinutes: 'match_minutes',
   oversPerMatch: 'overs_per_match',
   bookingMinutes: 'booking_minutes',
+  qualifyPerPool: 'qualify_per_pool',
 };
 
 @Injectable({ providedIn: 'root' })

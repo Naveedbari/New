@@ -36,6 +36,11 @@
           <ion-input id="review-overs" label="Overs per match" labelPlacement="stacked" type="number" inputmode="numeric"
             min="1" [value]="overs()" (ionInput)="overs.set(toNumber($event.detail.value))"></ion-input>
         </ion-item>
+        <ion-list-header><ion-label>Qualification</ion-label></ion-list-header>
+        <ion-item>
+          <ion-input id="review-qualify" label="Teams qualifying from each pool" labelPlacement="stacked" type="number"
+            inputmode="numeric" min="1" [value]="qualify()" (ionInput)="qualify.set(toNumber($event.detail.value))"></ion-input>
+        </ion-item>
         <ion-list-header><ion-label>Court booking</ion-label></ion-list-header>
         <ion-item>
           <ion-input id="review-booking" label="Booking per pool (hours)" labelPlacement="stacked" type="number"

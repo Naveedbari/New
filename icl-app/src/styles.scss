@@ -306,6 +306,9 @@ ion-segment-button {
   --border-radius: 999px;
   --padding-top: 0;
   --padding-bottom: 0;
+  --padding-start: 6px;
+  --padding-end: 6px;
+  min-width: 0;
   min-height: 36px;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -323,6 +326,8 @@ ion-segment-button::part(indicator-background) {
 ion-segment-button ion-label {
   text-transform: none;
   font-size: 14px;
+  overflow: visible;
+  white-space: nowrap;
   z-index: 1;
 }
 

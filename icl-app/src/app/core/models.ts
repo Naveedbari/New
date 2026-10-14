@@ -54,6 +54,18 @@ export interface Toss {
   decision: TossDecision | null;
 }
 
+/** Scorecard summary used for Net Run Rate. Overs are stored as balls (6 per over). */
+export interface MatchScore {
+  /** Which side batted first: 1 = team1, 2 = team2. */
+  batFirst: 1 | 2;
+  /** First innings (the target is this + 1). */
+  inn1Runs: number;
+  inn1Balls: number;
+  /** Second innings (the chase). */
+  inn2Runs: number;
+  inn2Balls: number;
+}
+
 export interface Match {
   id?: number;
   poolId?: number;
@@ -62,6 +74,7 @@ export interface Match {
   team2: PoolTeam;
   winner: MatchWinner;
   toss: Toss | null;
+  score: MatchScore | null;
 }
 
 export interface PoolFixtures {
@@ -85,5 +98,7 @@ export interface Tournament {
   /** Match length and overs as they were when the tournament started. */
   matchMinutes?: number | null;
   overs?: number | null;
+  /** How many top teams from each pool go through to the next round. */
+  qualifyCount?: number | null;
   pools?: Pool[];
 }

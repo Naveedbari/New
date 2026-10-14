@@ -92,11 +92,13 @@ export class TournamentNewPage {
   readonly matchMinutes = signal<number | null>(null);
   readonly overs = signal<number | null>(null);
   readonly reviewBookingHours = signal<number | null>(null);
+  readonly qualify = signal<number | null>(null);
   readonly saveAsDefault = signal(false);
   readonly settingsError = computed(() => {
     const minutes = this.matchMinutes();
     const overs = this.overs();
     const hours = this.reviewBookingHours();
+    const q = this.qualify();
     if (!minutes || !Number.isInteger(minutes) || minutes < 5 || minutes > 600) {
       return 'Match duration must be a whole number between 5 and 600 minutes.';
     }
@@ -105,6 +107,9 @@ export class TournamentNewPage {
     }
     if (!hours || hours <= 0 || hours > 24 || (hours * 60) % 15 !== 0) {
       return 'Court booking must be between 0.25 and 24 hours, in steps of 15 minutes (e.g. 1.5).';
+    }
+    if (!q || !Number.isInteger(q) || q < 1 || q > 16) {
+      return 'Qualifying teams per pool must be a whole number between 1 and 16.';
     }
     return '';
   });
@@ -189,6 +194,11 @@ export class TournamentNewPage {
     if (!pools) return 'Enter the number of pools.';
     if (!Number.isInteger(pools) || pools < 1) return 'Number of pools must be a whole number of 1 or more.';
     if (selected / pools < 2) return `${selected} teams can make at most ${Math.floor(selected / 2)} pools (2+ teams per pool).`;
+    const smallestPool = Math.floor(selected / pools);
+    const q = this.qualify() ?? 0;
+    if (q > smallestPool) {
+      return `${q} teams qualify from each pool, so every pool needs at least ${q} teams. Use fewer pools.`;
+    }
     if (pools === 1) return this.singleCourt() ? this.bookingError() : 'Choose the court for this tournament.';
     if (!courts) return 'Enter the number of courts.';
     if (!Number.isInteger(courts) || courts < 1) return 'Number of courts must be a whole number of 1 or more.';
@@ -215,6 +225,7 @@ export class TournamentNewPage {
     this.matchMinutes.set(defaults.matchMinutes);
     this.overs.set(defaults.oversPerMatch);
     this.reviewBookingHours.set(defaults.bookingMinutes / 60);
+    this.qualify.set(defaults.qualifyPerPool);
   }
 
   isSelected(id: number): boolean {
@@ -242,6 +253,7 @@ export class TournamentNewPage {
         matchMinutes: this.matchMinutes()!,
         oversPerMatch: this.overs()!,
         bookingMinutes,
+        qualifyPerPool: this.qualify()!,
       });
       this.toast('Saved as your default settings', 'success');
     }
@@ -338,6 +350,7 @@ export class TournamentNewPage {
         {
           matchMinutes: this.matchMinutes()!,
           overs: this.overs()!,
+          qualifyCount: this.qualify()!,
         },
       );
       await this.toast('Tournament started!', 'success');

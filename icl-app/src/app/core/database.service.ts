@@ -13,7 +13,7 @@ const DB_NAME = 'icl_db';
  * them to an existing database, so they are added here when missing.
  */
 const ADDED_COLUMNS: Record<string, Record<string, string>> = {
-  tournaments: { match_minutes: 'INTEGER', overs: 'INTEGER' },
+  tournaments: { match_minutes: 'INTEGER', overs: 'INTEGER', qualify_count: 'INTEGER' },
   tournament_pools: { booking_minutes: 'INTEGER' },
   matches: {
     toss_caller: 'INTEGER',
@@ -21,6 +21,11 @@ const ADDED_COLUMNS: Record<string, Record<string, string>> = {
     toss_result: 'TEXT',
     toss_winner: 'INTEGER',
     toss_decision: 'TEXT',
+    bat_first: 'INTEGER',
+    inn1_runs: 'INTEGER',
+    inn1_balls: 'INTEGER',
+    inn2_runs: 'INTEGER',
+    inn2_balls: 'INTEGER',
   },
 };
 

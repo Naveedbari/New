@@ -3,6 +3,7 @@ import { DatabaseService } from './database.service';
 import {
   CoinSide,
   Match,
+  MatchScore,
   MatchWinner,
   Pool,
   PoolFixtures,
@@ -26,6 +27,7 @@ interface TournamentRow {
   court_count: number | null;
   match_minutes: number | null;
   overs: number | null;
+  qualify_count: number | null;
   logo: string | null;
   current_team_name: string | null;
 }
@@ -60,6 +62,7 @@ const toTournament = (r: TournamentRow): Tournament => ({
   courtCount: r.court_count,
   matchMinutes: r.match_minutes,
   overs: r.overs,
+  qualifyCount: r.qualify_count,
 });
 
 /** Fisher–Yates shuffle (returns a new array). */
@@ -128,7 +131,7 @@ export function roundRobin(teams: PoolTeam[]): Omit<Match, 'position'>[] {
     const idx = remaining.findIndex(([a, b]) => !busy.has(a.name) && !busy.has(b.name));
     ordered.push(remaining.splice(idx === -1 ? 0 : idx, 1)[0]!);
   }
-  return ordered.map(([team1, team2]) => ({ team1, team2, winner: null, toss: null }));
+  return ordered.map(([team1, team2]) => ({ team1, team2, winner: null, toss: null, score: null }));
 }
 
 /** Randomly splits all `teams` into `poolCount` balanced pools and gives each a court. */
@@ -224,13 +227,13 @@ export class TournamentService {
     playedOn: string,
     courtCount: number,
     pools: Pool[],
-    format: { matchMinutes: number; overs: number },
+    format: { matchMinutes: number; overs: number; qualifyCount: number },
   ): Promise<number> {
     return this.db.transaction(async (run) => {
       const id = (await run(
-        `INSERT INTO tournaments (name, season, played_on, status, court_count, match_minutes, overs)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [seasonName(season), season, playedOn, 'ongoing', courtCount, format.matchMinutes, format.overs],
+        `INSERT INTO tournaments (name, season, played_on, status, court_count, match_minutes, overs, qualify_count)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [seasonName(season), season, playedOn, 'ongoing', courtCount, format.matchMinutes, format.overs, format.qualifyCount],
       ))!;
       for (const [pi, pool] of pools.entries()) {
         const poolId = await run(
@@ -295,6 +298,11 @@ export class TournamentService {
       toss_result: CoinSide | null;
       toss_winner: 1 | 2 | null;
       toss_decision: TossDecision | null;
+      bat_first: 1 | 2 | null;
+      inn1_runs: number | null;
+      inn1_balls: number | null;
+      inn2_runs: number | null;
+      inn2_balls: number | null;
       t1_name: string | null;
       t1_logo: string | null;
       t2_name: string | null;
@@ -329,6 +337,16 @@ export class TournamentService {
                   decision: r.toss_decision,
                 }
               : null,
+          score:
+            r.bat_first && r.inn1_runs != null && r.inn1_balls && r.inn2_runs != null && r.inn2_balls
+              ? {
+                  batFirst: r.bat_first,
+                  inn1Runs: r.inn1_runs,
+                  inn1Balls: r.inn1_balls,
+                  inn2Runs: r.inn2_runs,
+                  inn2Balls: r.inn2_balls,
+                }
+              : null,
         })),
     }));
   }
@@ -343,6 +361,26 @@ export class TournamentService {
        WHERE id = ?`,
       [toss?.caller ?? null, toss?.call ?? null, toss?.result ?? null, toss?.winner ?? null, toss?.decision ?? null, matchId],
     );
+  }
+
+  /** Saves (or clears) the scores of several matches in one go. */
+  async setScores(scores: { matchId: number; score: MatchScore | null }[]): Promise<void> {
+    await this.db.transaction(async (run) => {
+      for (const { matchId, score } of scores) {
+        await run(
+          `UPDATE matches SET bat_first = ?, inn1_runs = ?, inn1_balls = ?, inn2_runs = ?, inn2_balls = ?
+           WHERE id = ?`,
+          [
+            score?.batFirst ?? null,
+            score?.inn1Runs ?? null,
+            score?.inn1Balls ?? null,
+            score?.inn2Runs ?? null,
+            score?.inn2Balls ?? null,
+            matchId,
+          ],
+        );
+      }
+    });
   }
 
   async setTossDecision(matchId: number, decision: TossDecision | null): Promise<void> {

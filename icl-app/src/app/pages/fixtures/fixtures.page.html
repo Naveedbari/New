@@ -29,13 +29,25 @@
 
   @if (showTable()) {
     @for (g of groups(); track g.pool.id) {
+      @let t = table(g);
       <section class="pool">
         <header class="pool-head">
           <h2>{{ g.pool.name }}</h2>
           @if (g.pool.court) {
             <span class="meta"><span><ion-icon name="location-outline"></ion-icon> {{ courtName(g.pool.court) }}</span></span>
           }
+          <span class="q-note">Top {{ t.qualifyCount }} qualify</span>
         </header>
+
+        @if (t.complete && t.tieUnresolved) {
+          <div class="tie-alert">
+            <p><strong>Tie for a qualifying place.</strong> Teams are level on points at the cut-off. Enter match scores to decide by net run rate.</p>
+            <ion-button color="secondary" size="small" (click)="openNrr(g)">
+              <ion-icon slot="start" name="calculator-outline"></ion-icon> Calculate run rate
+            </ion-button>
+          </div>
+        }
+
         <div class="table-wrap">
           <table class="points">
             <thead>
@@ -45,14 +57,17 @@
                 <th scope="col" title="Played">P</th>
                 <th scope="col" title="Won">W</th>
                 <th scope="col" title="Lost">L</th>
-                <th scope="col" title="Matches left">Left</th>
+                @if (t.hasScores) {
+                  <th scope="col" title="Net run rate">NRR</th>
+                } @else {
+                  <th scope="col" title="Matches left">Left</th>
+                }
                 <th scope="col" title="Points">Pts</th>
               </tr>
             </thead>
             <tbody>
-              @let rows = standings(g);
-              @for (row of rows; track row.team.name; let i = $index) {
-                <tr [class.leader]="i === 0 && row.points > (rows[1]?.points ?? 0)">
+              @for (row of t.rows; track row.team.name; let i = $index) {
+                <tr [class]="'st-' + (row.status ?? 'none')" [class.cutoff]="i === t.qualifyCount - 1 && t.qualifyCount < t.rows.length">
                   <td class="pos">{{ i + 1 }}</td>
                   <td class="team-col">
                     <span class="team-cell">
@@ -62,21 +77,43 @@
                         <span class="mini placeholder">{{ initial(row.team.name) }}</span>
                       }
                       <span class="tname">{{ row.team.name }}</span>
+                      @switch (row.status) {
+                        @case ('q') { <span class="badge q">Q</span> }
+                        @case ('tie') { <span class="badge tie">Tie</span> }
+                      }
                     </span>
                   </td>
                   <td>{{ row.played }}</td>
                   <td>{{ row.won }}</td>
                   <td>{{ row.lost }}</td>
-                  <td>{{ row.remaining }}</td>
+                  @if (t.hasScores) {
+                    <td class="nrr" [class.neg]="(row.nrr ?? 0) < 0">{{ formatNrr(row.nrr) }}</td>
+                  } @else {
+                    <td>{{ row.remaining }}</td>
+                  }
                   <td class="pts">{{ row.points }}</td>
                 </tr>
               }
             </tbody>
           </table>
         </div>
+
+        @if (t.complete && !t.tieUnresolved && (t.tieOnPoints || t.hasScores)) {
+          <ion-button fill="clear" size="small" class="edit-nrr" (click)="openNrr(g)">
+            <ion-icon slot="start" name="calculator-outline"></ion-icon> Edit scores &amp; run rate
+          </ion-button>
+        }
       </section>
     }
-    <p class="progress">Win = {{ pointsPerWin }} points, loss = 0. Teams level on points are ordered by fewer matches played.</p>
+    <div class="legend">
+      <span><i class="dot q"></i> Qualified</span>
+      <span><i class="dot zone"></i> In a qualifying place</span>
+      <span><i class="dot tie"></i> Tied at the cut-off</span>
+    </div>
+    <p class="progress">
+      Win = {{ pointsPerWin }} points, loss = 0. Teams level on points are separated by net run rate
+      once match scores are entered.
+    </p>
   } @else {
   @for (g of visible(); track g.pool.id) {
     <section class="pool">

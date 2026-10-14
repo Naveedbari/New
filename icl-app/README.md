@@ -25,6 +25,11 @@ jeep-sqlite / IndexedDB).
 - **Fixtures**: round-robin matches are generated for each pool in random order, avoiding
   back-to-back games where possible. Each match gets a time slot (pool start + match number × match length). Tap a match to record the winner. Results appear next
   to each match, with a wins/played summary per pool.
+- **Points table & qualification**: each pool's top N teams (Settings → "Teams qualifying from each
+  pool", also asked when a tournament starts) are highlighted and marked **Q** once the pool is finished.
+  When teams are level on points at the cut-off, **Calculate run rate** asks for each match's target and
+  chase (runs and overs) and ranks them by Net Run Rate =
+  (runs scored ÷ overs faced) − (runs conceded ÷ overs bowled).
 - **Declare champion & MVP**: completes the tournament, and it then appears on Home.
 
 ## Develop
