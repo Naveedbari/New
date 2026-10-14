@@ -44,9 +44,25 @@
 
     @if (t.pools?.length) {
       <div class="ion-padding-horizontal">
-        <ion-button expand="block" fill="outline" [routerLink]="['/tournaments', t.id, 'fixtures']">
-          <ion-icon slot="start" name="list-outline"></ion-icon> Fixtures &amp; results
-        </ion-button>
+        <div class="rounds">
+          <ion-button expand="block" fill="outline" [routerLink]="['/tournaments', t.id, 'fixtures']">
+            <ion-icon slot="start" name="list-outline"></ion-icon> Round 1 · Pools
+          </ion-button>
+          @if (koStarted()) {
+            <ion-button id="round2" expand="block" fill="outline" [routerLink]="['/tournaments', t.id, 'knockout']">
+              <ion-icon slot="start" name="git-network-outline"></ion-icon> Round 2 · Knockout
+            </ion-button>
+          } @else {
+            <ion-button id="round2" expand="block" [color]="poolsCleared() ? 'secondary' : undefined"
+              [fill]="poolsCleared() ? 'solid' : 'outline'" [disabled]="!poolsCleared()" (click)="startKnockout()">
+              <ion-icon slot="start" [name]="poolsCleared() ? 'git-network-outline' : 'lock-closed-outline'"></ion-icon>
+              Start Round 2 · Knockout
+            </ion-button>
+            @if (lockReason()) {
+              <p class="lock-note">{{ lockReason() }}</p>
+            }
+          }
+        </div>
       </div>
       <div class="accordion">
         @for (pool of t.pools; track pool.id) {

@@ -94,6 +94,17 @@ export class TournamentFormPage {
     }
     this.savedChampionName = t.championTeamName ?? '';
     this.form.patchValue(t);
+    // Pre-select the knockout winner when the champion hasn't been declared yet.
+    if (!t.championTeamId) {
+      const ko = await this.tournaments.knockout(this.id);
+      const last = Math.max(0, ...ko.map((m) => m.koRound ?? 0));
+      const finals = ko.filter((m) => m.koRound === last);
+      const final = finals.length === 1 ? finals[0] : null;
+      if (final?.winner) {
+        const winner = final.winner === 1 ? final.team1 : final.team2;
+        this.form.patchValue({ championTeamId: winner.teamId });
+      }
+    }
   }
 
   async save(): Promise<void> {

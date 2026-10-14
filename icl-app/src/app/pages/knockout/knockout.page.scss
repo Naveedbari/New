@@ -1,0 +1,59 @@
+.champ {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 16px 4px;
+  padding: 18px 16px;
+  border-radius: 24px;
+  text-align: center;
+  background:
+    radial-gradient(90% 60% at 50% 0%, rgba(245, 183, 0, 0.18) 0%, transparent 70%),
+    var(--icl-glass);
+  border: 1px solid rgba(245, 183, 0, 0.4);
+
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 800;
+  }
+}
+
+.champ-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--icl-gold);
+}
+
+.champ-logo {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 4px var(--icl-gold), 0 0 32px rgba(245, 183, 0, 0.35);
+}
+
+.champ-logo.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1f27;
+  color: var(--icl-gold);
+  font-size: 36px;
+  font-weight: 800;
+}
+
+.bye {
+  margin: 0 4px 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  color: var(--icl-text-2);
+  background: var(--icl-glass);
+  border: 1px dashed var(--icl-glass-border);
+}

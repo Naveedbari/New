@@ -135,3 +135,16 @@
     transition: none;
   }
 }
+
+.rounds {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lock-note {
+  margin: 0 8px 4px;
+  font-size: 13px;
+  color: var(--icl-text-3);
+  text-align: center;
+}

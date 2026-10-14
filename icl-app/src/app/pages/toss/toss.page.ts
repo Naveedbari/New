@@ -58,8 +58,7 @@ export class TossPage {
   }
 
   async ionViewWillEnter(): Promise<void> {
-    const groups = await this.service.fixtures(this.tournamentId);
-    const match = groups.flatMap((g) => g.matches).find((m) => m.id === this.matchId) ?? null;
+    const match = await this.service.match(this.tournamentId, this.matchId);
     this.match.set(match);
     if (match?.toss) {
       this.face.set(match.toss.result);
@@ -126,6 +125,6 @@ export class TossPage {
   }
 
   done(): void {
-    this.nav.navigateBack(['/tournaments', this.tournamentId, 'fixtures']);
+    this.nav.navigateBack(['/tournaments', this.tournamentId, this.match()?.koRound ? 'knockout' : 'fixtures']);
   }
 }

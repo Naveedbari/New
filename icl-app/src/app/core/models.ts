@@ -75,6 +75,10 @@ export interface Match {
   winner: MatchWinner;
   toss: Toss | null;
   score: MatchScore | null;
+  /** Knockout round (1 = first knockout round); undefined/null for pool matches. */
+  koRound?: number | null;
+  /** Knockout bye: team1 advances without playing. */
+  isBye?: boolean;
 }
 
 export interface PoolFixtures {

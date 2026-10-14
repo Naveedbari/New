@@ -26,6 +26,8 @@ const ADDED_COLUMNS: Record<string, Record<string, string>> = {
     inn1_balls: 'INTEGER',
     inn2_runs: 'INTEGER',
     inn2_balls: 'INTEGER',
+    /** Knockout round number (1 = first knockout round); NULL for pool matches. */
+    ko_round: 'INTEGER',
   },
 };
 

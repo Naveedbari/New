@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button [defaultHref]="'/tournaments/' + tournamentId + '/fixtures'"></ion-back-button>
+      <ion-back-button [defaultHref]="'/tournaments/' + tournamentId + (match()?.koRound ? '/knockout' : '/fixtures')"></ion-back-button>
     </ion-buttons>
-    <ion-title>Toss · Match {{ (match()?.position ?? 0) + 1 }}</ion-title>
+    <ion-title>Toss · {{ match()?.team1?.name }} vs {{ match()?.team2?.name }}</ion-title>
   </ion-toolbar>
 </ion-header>
 

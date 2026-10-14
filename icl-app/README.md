@@ -30,6 +30,10 @@ jeep-sqlite / IndexedDB).
   When teams are level on points at the cut-off, **Calculate run rate** asks for each match's target and
   chase (runs and overs) and ranks them by Net Run Rate =
   (runs scored ÷ overs faced) − (runs conceded ÷ overs bowled).
+- **Round 2 · Knockout**: unlocks on the tournament page once every pool match has a result and no
+  qualifying place is tied. Qualified teams are seeded across pools (pool winners first, then runners-up:
+  A1 v B2, B1 v A2, …), with byes when the number of qualifiers isn't a power of two. Winners advance
+  automatically through the semi-finals to the final; the final's winner is pre-selected as champion.
 - **Declare champion & MVP**: completes the tournament, and it then appears on Home.
 
 ## Develop

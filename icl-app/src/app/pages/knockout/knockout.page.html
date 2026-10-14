@@ -1,0 +1,101 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button [defaultHref]="'/tournaments/' + id"></ion-back-button></ion-buttons>
+    <ion-title>Round 2 · Knockout</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (champion(); as c) {
+    <section class="champ">
+      <span class="champ-label"><ion-icon name="trophy"></ion-icon> Knockout winner</span>
+      @if (c.logo) {
+        <img class="champ-logo" [src]="c.logo" [alt]="c.name + ' logo'" />
+      } @else {
+        <div class="champ-logo placeholder">{{ initial(c.name) }}</div>
+      }
+      <h2>{{ c.name }}</h2>
+      @if (tournament()?.status !== 'completed') {
+        <ion-button color="secondary" [routerLink]="['/tournaments', id, 'edit']">
+          <ion-icon slot="start" name="trophy"></ion-icon> Declare champion &amp; MVP
+        </ion-button>
+      }
+    </section>
+  }
+
+  @for (round of rounds(); track round.number) {
+    <section class="pool">
+      <header class="pool-head">
+        <h2>{{ round.name }}</h2>
+      </header>
+
+      @for (m of round.matches; track m.id) {
+        @if (m.isBye) {
+          <p class="bye">{{ m.team1.name }} advances with a bye.</p>
+        } @else {
+          <article class="match-card" [class.done]="!!m.winner">
+            <div class="card-top">
+              <span class="match-no">{{ round.matches.length === 1 ? 'Final' : 'Match ' + matchNumber(m) }}</span>
+            </div>
+
+            <div class="teams">
+              @for (side of [1, 2]; track side) {
+                @let t = team(m, $any(side));
+                <div class="team" [class.won]="m.winner === side" [class.lost]="m.winner && m.winner !== side">
+                  @if (t.logo) {
+                    <img class="logo" [src]="t.logo" [alt]="t.name + ' logo'" />
+                  } @else {
+                    <div class="logo placeholder">{{ initial(t.name) }}</div>
+                  }
+                  <span class="name">{{ t.name }}</span>
+                  @if (!m.winner && m.toss?.winner === side) {
+                    <span class="toss-tag">Won toss</span>
+                  }
+                </div>
+                @if (side === 1) {
+                  <span class="vs">VS</span>
+                }
+              }
+            </div>
+
+            <div class="status-row">
+              @if (m.winner) {
+                <span class="pill result-won"><ion-icon name="trophy"></ion-icon> {{ team(m, m.winner).name }} won</span>
+              } @else {
+                <span class="pill result-pending">Result: Pending</span>
+              }
+            </div>
+
+            @if (!m.winner && m.toss; as toss) {
+              <div class="toss-box">
+                <p class="toss-line">
+                  <strong>Toss:</strong> {{ team(m, toss.winner).name }} won the toss
+                  @if (toss.decision) { and chose to {{ toss.decision === 'bat' ? 'bat' : 'bowl' }} first }.
+                </p>
+              </div>
+            }
+
+            <div class="actions">
+              @if (!m.winner) {
+                <ion-button fill="outline" size="small" [routerLink]="['/tournaments', id, 'matches', m.id, 'toss']">
+                  <ion-icon slot="start" name="ribbon-outline"></ion-icon> {{ m.toss ? 'Toss details' : 'Toss' }}
+                </ion-button>
+              }
+              <ion-button size="small" (click)="pickWinner(m)">
+                <ion-icon slot="start" name="trophy-outline"></ion-icon> {{ m.winner ? 'Change result' : 'Set result' }}
+              </ion-button>
+            </div>
+          </article>
+        }
+      }
+    </section>
+  } @empty {
+    @if (loaded()) {
+      <p class="progress">The knockout hasn't started yet. Start it from the tournament page once the pools are done.</p>
+    }
+  }
+
+  @if (rounds().length && !champion()) {
+    <p class="progress">Winners move on automatically. The next round appears when every match in this round has a result.</p>
+  }
+</ion-content>

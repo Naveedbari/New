@@ -152,6 +152,74 @@ export function drawPools(teams: Team[], poolCount: number, courtCount: number):
   });
 }
 
+interface MatchRow {
+  id: number;
+  pool_id: number;
+  position: number;
+  team1_id: number | null;
+  team1_name: string;
+  team2_id: number | null;
+  team2_name: string;
+  winner: MatchWinner;
+  toss_caller: 1 | 2 | null;
+  toss_call: CoinSide | null;
+  toss_result: CoinSide | null;
+  toss_winner: 1 | 2 | null;
+  toss_decision: TossDecision | null;
+  bat_first: 1 | 2 | null;
+  inn1_runs: number | null;
+  inn1_balls: number | null;
+  inn2_runs: number | null;
+  inn2_balls: number | null;
+  ko_round: number | null;
+  t1_name: string | null;
+  t1_logo: string | null;
+  t2_name: string | null;
+  t2_logo: string | null;
+}
+
+function toMatch(r: MatchRow): Match {
+  return {
+    id: r.id,
+    poolId: r.pool_id,
+    position: r.position,
+    team1: { teamId: r.team1_id, name: r.t1_name ?? r.team1_name, logo: r.t1_logo },
+    team2: { teamId: r.team2_id, name: r.t2_name ?? r.team2_name, logo: r.t2_logo },
+    winner: r.winner,
+    toss:
+      r.toss_caller && r.toss_call && r.toss_result && r.toss_winner
+        ? { caller: r.toss_caller, call: r.toss_call, result: r.toss_result, winner: r.toss_winner, decision: r.toss_decision }
+        : null,
+    score:
+      r.bat_first && r.inn1_runs != null && r.inn1_balls && r.inn2_runs != null && r.inn2_balls
+        ? { batFirst: r.bat_first, inn1Runs: r.inn1_runs, inn1Balls: r.inn1_balls, inn2Runs: r.inn2_runs, inn2Balls: r.inn2_balls }
+        : null,
+    koRound: r.ko_round,
+    isBye: r.ko_round != null && r.team2_id == null && !r.team2_name,
+  };
+}
+
+/**
+ * Seed order for a bracket of `size` slots, e.g. 4 → [1, 4, 2, 3], 8 → [1, 8, 4, 5, 2, 7, 3, 6].
+ * Adjacent pairs play each other, and seeds 1 and 2 can only meet in the final.
+ */
+export function bracketOrder(size: number): number[] {
+  let order = [1, 2];
+  while (order.length < size) {
+    const n = order.length * 2 + 1;
+    order = order.flatMap((s) => [s, n - s]);
+  }
+  return order;
+}
+
+/** "Final", "Semi-finals", "Quarter-finals", else "Round of N". */
+export function knockoutRoundName(matchCount: number): string {
+  if (matchCount === 1) return 'Final';
+  if (matchCount === 2) return 'Semi-finals';
+  if (matchCount === 4) return 'Quarter-finals';
+  return `Round of ${matchCount * 2}`;
+}
+
 @Injectable({ providedIn: 'root' })
 export class TournamentService {
   private readonly db = inject(DatabaseService);
@@ -282,73 +350,105 @@ export class TournamentService {
   }
 
   /** All matches of a tournament grouped by pool, in playing order. */
+  /** All matches of a tournament grouped by pool, in playing order. */
   async fixtures(tournamentId: number): Promise<PoolFixtures[]> {
     const pools = await this.pools(tournamentId);
-    const rows = await this.db.query<{
-      id: number;
-      pool_id: number;
-      position: number;
-      team1_id: number | null;
-      team1_name: string;
-      team2_id: number | null;
-      team2_name: string;
-      winner: MatchWinner;
-      toss_caller: 1 | 2 | null;
-      toss_call: CoinSide | null;
-      toss_result: CoinSide | null;
-      toss_winner: 1 | 2 | null;
-      toss_decision: TossDecision | null;
-      bat_first: 1 | 2 | null;
-      inn1_runs: number | null;
-      inn1_balls: number | null;
-      inn2_runs: number | null;
-      inn2_balls: number | null;
-      t1_name: string | null;
-      t1_logo: string | null;
-      t2_name: string | null;
-      t2_logo: string | null;
-    }>(
+    const rows = await this.matchRows(tournamentId, 'm.ko_round IS NULL');
+    return pools.map((pool) => ({
+      pool,
+      matches: rows.filter((r) => r.pool_id === pool.id).map(toMatch),
+    }));
+  }
+
+  private matchRows(tournamentId: number, where: string): Promise<MatchRow[]> {
+    return this.db.query<MatchRow>(
       `SELECT m.*, a.name AS t1_name, a.logo AS t1_logo, b.name AS t2_name, b.logo AS t2_logo
        FROM matches m
        LEFT JOIN teams a ON a.id = m.team1_id
        LEFT JOIN teams b ON b.id = m.team2_id
-       WHERE m.tournament_id = ?
-       ORDER BY m.position`,
+       WHERE m.tournament_id = ? AND ${where}
+       ORDER BY m.ko_round, m.position`,
       [tournamentId],
     );
-    return pools.map((pool) => ({
-      pool,
-      matches: rows
-        .filter((r) => r.pool_id === pool.id)
-        .map((r) => ({
-          id: r.id,
-          poolId: r.pool_id,
-          position: r.position,
-          team1: { teamId: r.team1_id, name: r.t1_name ?? r.team1_name, logo: r.t1_logo },
-          team2: { teamId: r.team2_id, name: r.t2_name ?? r.team2_name, logo: r.t2_logo },
-          winner: r.winner,
-          toss:
-            r.toss_caller && r.toss_call && r.toss_result && r.toss_winner
-              ? {
-                  caller: r.toss_caller,
-                  call: r.toss_call,
-                  result: r.toss_result,
-                  winner: r.toss_winner,
-                  decision: r.toss_decision,
-                }
-              : null,
-          score:
-            r.bat_first && r.inn1_runs != null && r.inn1_balls && r.inn2_runs != null && r.inn2_balls
-              ? {
-                  batFirst: r.bat_first,
-                  inn1Runs: r.inn1_runs,
-                  inn1Balls: r.inn1_balls,
-                  inn2Runs: r.inn2_runs,
-                  inn2Balls: r.inn2_balls,
-                }
-              : null,
-        })),
-    }));
+  }
+
+  // ---------- Knockout (Round 2) ----------
+
+  /** Knockout matches, ordered by round then bracket position. Byes are included (isBye). */
+  async knockout(tournamentId: number): Promise<Match[]> {
+    return (await this.matchRows(tournamentId, 'm.ko_round IS NOT NULL')).map(toMatch);
+  }
+
+  /** Looks up any match of a tournament (pool or knockout). */
+  async match(tournamentId: number, matchId: number): Promise<Match | null> {
+    const rows = await this.matchRows(tournamentId, `m.id = ${Number(matchId)}`);
+    return rows[0] ? toMatch(rows[0]) : null;
+  }
+
+  /**
+   * Creates the first knockout round from seeded teams (seed 1 first). The bracket is
+   * the next power of two; missing seeds become byes for the top seeds, and seeds are
+   * placed so the top two can only meet in the final.
+   */
+  async startKnockout(tournamentId: number, seeds: PoolTeam[]): Promise<void> {
+    if (seeds.length < 2) throw new Error('At least two teams are needed for a knockout.');
+    let size = 2;
+    while (size < seeds.length) size *= 2;
+    const order = bracketOrder(size);
+    await this.db.transaction(async (run) => {
+      await run('DELETE FROM matches WHERE tournament_id = ? AND ko_round IS NOT NULL', [tournamentId]);
+      for (let i = 0; i < order.length; i += 2) {
+        const a = seeds[order[i]! - 1] ?? null;
+        const b = seeds[order[i + 1]! - 1] ?? null;
+        const [t1, t2] = a ? [a, b] : [b!, null];
+        await this.insertKoMatch(run, tournamentId, 1, i / 2, t1, t2);
+      }
+    });
+    await this.advanceKnockout(tournamentId);
+  }
+
+  /** Records a knockout result. Later rounds are rebuilt, since their line-up may change. */
+  async setKnockoutWinner(tournamentId: number, matchId: number, winner: MatchWinner): Promise<void> {
+    const match = await this.match(tournamentId, matchId);
+    if (!match?.koRound) return;
+    await this.db.transaction(async (run) => {
+      await run('UPDATE matches SET winner = ? WHERE id = ?', [winner, matchId]);
+      await run('DELETE FROM matches WHERE tournament_id = ? AND ko_round > ?', [tournamentId, match.koRound]);
+    });
+    await this.advanceKnockout(tournamentId);
+  }
+
+  /** While the latest round is complete and has more than one match, pairs its winners up. */
+  private async advanceKnockout(tournamentId: number): Promise<void> {
+    for (;;) {
+      const all = await this.knockout(tournamentId);
+      if (!all.length) return;
+      const round = Math.max(...all.map((m) => m.koRound ?? 0));
+      const current = all.filter((m) => m.koRound === round);
+      if (current.length < 2 || current.some((m) => !m.winner)) return;
+      const winners = current.map((m) => (m.winner === 1 ? m.team1 : m.team2));
+      await this.db.transaction(async (run) => {
+        for (let i = 0; i < winners.length; i += 2) {
+          await this.insertKoMatch(run, tournamentId, round + 1, i / 2, winners[i]!, winners[i + 1] ?? null);
+        }
+      });
+    }
+  }
+
+  private async insertKoMatch(
+    run: (sql: string, params?: unknown[]) => Promise<number | undefined>,
+    tournamentId: number,
+    round: number,
+    position: number,
+    team1: PoolTeam,
+    team2: PoolTeam | null,
+  ): Promise<void> {
+    // A missing opponent is a bye: stored with an empty name and team1 as the winner.
+    await run(
+      `INSERT INTO matches (tournament_id, pool_id, position, team1_id, team1_name, team2_id, team2_name, winner, ko_round)
+       VALUES (?, 0, ?, ?, ?, ?, ?, ?, ?)`,
+      [tournamentId, position, team1.teamId, team1.name, team2?.teamId ?? null, team2?.name ?? '', team2 ? null : 1, round],
+    );
   }
 
   async setWinner(matchId: number, winner: MatchWinner): Promise<void> {
