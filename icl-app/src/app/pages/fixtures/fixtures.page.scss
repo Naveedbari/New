@@ -44,7 +44,7 @@
   border: 1px solid var(--icl-glass-border);
   backdrop-filter: var(--icl-blur);
   -webkit-backdrop-filter: var(--icl-blur);
-  box-shadow: var(--icl-shadow), inset 0 1px 0 var(--icl-glass-highlight);
+  box-shadow: none;
 
   &.done {
     border-color: rgba(var(--ion-color-success-rgb), 0.45);
@@ -138,8 +138,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(145deg, #ffffff, #e0deff);
-  color: #3b37a8;
+  background: #2a313c;
+  color: #f5f7fa;
   font-size: 22px;
   font-weight: 800;
 }

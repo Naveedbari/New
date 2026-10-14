@@ -20,13 +20,12 @@
 @import '@fontsource/plus-jakarta-sans/latin-800.css';
 
 /* ---------- Backdrop ---------- */
-/* Every page paints the gradient itself, so page transitions never show two pages at once. */
+/* Every page paints its own background, so page transitions never show two pages at once.
+   A faint green floodlight glow at the top is the only decoration. */
 .ion-page {
   background:
-    radial-gradient(60% 45% at 100% 8%, var(--icl-glow-pink) 0%, transparent 70%),
-    radial-gradient(55% 40% at 0% 45%, var(--icl-glow-blue) 0%, transparent 70%),
-    radial-gradient(70% 50% at 70% 100%, var(--icl-glow-violet) 0%, transparent 70%),
-    linear-gradient(160deg, var(--icl-bg-1) 0%, var(--icl-bg-2) 50%, var(--icl-bg-3) 100%);
+    radial-gradient(90% 28% at 50% -6%, rgba(34, 197, 94, 0.1) 0%, transparent 70%),
+    var(--icl-bg);
 }
 
 body {
@@ -45,7 +44,7 @@ ion-content {
   background: var(--icl-glass);
   border: 1px solid var(--icl-glass-border);
   border-radius: var(--icl-radius);
-  box-shadow: var(--icl-shadow), inset 0 1px 0 var(--icl-glass-highlight);
+  box-shadow: none;
   backdrop-filter: var(--icl-blur);
   -webkit-backdrop-filter: var(--icl-blur);
 }
@@ -75,8 +74,8 @@ ion-title {
 ion-toolbar ion-buttons ion-button,
 ion-toolbar ion-back-button {
   --background: var(--icl-glass-strong);
-  --background-hover: rgba(255, 255, 255, 0.28);
-  --background-activated: rgba(255, 255, 255, 0.3);
+  --background-hover: #2a323e;
+  --background-activated: #2a323e;
   --border-radius: 50%;
   --color: var(--icl-text);
   --padding-start: 0;
@@ -86,7 +85,7 @@ ion-toolbar ion-back-button {
   margin: 0 3px;
   border-radius: 50%;
   border: 1px solid var(--icl-glass-border);
-  box-shadow: inset 0 1px 0 var(--icl-glass-highlight), 0 6px 16px rgba(20, 14, 80, 0.2);
+  box-shadow: none;
 }
 
 ion-toolbar ion-buttons ion-button ion-icon,
@@ -102,7 +101,7 @@ ion-toolbar ion-back-button::part(native) {
 /* Header buttons stay glass even without a fill/colour (beats the white-pill default below) */
 ion-toolbar ion-buttons ion-button:not([fill='clear']) {
   --background: var(--icl-glass-strong) !important;
-  --background-activated: rgba(255, 255, 255, 0.3) !important;
+  --background-activated: #2a323e !important;
   --color: var(--icl-text) !important;
 }
 
@@ -116,8 +115,14 @@ ion-footer ion-toolbar {
   --padding-bottom: calc(8px + var(--ion-safe-area-bottom, 0px));
 }
 
-ion-footer ion-toolbar ion-button:not([fill]):not([color]) {
-  --color: #2b2873;
+ion-footer ion-toolbar ion-button:not([fill]):not([color]),
+ion-footer ion-toolbar ion-button[color='secondary']:not([fill]) {
+  --color: var(--icl-accent-ink);
+}
+
+ion-footer ion-toolbar {
+  --background: rgba(14, 17, 22, 0.96);
+  border-top: 1px solid var(--icl-glass-border);
 }
 
 /* Text buttons inside a header (e.g. "Back" in the wizard) keep a pill shape */
@@ -134,7 +139,7 @@ ion-list {
   background: var(--icl-glass) !important;
   border: 1px solid var(--icl-glass-border);
   border-radius: var(--icl-radius);
-  box-shadow: var(--icl-shadow), inset 0 1px 0 var(--icl-glass-highlight);
+  box-shadow: none;
   backdrop-filter: var(--icl-blur);
   -webkit-backdrop-filter: var(--icl-blur);
   margin: 12px 16px;
@@ -185,7 +190,7 @@ ion-textarea,
 ion-select {
   --color: var(--icl-text);
   --placeholder-color: rgba(255, 255, 255, 0.5);
-  --highlight-color-focused: #ffffff;
+  --highlight-color-focused: var(--icl-accent);
   --highlight-color-valid: var(--icl-mint);
   --highlight-color-invalid: var(--ion-color-danger);
 }
@@ -234,28 +239,25 @@ ion-button[size='small'] {
   min-height: 36px;
 }
 
-/* Solid white pill (default) */
+/* Solid buttons: cricket-green pill with dark ink */
 ion-button:not([fill]):not([color]),
-ion-button[fill='solid']:not([color]) {
-  --background: #ffffff;
-  --background-activated: #e9e8fb;
-  --color: #2b2873;
-  box-shadow: 0 8px 22px rgba(20, 14, 80, 0.28);
+ion-button[fill='solid']:not([color]),
+ion-button[color='secondary']:not([fill='clear']):not([fill='outline']) {
+  --background: var(--icl-accent);
+  --background-activated: #1eae53;
+  --background-hover: var(--icl-accent-2);
+  --color: var(--icl-accent-ink);
   border-radius: 999px;
 }
 
-/* Coral accent: the one main action on a screen */
+/* The one main action on a screen gets a soft green glow */
 ion-button[color='secondary']:not([fill='clear']):not([fill='outline']) {
-  --background: linear-gradient(135deg, var(--icl-accent-2), var(--icl-accent));
-  --background-activated: var(--icl-accent);
-  --color: #ffffff;
-  box-shadow: 0 10px 26px rgba(255, 91, 74, 0.45);
-  border-radius: 999px;
+  box-shadow: 0 8px 22px rgba(34, 197, 94, 0.28);
 }
 
 /* Outline = glass pill */
 ion-button[fill='outline'] {
-  --background: var(--icl-glass);
+  --background: var(--icl-glass-strong);
   --border-color: var(--icl-glass-border);
   --border-width: 1px;
   --color: var(--icl-text);
@@ -274,10 +276,10 @@ ion-button.button-disabled {
 }
 
 ion-fab-button {
-  --background: linear-gradient(135deg, var(--icl-accent-2), var(--icl-accent));
-  --background-activated: var(--icl-accent);
-  --color: #ffffff;
-  --box-shadow: 0 12px 28px rgba(255, 91, 74, 0.5);
+  --background: var(--icl-accent);
+  --background-activated: #1eae53;
+  --color: var(--icl-accent-ink);
+  --box-shadow: 0 10px 24px rgba(34, 197, 94, 0.35);
 }
 
 ion-fab[vertical='bottom'] {
@@ -298,8 +300,8 @@ ion-segment {
 
 ion-segment-button {
   --color: var(--icl-text-2);
-  --color-checked: #2b2873;
-  --indicator-color: #ffffff;
+  --color-checked: var(--icl-accent-ink);
+  --indicator-color: var(--icl-accent);
   --indicator-height: 100%;
   --border-radius: 999px;
   --padding-top: 0;
@@ -316,7 +318,6 @@ ion-segment-button::part(indicator) {
 
 ion-segment-button::part(indicator-background) {
   border-radius: 999px;
-  box-shadow: 0 6px 16px rgba(20, 14, 80, 0.25);
 }
 
 ion-segment-button ion-label {
@@ -333,16 +334,14 @@ ion-tab-bar {
   padding: 6px;
   height: 68px;
   border-radius: 28px;
-  background: rgba(40, 32, 120, 0.42);
+  background: #151a21;
   border: 1px solid var(--icl-glass-border);
-  box-shadow: 0 14px 34px rgba(15, 10, 60, 0.4), inset 0 1px 0 var(--icl-glass-highlight);
-  backdrop-filter: blur(26px) saturate(170%);
-  -webkit-backdrop-filter: blur(26px) saturate(170%);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
 }
 
 ion-tab-button {
   --color: var(--icl-text-3);
-  --color-selected: #ffffff;
+  --color-selected: var(--icl-accent);
   --background: transparent;
   --ripple-color: transparent;
   border-radius: 22px;
@@ -360,8 +359,7 @@ ion-tab-button {
 }
 
 ion-tab-button.tab-selected {
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: inset 0 1px 0 var(--icl-glass-highlight);
+  background: rgba(34, 197, 94, 0.12);
 }
 
 /* ---------- Cards, badges, notes ---------- */
@@ -370,7 +368,7 @@ ion-card {
   --color: var(--icl-text);
   border: 1px solid var(--icl-glass-border);
   border-radius: var(--icl-radius);
-  box-shadow: var(--icl-shadow), inset 0 1px 0 var(--icl-glass-highlight);
+  box-shadow: none;
   backdrop-filter: var(--icl-blur);
   -webkit-backdrop-filter: var(--icl-blur);
 }
@@ -397,8 +395,8 @@ ion-note {
 /* ---------- Overlays: frosted dark glass ---------- */
 ion-alert,
 ion-action-sheet {
-  --background: rgba(36, 30, 104, 0.82);
-  --backdrop-opacity: 0.45;
+  --background: #1a1f27;
+  --backdrop-opacity: 0.6;
   --color: #ffffff;
 }
 
@@ -445,10 +443,10 @@ ion-action-sheet {
 }
 
 ion-toast {
-  --background: rgba(36, 30, 104, 0.88);
-  --color: #ffffff;
-  --border-radius: 18px;
-  --box-shadow: 0 12px 30px rgba(10, 6, 50, 0.45);
+  --background: #232a34;
+  --color: #f5f7fa;
+  --border-radius: 16px;
+  --box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
 }
 
 /* ---------- Shared app pieces ---------- */
@@ -465,15 +463,14 @@ ion-toast {
   object-fit: cover;
   flex-shrink: 0;
   border: 1px solid var(--icl-glass-border);
-  box-shadow: 0 6px 14px rgba(20, 14, 80, 0.25);
 }
 
 .team-logo-placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(224, 222, 255, 0.85));
-  color: #3b37a8;
+  background: #2a313c;
+  color: #f5f7fa;
   font-weight: 800;
   font-size: 17px;
 }
