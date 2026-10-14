@@ -119,21 +119,41 @@ function grain(ctx: CanvasRenderingContext2D): void {
   ctx.restore();
 }
 
-/** Group photo across the top, toned green and fading into black. */
+/**
+ * A green-toned copy of the photo that is transparent at the top and fully green behind the
+ * title block, so the faces keep their natural colour and the tint only rises behind the text.
+ */
+function greenGrade(photo: HTMLImageElement): HTMLCanvasElement {
+  const layer = document.createElement('canvas');
+  layer.width = W;
+  layer.height = HERO_BOTTOM;
+  const g = layer.getContext('2d')!;
+  drawCover(g, photo, 0, 0, W, HERO_BOTTOM);
+  // Shift the hue towards green, keeping light and shade.
+  g.globalCompositeOperation = 'color';
+  g.fillStyle = 'rgba(34, 197, 94, 0.6)';
+  g.fillRect(0, 0, W, HERO_BOTTOM);
+  g.globalCompositeOperation = 'soft-light';
+  g.fillStyle = 'rgba(74, 222, 128, 0.45)';
+  g.fillRect(0, 0, W, HERO_BOTTOM);
+  // Mask: clear above the content, ramp in towards the trophy.
+  g.globalCompositeOperation = 'destination-in';
+  const mask = g.createLinearGradient(0, 520, 0, 780);
+  mask.addColorStop(0, 'rgba(0, 0, 0, 0)');
+  mask.addColorStop(1, 'rgba(0, 0, 0, 1)');
+  g.fillStyle = mask;
+  g.fillRect(0, 0, W, HERO_BOTTOM);
+  return layer;
+}
+
+/** Group photo across the top in natural colour, turning green and fading into black behind the title. */
 function drawPhotoHero(ctx: CanvasRenderingContext2D, photo: HTMLImageElement): void {
   ctx.save();
   ctx.beginPath();
   ctx.rect(0, 0, W, HERO_BOTTOM);
   ctx.clip();
   drawCover(ctx, photo, 0, 0, W, HERO_BOTTOM);
-  // Green grade: shift the hue towards green, keeping light and shade.
-  ctx.globalCompositeOperation = 'color';
-  ctx.fillStyle = 'rgba(34, 197, 94, 0.5)';
-  ctx.fillRect(0, 0, W, HERO_BOTTOM);
-  ctx.globalCompositeOperation = 'soft-light';
-  ctx.fillStyle = 'rgba(74, 222, 128, 0.4)';
-  ctx.fillRect(0, 0, W, HERO_BOTTOM);
-  ctx.globalCompositeOperation = 'source-over';
+  ctx.drawImage(greenGrade(photo), 0, 0);
   // Side vignette
   const side = ctx.createLinearGradient(0, 0, W, 0);
   side.addColorStop(0, 'rgba(5, 8, 7, 0.55)');
