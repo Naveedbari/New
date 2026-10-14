@@ -30,7 +30,7 @@ import {
   ToastController,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { locationOutline, shuffle as shuffleIcon } from 'ionicons/icons';
+import { calendarOutline, checkmarkCircle, hourglassOutline, locationOutline, shuffle as shuffleIcon, timeOutline } from 'ionicons/icons';
 import { Pool, Team } from '../../core/models';
 import { SettingsService } from '../../core/settings.service';
 import { TeamService } from '../../core/team.service';
@@ -208,7 +208,7 @@ export class TournamentNewPage {
   readonly pools = signal<Pool[]>([]);
 
   constructor() {
-    addIcons({ shuffle: shuffleIcon, locationOutline });
+    addIcons({ shuffle: shuffleIcon, locationOutline, calendarOutline, timeOutline, hourglassOutline, checkmarkCircle });
     this.teamService.search('').then((teams) => this.allTeams.set(teams));
     this.tournaments.nextSeason().then((n) => this.season.set(n));
     const defaults = this.settings.settings();

@@ -165,18 +165,32 @@
               <span class="court"><ion-icon name="location-outline"></ion-icon> {{ courtName(pool.court!) }}</span>
             </ion-card-header>
             <ion-card-content>
-              <div class="booking-row">
-                <ion-item lines="none" class="time-item">
-                  <ion-input [id]="'start-' + $index" label="Start time *" labelPlacement="stacked" type="time"
-                    [value]="pool.startTime" (ionInput)="setStartTime($index, $event.detail.value)"></ion-input>
-                </ion-item>
-                <ion-item lines="none" class="time-item">
-                  <ion-input [id]="'booking-' + $index" label="Booking (hours) *" labelPlacement="stacked" type="number"
-                    inputmode="decimal" min="0.25" step="0.25"
-                    [value]="pool.bookingMinutes ? pool.bookingMinutes / 60 : null"
-                    (ionInput)="setBookingHours($index, $event.detail.value)"></ion-input>
-                </ion-item>
-              </div>
+              <section class="booking-panel" [class.needs-input]="!pool.startTime || !pool.bookingMinutes">
+                <div class="panel-head">
+                  <span class="panel-title"><ion-icon name="calendar-outline"></ion-icon> Court booking</span>
+                  @if (!pool.startTime || !pool.bookingMinutes) {
+                    <span class="panel-flag">Required</span>
+                  } @else {
+                    <span class="panel-flag ok"><ion-icon name="checkmark-circle"></ion-icon> Set</span>
+                  }
+                </div>
+                <div class="booking-row">
+                  <label class="field" [class.empty]="!pool.startTime" [for]="'start-' + $index">
+                    <span class="field-label"><ion-icon name="time-outline"></ion-icon> Start time</span>
+                    <input [id]="'start-' + $index" type="time" [value]="pool.startTime ?? ''"
+                      (input)="setStartTime($index, $any($event.target).value)" />
+                  </label>
+                  <label class="field" [class.empty]="!pool.bookingMinutes" [for]="'booking-' + $index">
+                    <span class="field-label"><ion-icon name="hourglass-outline"></ion-icon> Hours</span>
+                    <input [id]="'booking-' + $index" type="number" inputmode="decimal" min="0.25" step="0.25"
+                      placeholder="e.g. 2" [value]="pool.bookingMinutes ? pool.bookingMinutes / 60 : ''"
+                      (input)="setBookingHours($index, $any($event.target).value)" />
+                  </label>
+                </div>
+                @if (!pool.startTime) {
+                  <p class="panel-hint">Set the start time of this pool's court booking.</p>
+                }
+              </section>
               <ol>
                 @for (t of pool.teams; track t.teamId) {
                   <li>

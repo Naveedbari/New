@@ -106,10 +106,115 @@
   color: var(--ion-color-medium);
 }
 
+.booking-panel {
+  margin: 4px 0 12px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(34, 197, 94, 0.06);
+  border: 1px solid rgba(34, 197, 94, 0.28);
+
+  &.needs-input {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1.5px solid var(--icl-accent);
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+  }
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.panel-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--icl-accent);
+}
+
+.panel-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--icl-accent);
+  color: var(--icl-accent-ink);
+
+  &.ok {
+    background: rgba(34, 197, 94, 0.16);
+    color: var(--icl-accent);
+  }
+}
+
 .booking-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 10px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #0e1116;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: text;
+
+  &:focus-within {
+    border-color: var(--icl-accent);
+  }
+
+  &.empty {
+    border-style: dashed;
+    border-color: var(--icl-accent);
+  }
+
+  input {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--icl-text);
+    font: inherit;
+    font-size: 22px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color-scheme: dark;
+  }
+
+  input::placeholder {
+    color: var(--icl-text-3);
+    font-weight: 600;
+  }
+}
+
+.field-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--icl-text-2);
+}
+
+.panel-hint {
+  margin: 8px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--icl-accent);
 }
 
 .over {
