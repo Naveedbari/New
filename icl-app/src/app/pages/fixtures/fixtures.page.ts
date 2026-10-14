@@ -28,8 +28,8 @@ import { Match, MatchWinner, PoolFixtures, PoolTeam, TossDecision, Tournament } 
 import { TournamentService, courtName } from '../../core/tournament.service';
 import { addMinutes, formatDuration } from '../../core/time.util';
 
-type Filter = 'all' | 'pending' | 'played';
-type ResultsView = 'matches' | 'table';
+/** 'table' is the points table; the other two list match cards. */
+type Filter = 'all' | 'pending' | 'table';
 
 /** Points awarded for a win; a loss scores nothing (no draws without scores). */
 export const POINTS_PER_WIN = 2;
@@ -72,16 +72,14 @@ export class FixturesPage {
   readonly groups = signal<PoolFixtures[]>([]);
   readonly loaded = signal(false);
   readonly filter = signal<Filter>('all');
-  /** Inside the Results tab: the finished match cards, or the points table. */
-  readonly resultsView = signal<ResultsView>('matches');
-  readonly showTable = computed(() => this.filter() === 'played' && this.resultsView() === 'table');
+  readonly showTable = computed(() => this.filter() === 'table');
   readonly pointsPerWin = POINTS_PER_WIN;
 
   readonly visible = computed(() => {
     const f = this.filter();
     return this.groups().map((g) => ({
       ...g,
-      matches: g.matches.filter((m) => f === 'all' || (f === 'played' ? m.winner : !m.winner)),
+      matches: g.matches.filter((m) => f === 'all' || !m.winner),
     }));
   });
   readonly progress = computed(() => {
