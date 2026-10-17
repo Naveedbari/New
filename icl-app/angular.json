@@ -54,7 +54,7 @@
                 "input": "public"
               },
               {
-                "glob": "sql-wasm.wasm",
+                "glob": "sql-wasm.{wasm,js}",
                 "input": "node_modules/sql.js/dist",
                 "output": "assets"
               }

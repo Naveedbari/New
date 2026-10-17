@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import {
   CapacitorSQLite,
@@ -7,6 +7,20 @@ import {
 } from '@capacitor-community/sqlite';
 
 const DB_NAME = 'icl_db';
+
+type SqlJsInit = (config: { locateFile: (file: string) => string }) => Promise<{ Database: new () => MemoryDb }>;
+
+/** The bits of a sql.js database the in-memory fallback uses (sql.js ships no types). */
+interface MemoryDb {
+  exec(sql: string): { columns: string[]; values: unknown[][] }[];
+  prepare(sql: string): {
+    bind(params: unknown[]): boolean;
+    step(): boolean;
+    getAsObject(): Record<string, unknown>;
+    run(params: unknown[]): void;
+    free(): boolean;
+  };
+}
 
 /**
  * Columns added after the first release. CREATE TABLE IF NOT EXISTS won't add
@@ -109,38 +123,89 @@ CREATE INDEX IF NOT EXISTS idx_teams_phone ON teams (captain_phone);
 
 /**
  * On-device SQLite database. On Android/iOS it uses native SQLite; in the
- * browser (ionic serve) it falls back to jeep-sqlite, which persists to IndexedDB.
+ * browser it uses jeep-sqlite, which persists to IndexedDB. If the browser blocks
+ * storage (private windows, some in-app viewers), it falls back to an in-memory
+ * sql.js database so the app still opens; nothing is kept after a reload.
  */
 @Injectable({ providedIn: 'root' })
 export class DatabaseService {
   private readonly sqlite = new SQLiteConnection(CapacitorSQLite);
   private readonly isWeb = Capacitor.getPlatform() === 'web';
   private db!: SQLiteDBConnection;
+  /** Set when browser storage is blocked and the in-memory fallback is in use. */
+  private memory: MemoryDb | null = null;
+  /** True when data will not survive a reload (storage blocked in this browser). */
+  readonly temporary = signal(false);
 
   async init(): Promise<void> {
     if (this.isWeb) {
+      try {
+        if (!(await browserStorageWorks())) throw new Error('IndexedDB is blocked');
+        // jeep-sqlite can log a storage error and never settle, so don't wait forever.
+        await withTimeout(this.openSqlite(), 10000);
+      } catch (e) {
+        console.warn('Browser storage unavailable, using a temporary in-memory database', e);
+        await this.openMemory();
+      }
+    } else {
+      await this.openSqlite();
+    }
+    await this.execute(SCHEMA);
+    await this.migrate();
+    await this.persist();
+  }
+
+  private async openSqlite(): Promise<void> {
+    if (this.isWeb) {
       await this.initWebStore();
     }
-
     const consistency = await this.sqlite.checkConnectionsConsistency();
     const exists = (await this.sqlite.isConnection(DB_NAME, false)).result;
     this.db =
       consistency.result && exists
         ? await this.sqlite.retrieveConnection(DB_NAME, false)
         : await this.sqlite.createConnection(DB_NAME, false, 'no-encryption', 1, false);
-
     await this.db.open();
-    await this.db.execute(SCHEMA);
-    await this.migrate();
-    await this.persist();
+  }
+
+  private async openMemory(): Promise<void> {
+    // sql.js is loaded as a plain script (its bundle can't be built for the browser by esbuild).
+    await new Promise<void>((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'assets/sql-wasm.js';
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('Could not load sql.js'));
+      document.head.appendChild(script);
+    });
+    const initSqlJs = (window as unknown as { initSqlJs: SqlJsInit }).initSqlJs;
+    const SQL = await initSqlJs({ locateFile: (file) => `assets/${file}` });
+    this.memory = new SQL.Database();
+    this.temporary.set(true);
+  }
+
+  private async execute(sql: string): Promise<void> {
+    if (this.memory) this.memory.exec(sql);
+    else await this.db.execute(sql);
   }
 
   async query<T = any>(sql: string, params: unknown[] = []): Promise<T[]> {
+    if (this.memory) {
+      const stmt = this.memory.prepare(sql);
+      try {
+        stmt.bind(sqlParams(params));
+        const rows: T[] = [];
+        while (stmt.step()) rows.push(stmt.getAsObject() as T);
+        return rows;
+      } finally {
+        stmt.free();
+      }
+    }
     const res = await this.db.query(sql, params);
     return (res.values ?? []) as T[];
   }
 
   async run(sql: string, params: unknown[] = []): Promise<number | undefined> {
+    if (this.memory) return this.memoryRun(sql, params);
     const res = await this.db.run(sql, params);
     await this.persist();
     return res.changes?.lastId;
@@ -148,6 +213,18 @@ export class DatabaseService {
 
   /** Runs several dependent writes in one transaction, persisting once at the end. */
   async transaction<T>(work: (run: (sql: string, params?: unknown[]) => Promise<number | undefined>) => Promise<T>): Promise<T> {
+    if (this.memory) {
+      const mem = this.memory;
+      mem.exec('BEGIN');
+      try {
+        const result = await work(async (sql, params = []) => this.memoryRun(sql, params));
+        mem.exec('COMMIT');
+        return result;
+      } catch (e) {
+        mem.exec('ROLLBACK');
+        throw e;
+      }
+    }
     await this.db.beginTransaction();
     try {
       const result = await work(async (sql, params = []) => (await this.db.run(sql, params, false)).changes?.lastId);
@@ -160,8 +237,19 @@ export class DatabaseService {
     }
   }
 
+  private memoryRun(sql: string, params: unknown[]): number | undefined {
+    const mem = this.memory!;
+    const stmt = mem.prepare(sql);
+    try {
+      stmt.run(sqlParams(params));
+    } finally {
+      stmt.free();
+    }
+    return mem.exec('SELECT last_insert_rowid()')[0]?.values[0]?.[0] as number | undefined;
+  }
+
   private async persist(): Promise<void> {
-    if (this.isWeb) {
+    if (this.isWeb && !this.memory) {
       await this.sqlite.saveToStore(DB_NAME);
     }
   }
@@ -173,7 +261,7 @@ export class DatabaseService {
       );
       for (const [column, type] of Object.entries(columns)) {
         if (!existing.has(column)) {
-          await this.db.execute(`ALTER TABLE ${table} ADD COLUMN ${column} ${type}`);
+          await this.execute(`ALTER TABLE ${table} ADD COLUMN ${column} ${type}`);
         }
       }
     }
@@ -191,4 +279,38 @@ export class DatabaseService {
     await customElements.whenDefined('jeep-sqlite');
     await this.sqlite.initWebStore();
   }
+}
+
+/** sql.js rejects `undefined` and booleans; SQLite stores them as NULL and 0/1. */
+function sqlParams(params: unknown[]): unknown[] {
+  return params.map((v) => (v === undefined ? null : typeof v === 'boolean' ? Number(v) : v));
+}
+
+/** Whether IndexedDB (where jeep-sqlite keeps the database) can be opened in this browser. */
+function browserStorageWorks(): Promise<boolean> {
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(false), 3000);
+    const done = (ok: boolean): void => {
+      clearTimeout(timer);
+      resolve(ok);
+    };
+    try {
+      const req = indexedDB.open('icl_storage_probe');
+      req.onsuccess = () => {
+        req.result.close();
+        done(true);
+      };
+      req.onerror = () => done(false);
+      req.onblocked = () => done(true);
+    } catch {
+      done(false);
+    }
+  });
+}
+
+function withTimeout<T>(work: Promise<T>, ms: number): Promise<T> {
+  return Promise.race([
+    work,
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error(`Timed out after ${ms} ms`)), ms)),
+  ]);
 }
