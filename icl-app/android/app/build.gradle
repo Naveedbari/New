@@ -19,23 +19,28 @@ android {
         }
     }
     // One permanent key for every build, so a new APK installs over the old one and keeps the
-    // app's data. Android refuses an update signed with a different key.
+    // app's data (Android refuses an update signed with a different key). The key is not in the
+    // repo: CI decodes it from the ICL_KEYSTORE_BASE64 secret and passes its path and password.
+    def keystorePath = System.getenv('ICL_KEYSTORE_PATH')
     signingConfigs {
-        icl {
-            storeFile file('icl.keystore')
-            storePassword 'icl-league'
-            keyAlias 'icl'
-            keyPassword 'icl-league'
+        if (keystorePath) {
+            icl {
+                storeFile file(keystorePath)
+                storePassword System.getenv('ICL_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('ICL_KEY_ALIAS') ?: 'icl'
+                keyPassword System.getenv('ICL_KEY_PASSWORD') ?: System.getenv('ICL_KEYSTORE_PASSWORD')
+            }
         }
     }
     buildTypes {
         debug {
-            signingConfig signingConfigs.icl
+            // Local builds without the key fall back to the machine's debug key.
+            if (keystorePath) signingConfig signingConfigs.icl
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.icl
+            if (keystorePath) signingConfig signingConfigs.icl
         }
     }
 }

@@ -40,10 +40,24 @@ jobs:
       - name: Sync Capacitor Android project
         run: npx cap sync android
 
+      # The signing key lives in repository secrets (Settings → Secrets and variables → Actions):
+      # ICL_KEYSTORE_BASE64 (the keystore, base64) and ICL_KEYSTORE_PASSWORD.
+      - name: Decode signing key
+        env:
+          ICL_KEYSTORE_BASE64: ${{ secrets.ICL_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$ICL_KEYSTORE_BASE64" ]; then
+            echo "::error::Add the ICL_KEYSTORE_BASE64 and ICL_KEYSTORE_PASSWORD repository secrets first."
+            exit 1
+          fi
+          echo "$ICL_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/icl.keystore"
+
       - name: Build debug APK
         working-directory: icl-app/android
         env:
           ICL_BUILD_NUMBER: ${{ github.run_number }}
+          ICL_KEYSTORE_PATH: ${{ runner.temp }}/icl.keystore
+          ICL_KEYSTORE_PASSWORD: ${{ secrets.ICL_KEYSTORE_PASSWORD }}
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
@@ -53,10 +67,14 @@ jobs:
         run: |
           APKSIGNER=$(ls -d "$ANDROID_HOME"/build-tools/*/ | sort -V | tail -1)apksigner
           "$APKSIGNER" verify --print-certs android/app/build/outputs/apk/debug/app-debug.apk | tee certs.txt
-          grep -qi "SHA-256 digest: 43c9be6bf67332bd4d26823282ba8c057126" certs.txt
+          grep -qi "SHA-256 digest: 3d68e907d8ad1da6b45d4125c0416ab22b45600c7c2c955887feec83f4f54144" certs.txt
 
       - name: Rename APK
         run: cp android/app/build/outputs/apk/debug/app-debug.apk ICL-${{ github.run_number }}.apk
+
+      - name: Remove signing key
+        if: always()
+        run: rm -f "$RUNNER_TEMP/icl.keystore"
 
       - uses: actions/upload-artifact@v4
         with:

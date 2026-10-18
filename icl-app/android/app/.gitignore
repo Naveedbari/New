@@ -1,2 +1,6 @@
 /build/*
 !/build/.npmkeep
+
+# Signing keys live in GitHub secrets, never in the repo
+*.keystore
+*.jks
