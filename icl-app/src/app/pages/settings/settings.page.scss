@@ -2,3 +2,41 @@
   font-size: 13px;
   color: var(--ion-color-medium);
 }
+
+.backup {
+  margin: 8px 16px 16px;
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--icl-glass);
+  border: 1px solid var(--icl-glass-border);
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: 800;
+
+    ion-icon {
+      color: var(--icl-accent);
+      font-size: 20px;
+    }
+  }
+
+  p {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: var(--icl-text-2);
+  }
+}
+
+.backup-actions {
+  display: flex;
+  gap: 8px;
+
+  ion-button {
+    flex: 1;
+    margin: 0;
+  }
+}

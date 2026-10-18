@@ -13,11 +13,14 @@ import {
   IonNote,
   IonTitle,
   IonToolbar,
+  AlertController,
   ToastController,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { logOutOutline } from 'ionicons/icons';
+import { cloudDownloadOutline, cloudUploadOutline, downloadOutline, logOutOutline } from 'ionicons/icons';
 import { AuthService } from '../../core/auth.service';
+import { BackupService } from '../../core/backup.service';
+import { confirmAction } from '../../core/confirm';
 import { SettingsService } from '../../core/settings.service';
 import { formatDuration } from '../../core/time.util';
 
@@ -45,6 +48,9 @@ export class SettingsPage {
   private readonly service = inject(SettingsService);
   private readonly toasts = inject(ToastController);
   readonly auth = inject(AuthService);
+  private readonly backup = inject(BackupService);
+  private readonly alerts = inject(AlertController);
+  readonly busy = signal(false);
 
   readonly matchMinutes = signal<number | null>(null);
   readonly overs = signal<number | null>(null);
@@ -81,7 +87,46 @@ export class SettingsPage {
   });
 
   constructor() {
-    addIcons({ logOutOutline });
+    addIcons({ logOutOutline, cloudDownloadOutline, cloudUploadOutline, downloadOutline });
+  }
+
+  async exportBackup(): Promise<void> {
+    this.busy.set(true);
+    try {
+      const where = await this.backup.export();
+      await this.toast(where ? `Backup saved to ${where}` : 'Backup ready to share', 'success');
+    } catch {
+      await this.toast('Could not save the backup', 'danger');
+    } finally {
+      this.busy.set(false);
+    }
+  }
+
+  async restoreBackup(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
+    try {
+      const { backup, summary } = await this.backup.read(file);
+      const date = new Date(summary.createdAt).toLocaleString();
+      const ok = await confirmAction(
+        this.alerts,
+        'Restore backup?',
+        `Backup from ${date}: ${summary.teams} teams and ${summary.tournaments} tournaments. ` +
+          'This replaces ALL data currently in the app.',
+        'Restore',
+      );
+      if (!ok) return;
+      this.busy.set(true);
+      await this.backup.restore(backup);
+      this.ionViewWillEnter();
+      await this.toast('Backup restored', 'success');
+    } catch (e) {
+      await this.toast((e as Error)?.message || 'Could not restore the backup', 'danger');
+    } finally {
+      this.busy.set(false);
+    }
   }
 
   ionViewWillEnter(): void {
@@ -112,5 +157,10 @@ export class SettingsPage {
     } finally {
       this.saving.set(false);
     }
+  }
+
+  private async toast(message: string, color: 'success' | 'danger'): Promise<void> {
+    const t = await this.toasts.create({ message, color, duration: 2500 });
+    await t.present();
   }
 }

@@ -42,9 +42,18 @@ jobs:
 
       - name: Build debug APK
         working-directory: icl-app/android
+        env:
+          ICL_BUILD_NUMBER: ${{ github.run_number }}
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
+
+      # Every build must carry the same certificate, or Android won't install it as an update.
+      - name: Verify signing certificate
+        run: |
+          APKSIGNER=$(ls -d "$ANDROID_HOME"/build-tools/*/ | sort -V | tail -1)apksigner
+          "$APKSIGNER" verify --print-certs android/app/build/outputs/apk/debug/app-debug.apk | tee certs.txt
+          grep -qi "SHA-256 digest: 43c9be6bf67332bd4d26823282ba8c057126" certs.txt
 
       - name: Rename APK
         run: cp android/app/build/outputs/apk/debug/app-debug.apk ICL-${{ github.run_number }}.apk

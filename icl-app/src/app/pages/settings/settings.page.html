@@ -52,6 +52,23 @@
       <p class="hint">Changes apply to new tournaments. Tournaments already started keep the format they began with.</p>
     </div>
 
+    <section class="backup">
+      <h2><ion-icon name="cloud-download-outline"></ion-icon> Backup &amp; restore</h2>
+      <p>
+        Everything is stored only on this phone. Save a backup file before reinstalling the app or
+        switching phones, and keep a copy somewhere safe (WhatsApp, Google Drive, email).
+      </p>
+      <div class="backup-actions">
+        <ion-button id="export-backup" type="button" color="secondary" [disabled]="busy()" (click)="exportBackup()">
+          <ion-icon slot="start" name="download-outline"></ion-icon> Save backup
+        </ion-button>
+        <ion-button id="restore-backup" type="button" fill="outline" [disabled]="busy()" (click)="backupInput.click()">
+          <ion-icon slot="start" name="cloud-upload-outline"></ion-icon> Restore
+        </ion-button>
+      </div>
+      <input #backupInput type="file" accept="application/json,.json" hidden (change)="restoreBackup($event)" />
+    </section>
+
     <ion-list lines="full">
       <ion-list-header><ion-label>Account</ion-label></ion-list-header>
       <ion-item>

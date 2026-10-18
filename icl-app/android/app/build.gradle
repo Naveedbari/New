@@ -7,8 +7,10 @@ android {
         applicationId "com.icl.indoorchampionleague"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        // CI passes the build number so every APK is a newer version than the last.
+        def buildNumber = (System.getenv('ICL_BUILD_NUMBER') ?: '1') as Integer
+        versionCode buildNumber
+        versionName "1.0.${buildNumber}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,10 +18,24 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    // One permanent key for every build, so a new APK installs over the old one and keeps the
+    // app's data. Android refuses an update signed with a different key.
+    signingConfigs {
+        icl {
+            storeFile file('icl.keystore')
+            storePassword 'icl-league'
+            keyAlias 'icl'
+            keyPassword 'icl-league'
+        }
+    }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.icl
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.icl
         }
     }
 }

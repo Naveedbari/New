@@ -10,6 +10,9 @@ const DB_NAME = 'icl_db';
 
 type SqlJsInit = (config: { locateFile: (file: string) => string }) => Promise<{ Database: new () => MemoryDb }>;
 
+/** Tables saved in a backup file, parents before children. */
+export const BACKUP_TABLES = ['users', 'settings', 'teams', 'tournaments', 'tournament_pools', 'pool_teams', 'matches'] as const;
+
 /** The bits of a sql.js database the in-memory fallback uses (sql.js ships no types). */
 interface MemoryDb {
   exec(sql: string): { columns: string[]; values: unknown[][] }[];
@@ -265,6 +268,38 @@ export class DatabaseService {
     if (this.isWeb && !this.memory) {
       await this.sqlite.saveToStore(DB_NAME);
     }
+  }
+
+  /** Every table's rows, for a backup file. */
+  async exportAll(): Promise<Record<string, Record<string, unknown>[]>> {
+    const tables: Record<string, Record<string, unknown>[]> = {};
+    for (const table of BACKUP_TABLES) tables[table] = await this.query(`SELECT * FROM ${table}`);
+    return tables;
+  }
+
+  /**
+   * Replaces all data with a backup's rows, in one transaction (all or nothing). Columns the
+   * backup has but this version doesn't are skipped; columns it lacks are left NULL.
+   */
+  async importAll(tables: Record<string, Record<string, unknown>[]>): Promise<void> {
+    const columns = new Map<string, Set<string>>();
+    for (const table of BACKUP_TABLES) {
+      columns.set(table, new Set((await this.query<{ name: string }>(`PRAGMA table_info(${table})`)).map((c) => c.name)));
+    }
+    await this.transaction(async (run) => {
+      for (const table of BACKUP_TABLES) await run(`DELETE FROM ${table}`);
+      for (const table of BACKUP_TABLES) {
+        const known = columns.get(table)!;
+        for (const row of tables[table] ?? []) {
+          const cols = Object.keys(row).filter((c) => known.has(c));
+          if (!cols.length) continue;
+          await run(
+            `INSERT INTO ${table} (${cols.join(', ')}) VALUES (${cols.map(() => '?').join(', ')})`,
+            cols.map((c) => row[c]),
+          );
+        }
+      }
+    });
   }
 
   private async migrate(): Promise<void> {
