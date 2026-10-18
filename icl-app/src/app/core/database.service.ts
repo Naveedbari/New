@@ -136,6 +136,8 @@ export class DatabaseService {
   private memory: MemoryDb | null = null;
   /** True when data will not survive a reload (storage blocked in this browser). */
   readonly temporary = signal(false);
+  /** Bumped after every write, so screens can refresh (see data-sync.ts). */
+  readonly changes = signal(0);
 
   async init(): Promise<void> {
     if (this.isWeb) {
@@ -205,9 +207,14 @@ export class DatabaseService {
   }
 
   async run(sql: string, params: unknown[] = []): Promise<number | undefined> {
-    if (this.memory) return this.memoryRun(sql, params);
+    if (this.memory) {
+      const id = this.memoryRun(sql, params);
+      this.changed();
+      return id;
+    }
     const res = await this.db.run(sql, params);
     await this.persist();
+    this.changed();
     return res.changes?.lastId;
   }
 
@@ -219,6 +226,7 @@ export class DatabaseService {
       try {
         const result = await work(async (sql, params = []) => this.memoryRun(sql, params));
         mem.exec('COMMIT');
+        this.changed();
         return result;
       } catch (e) {
         mem.exec('ROLLBACK');
@@ -230,11 +238,16 @@ export class DatabaseService {
       const result = await work(async (sql, params = []) => (await this.db.run(sql, params, false)).changes?.lastId);
       await this.db.commitTransaction();
       await this.persist();
+      this.changed();
       return result;
     } catch (e) {
       await this.db.rollbackTransaction();
       throw e;
     }
+  }
+
+  private changed(): void {
+    this.changes.update((n) => n + 1);
   }
 
   private memoryRun(sql: string, params: unknown[]): number | undefined {

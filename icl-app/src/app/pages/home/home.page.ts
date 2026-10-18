@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
+import { reloadOnDataChange } from '../../core/data-sync';
 import { RouterLink } from '@angular/router';
 import {
   IonButton,
@@ -55,6 +56,7 @@ export class HomePage {
   readonly history = computed(() => this.all().slice(1));
 
   constructor() {
+    reloadOnDataChange(() => this.ionViewWillEnter());
     addIcons({ trophy, flag, medal, star, calendarOutline, logOutOutline, ribbonOutline, shareSocialOutline });
   }
 

@@ -97,7 +97,7 @@
               <span class="stage-kicker">Round 2</span>
               <span class="stage-title">Knockout</span>
               <span class="stage-sub">
-                @if (poolsCleared()) { {{ seeds().length }} teams qualified. Ready to draw the bracket. } @else { {{ lockReason() }} }
+                @if (poolsCleared()) { {{ seeds().length }} teams qualified. Ready to start Round 2. } @else { {{ lockReason() }} }
               </span>
             </span>
           </div>
@@ -127,6 +127,10 @@
                   }
                   <span><ion-icon name="people-outline"></ion-icon> {{ pool.teams.length }} teams</span>
                 </span>
+                @let qualified = qualifiedNames(pool);
+                @if (qualified) {
+                  <span class="acc-q"><span class="badge q">Q</span> {{ qualified }}</span>
+                }
               </span>
               <ion-icon class="chevron" name="chevron-down"></ion-icon>
             </button>
@@ -140,6 +144,10 @@
                       <span class="team-logo-placeholder small">{{ team.name.charAt(0).toUpperCase() }}</span>
                     }
                     <span class="tname">{{ team.name }}</span>
+                    @switch (qualifyStatus(pool.id!, team)) {
+                      @case ('q') { <span class="badge q" title="Qualified for Round 2">Q</span> }
+                      @case ('tie') { <span class="badge tie" title="Tied for a qualifying place">Tie</span> }
+                    }
                   </li>
                 }
               </ol>

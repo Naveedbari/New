@@ -438,8 +438,38 @@
 }
 
 .tname {
+  flex: 1;
   font-size: 16px;
   font-weight: 600;
+}
+
+.acc-q {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--icl-mint);
+}
+
+.badge {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+
+  &.q {
+    background: var(--icl-accent);
+    color: var(--icl-accent-ink);
+  }
+
+  &.tie {
+    background: var(--icl-gold);
+    color: #1d1500;
+  }
 }
 
 @keyframes acc-in {

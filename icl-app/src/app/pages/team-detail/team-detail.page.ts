@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { reloadOnDataChange } from '../../core/data-sync';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   AlertController,
@@ -57,6 +58,7 @@ export class TeamDetailPage {
   readonly team = signal<Team | null>(null);
 
   constructor() {
+    reloadOnDataChange(() => this.ionViewWillEnter());
     addIcons({ call, callOutline, personOutline, locationOutline, chatbubbleOutline, createOutline, trashOutline });
   }
 

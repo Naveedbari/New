@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { reloadOnDataChange } from '../../core/data-sync';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import {
@@ -65,6 +66,7 @@ export class TeamsPage {
   };
 
   constructor() {
+    reloadOnDataChange(() => this.refresh());
     addIcons({ add, logOutOutline, callOutline, personOutline, peopleOutline });
   }
 

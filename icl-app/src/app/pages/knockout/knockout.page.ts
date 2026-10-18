@@ -1,5 +1,5 @@
-import { NgTemplateOutlet } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
+import { reloadOnDataChange } from '../../core/data-sync';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   ActionSheetController,
@@ -10,9 +10,6 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonLabel,
-  IonSegment,
-  IonSegmentButton,
   IonTitle,
   IonToolbar,
 } from '@ionic/angular';
@@ -20,8 +17,8 @@ import { addIcons } from 'ionicons';
 import { ribbonOutline, trophy, trophyOutline } from 'ionicons/icons';
 import { confirmAction } from '../../core/confirm';
 import { Match, MatchWinner, PoolTeam, Tournament } from '../../core/models';
-import { TournamentService, knockoutRoundName, koMatchLabel, koRoundTitle } from '../../core/tournament.service';
-import { BracketMatch, buildBracket, knockoutChampion } from '../../core/bracket';
+import { TournamentService, koMatchLabel, koRoundTitle } from '../../core/tournament.service';
+import { knockoutChampion } from '../../core/knockout';
 
 interface KoRound {
   number: number;
@@ -31,7 +28,7 @@ interface KoRound {
 
 @Component({
   selector: 'app-knockout',
-  imports: [NgTemplateOutlet, RouterLink, IonLabel, IonSegment, IonSegmentButton, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonButton, IonIcon, IonContent],
+  imports: [RouterLink, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonButton, IonIcon, IonContent],
   templateUrl: './knockout.page.html',
   styleUrls: ['../fixtures/fixtures.page.scss', './knockout.page.scss'],
 })
@@ -56,7 +53,6 @@ export class KnockoutPage {
       .map(([number, matches]) => ({ number, name: koRoundTitle(this.format(), number, matches.length), matches }));
   });
 
-  readonly view = signal<'bracket' | 'matches'>('bracket');
   readonly format = computed(() => this.tournament()?.koFormat ?? 'cross');
 
   /** Label for one match card, e.g. "Qualifier 1", "Semi-final 2", "Final". */
@@ -66,65 +62,11 @@ export class KnockoutPage {
     return this.format() !== 'playoff' && size > 1 ? `${base} ${m.position + 1}` : base;
   }
 
-  /** Playoff map boxes (option 3): Q1, Eliminator, Q2 and Final, with TBD until known. */
-  readonly playoff = computed(() => {
-    const ko = this.matches();
-    const at = (r: number, p: number) => ko.find((m) => m.koRound === r && m.position === p) ?? null;
-    const box = (m: Match | null, round: number, index: number, top: PoolTeam | null, bottom: PoolTeam | null): BracketMatch => ({
-      round,
-      index,
-      match: m,
-      isBye: false,
-      top: m ? { team: m.team1, won: m.winner === 1, lost: m.winner === 2 } : { team: top, won: false, lost: false },
-      bottom: m ? { team: m.team2, won: m.winner === 2, lost: m.winner === 1 } : { team: bottom, won: false, lost: false },
-    });
-    const winner = (m: Match | null) => (m?.winner ? (m.winner === 1 ? m.team1 : m.team2) : null);
-    const loser = (m: Match | null) => (m?.winner ? (m.winner === 1 ? m.team2 : m.team1) : null);
-    const q1 = at(1, 0);
-    const elim = at(1, 1);
-    const q2 = at(2, 0);
-    return {
-      q1: box(q1, 1, 0, null, null),
-      elim: box(elim, 1, 1, null, null),
-      q2: box(q2, 2, 0, loser(q1), winner(elim)),
-      final: box(at(3, 0), 3, 0, winner(q1), winner(q2)),
-    };
-  });
-
-  /** Every bracket round, first round to final, including future (TBD) matches. */
-  readonly bracket = computed(() => buildBracket(this.matches()));
-
-  /**
-   * Two-sided layout: the first half of each round feeds in from the left, the second half
-   * from the right, meeting at the final in the middle. Columns: left rounds, final, right rounds.
-   */
-  readonly bracketSides = computed(() => {
-    const rounds = this.bracket();
-    const early = rounds.slice(0, -1);
-    return {
-      left: early.map((r) => r.slice(0, r.length / 2)),
-      right: early.map((r) => r.slice(r.length / 2)).reverse(),
-      final: rounds[rounds.length - 1]?.[0] ?? null,
-      names: early.map((r) => knockoutRoundName(r.length)),
-    };
-  });
-
-  /** Groups a column's boxes into pairs that feed the same next-round match. */
-  pairs(column: BracketMatch[]): BracketMatch[][] {
-    const out: BracketMatch[][] = [];
-    for (let i = 0; i < column.length; i += 2) out.push(column.slice(i, i + 2));
-    return out;
-  }
-
-  /** Tapping a playable bracket box records its result. */
-  tapBox(b: BracketMatch): void {
-    if (b.match && !b.isBye) this.pickWinner(b.match);
-  }
-
   /** Champion once the final is decided. */
   readonly champion = computed<PoolTeam | null>(() => knockoutChampion(this.matches(), this.format()));
 
   constructor() {
+    reloadOnDataChange(() => this.ionViewWillEnter());
     addIcons({ trophy, trophyOutline, ribbonOutline });
   }
 

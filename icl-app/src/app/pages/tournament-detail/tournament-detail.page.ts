@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
+import { reloadOnDataChange } from '../../core/data-sync';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   AlertController,
@@ -32,12 +33,12 @@ import {
   trashOutline,
   trophy,
 } from 'ionicons/icons';
-import { Match, PoolFixtures, PoolTeam, Tournament } from '../../core/models';
+import { Match, Pool, PoolFixtures, PoolTeam, Tournament } from '../../core/models';
 import { confirmAction } from '../../core/confirm';
 import { TournamentService, courtName, koRoundTitle } from '../../core/tournament.service';
-import { knockoutChampion } from '../../core/bracket';
+import { knockoutChampion } from '../../core/knockout';
 import { SettingsService } from '../../core/settings.service';
-import { computeStandings } from '../../core/standings';
+import { QualifyStatus, computeStandings } from '../../core/standings';
 import { KoModeModalComponent, KoModeResult, KoPairs } from './ko-mode-modal/ko-mode-modal.component';
 
 @Component({
@@ -82,6 +83,7 @@ export class TournamentDetailPage {
   readonly courtName = courtName;
 
   constructor() {
+    reloadOnDataChange(() => this.ionViewWillEnter());
     addIcons({ trophy, star, createOutline, trashOutline, locationOutline, timeOutline, chevronDown, peopleOutline, gitNetworkOutline, lockClosedOutline, calendarOutline, chevronForward, gridOutline, play, imagesOutline });
   }
 
@@ -138,6 +140,29 @@ export class TournamentDetailPage {
   private readonly standings = computed(() =>
     this.groups().map((g) => computeStandings(g, this.qualifyCount())),
   );
+
+  /** Qualification status of each team, per pool (Q once the pool is complete, Tie while tied). */
+  private readonly statusByPool = computed(() => {
+    const out = new Map<number, Map<string, QualifyStatus>>();
+    this.groups().forEach((g, i) => {
+      const table = this.standings()[i];
+      if (!table || g.pool.id == null) return;
+      out.set(g.pool.id, new Map(table.rows.map((r) => [teamKey(r.team), r.status])));
+    });
+    return out;
+  });
+
+  qualifyStatus(poolId: number, team: PoolTeam): QualifyStatus {
+    return this.statusByPool().get(poolId)?.get(teamKey(team)) ?? null;
+  }
+
+  /** Names of a pool's teams that have qualified for Round 2, e.g. "Alpha, Bravo" ('' if none yet). */
+  qualifiedNames(pool: Pool): string {
+    return pool.teams
+      .filter((t) => this.qualifyStatus(pool.id!, t) === 'q')
+      .map((t) => t.name)
+      .join(', ');
+  }
 
   /** Pools are cleared when every pool match has a result and no qualifying place is still tied. */
   readonly poolsCleared = computed(() => {
@@ -249,4 +274,9 @@ export class TournamentDetailPage {
       await this.nav.navigateBack('/tabs/tournaments');
     }
   }
+}
+
+/** Pool teams are matched by id when they have one (renamed teams), otherwise by name. */
+function teamKey(team: PoolTeam): string {
+  return team.teamId != null ? `id:${team.teamId}` : `name:${team.name}`;
 }

@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { reloadOnDataChange } from '../../core/data-sync';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import {
@@ -218,9 +219,9 @@ export class TournamentNewPage {
   readonly pools = signal<Pool[]>([]);
 
   constructor() {
+    reloadOnDataChange(() => this.loadTeamsAndSeason());
     addIcons({ shuffle: shuffleIcon, locationOutline, calendarOutline, timeOutline, hourglassOutline, checkmarkCircle });
-    this.teamService.search('').then((teams) => this.allTeams.set(teams));
-    this.tournaments.nextSeason().then((n) => this.season.set(n));
+    void this.loadTeamsAndSeason();
     const defaults = this.settings.settings();
     this.matchMinutes.set(defaults.matchMinutes);
     this.overs.set(defaults.oversPerMatch);
@@ -228,7 +229,16 @@ export class TournamentNewPage {
     this.qualify.set(defaults.qualifyPerPool);
   }
 
-  isSelected(id: number): boolean {
+  /** Teams to pick from and the next season number; re-run when data changes elsewhere. */
+  private async loadTeamsAndSeason(): Promise<void> {
+    const teams = await this.teamService.search('');
+    this.allTeams.set(teams);
+    const ids = new Set(teams.map((t) => t.id!));
+    this.selectedIds.update((sel) => new Set([...sel].filter((id) => ids.has(id))));
+    this.season.set(await this.tournaments.nextSeason());
+  }
+
+    isSelected(id: number): boolean {
     return this.selectedIds().has(id);
   }
 

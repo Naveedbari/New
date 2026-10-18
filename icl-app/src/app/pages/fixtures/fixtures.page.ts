@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
+import { reloadOnDataChange } from '../../core/data-sync';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   ActionSheetController,
@@ -98,15 +99,20 @@ export class FixturesPage {
   readonly formatDuration = formatDuration;
 
   constructor() {
+    reloadOnDataChange(() => this.refreshData());
     addIcons({ trophy, trophyOutline, timeOutline, locationOutline, calendarOutline, ribbonOutline, calculatorOutline });
   }
 
   async ionViewWillEnter(): Promise<void> {
     // Links such as "Add run rate" open this screen straight on the points table.
     if (this.activated.snapshot.queryParamMap.get('tab') === 'table') this.filter.set('table');
+    await this.refreshData();
+    this.loaded.set(true);
+  }
+
+  private async refreshData(): Promise<void> {
     this.tournament.set(await this.service.get(this.id));
     await this.reload();
-    this.loaded.set(true);
   }
 
   private async reload(): Promise<void> {

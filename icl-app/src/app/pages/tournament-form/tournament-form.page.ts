@@ -26,7 +26,7 @@ import { Team } from '../../core/models';
 import { TeamService } from '../../core/team.service';
 import { confirmAction } from '../../core/confirm';
 import { TournamentService } from '../../core/tournament.service';
-import { knockoutChampion } from '../../core/bracket';
+import { knockoutChampion } from '../../core/knockout';
 
 const today = (): string => {
   const d = new Date();
