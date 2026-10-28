@@ -1,0 +1,250 @@
+{
+  "name": "Postiz - Schedule Video to Socials",
+  "nodes": [
+    {
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0",
+              "name": "postizUrl",
+              "type": "string",
+              "value": "https://postiz.yourdomain.com"
+            },
+            {
+              "id": "1",
+              "name": "videoUrl",
+              "type": "string",
+              "value": "https://example.com/video.mp4"
+            },
+            {
+              "id": "2",
+              "name": "title",
+              "type": "string",
+              "value": "My video title"
+            },
+            {
+              "id": "3",
+              "name": "caption",
+              "type": "string",
+              "value": "Caption / description #hashtags"
+            },
+            {
+              "id": "4",
+              "name": "platforms",
+              "type": "string",
+              "value": "youtube,tiktok,instagram-standalone"
+            },
+            {
+              "id": "5",
+              "name": "delayHours",
+              "type": "number",
+              "value": 24
+            },
+            {
+              "id": "6",
+              "name": "youtubeVisibility",
+              "type": "string",
+              "value": "public"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "name": "Download Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "url": "={{ $json.videoUrl }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Upload Video to Postiz",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.postizUrl }}/api/public/v1/upload",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Postiz API"
+        }
+      }
+    },
+    {
+      "name": "Get Integrations",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "url": "={{ $('Config').first().json.postizUrl }}/api/public/v1/integrations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Postiz API"
+        }
+      }
+    },
+    {
+      "name": "Build Post",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const cfg = $('Config').first().json;\nconst file = $('Upload Video to Postiz').first().json;\n\n// Per-platform settings Postiz expects. Add more providers here (linkedin, x, bluesky...).\nconst settings = {\n  youtube: { __type: 'youtube', title: cfg.title, type: cfg.youtubeVisibility },\n  tiktok: {\n    __type: 'tiktok', privacy_level: 'PUBLIC_TO_EVERYONE', duet: false, stitch: false,\n    comment: true, autoAddMusic: 'no', brand_content_toggle: false,\n    brand_organic_toggle: false, content_posting_method: 'DIRECT_POST',\n  },\n  instagram: { __type: 'instagram', post_type: 'post', collaborators: [] },\n  'instagram-standalone': { __type: 'instagram-standalone', post_type: 'post', collaborators: [] },\n};\n\nconst wanted = cfg.platforms.split(',').map((s) => s.trim());\nconst posts = $input.all().map((i) => i.json)\n  .filter((i) => !i.disabled && settings[i.identifier] && wanted.includes(i.identifier))\n  .map((i) => ({\n    integration: { id: i.id },\n    // Videos go in \"image\" too - that's how Postiz takes media.\n    value: [{ content: cfg.caption, image: [{ id: file.id, path: file.path }] }],\n    settings: settings[i.identifier],\n  }));\n\nif (!posts.length) throw new Error('No connected Postiz integration matches: ' + cfg.platforms);\n\nreturn [{ json: {\n  type: 'schedule',\n  date: new Date(Date.now() + cfg.delayHours * 3600e3).toISOString(),\n  shortLink: false,\n  tags: [],\n  posts,\n} }];"
+      }
+    },
+    {
+      "name": "Schedule Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1320,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.postizUrl }}/api/public/v1/posts",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Postiz API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Download Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Video": {
+      "main": [
+        [
+          {
+            "node": "Upload Video to Postiz",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Video to Postiz": {
+      "main": [
+        [
+          {
+            "node": "Get Integrations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Integrations": {
+      "main": [
+        [
+          {
+            "node": "Build Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Post": {
+      "main": [
+        [
+          {
+            "node": "Schedule Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "pinData": {}
+}
