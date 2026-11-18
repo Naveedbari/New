@@ -1,1 +1,55 @@
-/* You can add global styles to this file, and also import other style files */
+@import '@ionic/angular/css/core.css';
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
+@import '@ionic/angular/css/padding.css';
+@import '@ionic/angular/css/flex-utils.css';
+@import '@ionic/angular/css/display.css';
+@import '@ionic/angular/css/palettes/dark.system.css';
+
+:root {
+  --ion-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --ion-color-primary: #0f766e; --ion-color-primary-rgb: 15, 118, 110; --ion-color-primary-contrast: #fff;
+  --ion-color-primary-shade: #0d685f; --ion-color-primary-tint: #27847c;
+  --ion-color-success: #15803d; --ion-color-danger: #dc2626; --ion-color-warning: #d97706;
+  --ion-background-color: #f4f6f8;
+  --card-bg: #fff; --muted: #64748b; --line: #e5e7eb;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --ion-background-color: #0b0f14; --card-bg: #151b23; --muted: #94a3b8; --line: #263040; }
+}
+
+ion-toolbar { --background: var(--ion-background-color); --border-width: 0 !important; }
+ion-content { --padding-bottom: 96px; }
+ion-footer ion-content, ion-footer { background: var(--ion-background-color); }
+ion-list.inset { margin: 0 16px 16px; border-radius: 16px; }
+ion-item { --background: var(--card-bg); }
+
+.wrap { max-width: 720px; margin: 0 auto; }
+.card { background: var(--card-bg); border-radius: 16px; padding: 16px; margin: 0 16px 16px; box-shadow: 0 1px 2px rgba(15, 23, 42, .06); }
+.hero {
+  margin: 8px 16px 16px; padding: 20px; border-radius: 20px; color: #fff;
+  background: linear-gradient(135deg, #0f766e, #115e59 60%, #134e4a);
+  .label { opacity: .8; font-size: 13px; }
+  .big { font-size: 34px; font-weight: 700; letter-spacing: -.5px; margin: 4px 0 12px; }
+  .row { display: flex; gap: 16px; font-size: 13px; div { flex: 1; } b { display: block; font-size: 16px; } }
+}
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 16px 16px;
+  > div { background: var(--card-bg); border-radius: 14px; padding: 14px; }
+  small { color: var(--muted); display: block; font-size: 12px; }
+  b { font-size: 18px; }
+}
+.section { display: flex; align-items: center; justify-content: space-between; margin: 20px 20px 8px;
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin: 0; font-weight: 600; }
+}
+.avatar { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; font-size: 13px;
+  background: rgba(var(--ion-color-primary-rgb), .12); color: var(--ion-color-primary); flex-shrink: 0; }
+.pos { color: var(--ion-color-success); } .neg { color: var(--ion-color-danger); } .muted { color: var(--muted); }
+.amount { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.empty { text-align: center; color: var(--muted); padding: 40px 24px; ion-icon { font-size: 48px; opacity: .5; } }
+.banner { margin: 0 16px 12px; padding: 10px 14px; border-radius: 12px; font-size: 14px; display: flex; gap: 8px; align-items: center;
+  &.warn { background: rgba(217, 119, 6, .12); color: #b45309; } &.err { background: rgba(220, 38, 38, .1); color: var(--ion-color-danger); }
+  &.info { background: rgba(var(--ion-color-primary-rgb), .1); color: var(--ion-color-primary); } }
+.strike { text-decoration: line-through; opacity: .6; }
+.sticky-foot { padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--ion-background-color); border-top: 1px solid var(--line); }
+table.t { width: 100%; border-collapse: collapse; font-size: 14px; th, td { padding: 8px 4px; border-bottom: 1px solid var(--line); text-align: left; } th { color: var(--muted); font-weight: 500; font-size: 12px; } .r { text-align: right; } }
