@@ -1,0 +1,16 @@
+{
+  "game": "GTA 6",
+  "font": "Arial",
+  "hashtags": ["#GTA6", "#ViceCity", "#GTAVI", "#GTA6Gameplay", "#GTA6Trailer", "#Rockstar", "#RockstarGames", "#Gaming", "#GamingShorts", "#LiveStreamClips"],
+  "tags": ["GTA 6", "GTA VI", "Vice City", "GTA 6 Vice City gameplay", "GTA 6 funny moments", "GTA 6 gameplay", "Rockstar Games", "gaming shorts"],
+  "hooks": ["Wait for this {game} moment", "Nobody expected this in {game}", "Watch till the end", "This {game} moment is insane"],
+  "emojis": ["😱", "🤯", "😂", "🔥"],
+  "questions": ["Would you play this?", "What would you do here?", "Best moment so far?"],
+  "title_templates": ["\"{quote}\" {emoji} {game} Vice City", "{game}: \"{quote}\" {emoji}"],
+  "title_fallbacks": ["Wild {game} Vice City moment {emoji}", "{streamer} in {game} Vice City {emoji}"],
+  "hype_words": ["no way", "oh my god", "omg", "what", "wow", "let's go", "insane", "crazy", "haha", "hahaha", "lol", "lmao", "laughs", "laughing", "laughter"],
+  "word_fixes": {
+    "gta six": "GTA 6", "gta 6": "GTA 6", "gta6": "GTA 6", "gta vi": "GTA VI", "gta": "GTA",
+    "vice city": "Vice City", "lucia": "Lucia", "jason": "Jason", "leonida": "Leonida", "rockstar": "Rockstar"
+  }
+}

@@ -1,0 +1,9 @@
+yt-dlp
+faster-whisper>=1.0
+google-api-python-client
+google-auth-oauthlib
+google-auth-httplib2
+opencv-python>=4.8,<5   # 5.x dropped the Haar face detector used for facecams
+numpy
+pillow
+python-dotenv
